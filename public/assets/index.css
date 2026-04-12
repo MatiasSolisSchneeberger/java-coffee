@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&display=swap");
+
+:root {
+	/* Colors (OKLCH) 
+     * Formato: oklch(Luminosidad Croma Tono)
+     */
+	/* Base Backgrounds (Sistema de elevación) */
+	--bg-base: oklch(18% 0.01 260); /* Fondo principal oscuro */
+	--bg-surface: oklch(24% 0.015 260); /* Tarjetas de café, modales */
+	--bg-surface-hover: oklch(30% 0.02 260); /* Hover en tarjetas */
+
+	/* Brand Colors */
+	--color-primary: oklch(85% 0.25 145); /* Verde neón terminal */
+	--color-primary-dim: oklch(85% 0.25 145 / 0.15); /* Verde con opacidad para fondos sutiles */
+	--color-secondary: oklch(65% 0.15 280); /* Púrpura (para detalles tech) */
+	--color-coffee: oklch(65% 0.14 55); /* Naranja/Marrón cálido para equilibrar (tueste de café) */
+
+	/* Text */
+	--text-main: oklch(95% 0.01 260); /* Blanco apagado, no quema la vista */
+	--text-muted: oklch(70% 0.03 260); /* Gris para subtítulos y descripciones */
+
+	/* Feedback (Success/Error) */
+	--color-error: oklch(60% 0.2 25);
+	--color-success: oklch(75% 0.15 150);
+
+	/* Spacing (Escala logarítmica para UI consistente) */
+	--spacing-xs: 0.25rem;
+	--spacing-sm: 0.5rem;
+	--spacing-md: 1rem;
+	--spacing-lg: 1.5rem;
+	--spacing-xl: 2rem;
+	--spacing-2xl: 3rem;
+	--spacing-3xl: 5rem;
+
+	/* Typography */
+	--font-primary: "Cascadia Mono", monospace, sans-serif;
+
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-base: 1rem;
+	--text-lg: 1.125rem;
+	--text-xl: 1.25rem;
+
+	--font-regular: 400;
+	--font-semibold: 600;
+	--font-bold: 700;
+
+	/* Borders, Shadows & Transitions */
+	--border-radius-sm: 0.25rem; /* Más cuadrado = más estilo tech/terminal */
+	--border-radius: 0.5rem;
+	--border-radius-lg: 1rem;
+
+	/* Bordes sutiles para tarjetas de e-commerce */
+	--border-thin: 1px solid oklch(35% 0.02 260);
+
+	--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+	--shadow-glow: 0 0 15px oklch(85% 0.25 145 / 0.3); /* Glow verde actualizado */
+
+	--transition-fast: 0.15s ease-in-out;
+	--transition-normal: 0.3s ease-in-out;
+
+	/* Z-index layers (esencial para modales y carritos flotantes) */
+	--z-header: 100;
+	--z-dropdown: 200;
+	--z-modal: 300;
+	--z-toast: 400;
+}
+
+html {
+	scroll-behavior: smooth;
+	/* Evita saltos en el layout al aparecer el scrollbar */
+	scrollbar-gutter: stable;
+}
+
+body {
+	background: var(--bg-base);
+	color: var(--text-main);
+	min-height: 100dvh; /* Mejor que height: 100dvh para evitar recortes */
+	width: 100%; /* Evita 100dvw que causa scroll horizontal */
+	font-family: var(--font-primary);
+	line-height: 1.6;
+	-webkit-text-size-adjust: 100%;
+	/* Efecto CRT sutil (opcional) o base limpia */
+	text-rendering: optimizeLegibility;
+}
+
+/* Custom Scrollbar (Estética Terminal) */
+::-webkit-scrollbar {
+	width: 10px;
+}
+::-webkit-scrollbar-track {
+	background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+	background: oklch(35% 0.02 260);
+	border-radius: var(--border-radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-primary);
+}
+
+/* Text Selection */
+::selection {
+	background-color: var(--color-primary);
+	color: var(--bg-base);
+}
+
+/* Typography Base */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	line-height: 1.2;
+	font-weight: var(--font-bold);
+	color: var(--text-main);
+	/* UX: Evita que la última palabra quede sola en una línea */
+	text-wrap: balance;
+	letter-spacing: -0.02em;
+}
+
+h1 {
+	font-size: clamp(2rem, 5vw, 3.5rem);
+}
+h2 {
+	font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+h3 {
+	font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+p {
+	/* UX: Limita el ancho de los párrafos para mejor lectura */
+	max-width: 65ch;
+	color: var(--text-muted);
+}
+
+/* Links & Interactivity */
+a {
+	color: var(--color-primary);
+	text-decoration: none;
+	transition:
+		color var(--transition-normal),
+		text-shadow var(--transition-fast);
+}
+
+a:hover {
+	color: var(--color-coffee); /* Detalle cafetero en hover */
+	text-shadow: var(--shadow-glow);
+}
+
+/* A11y: Accesibilidad para navegación por teclado */
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 4px;
+	border-radius: var(--border-radius-sm);
+}
+
+/* Forms & Inputs (Base E-commerce) */
+input,
+textarea,
+button,
+select {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+}
+
+/* Utilities */
+.container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 var(--spacing-md);
+}
+
+.flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.flex-col {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Útil para mostrar precios o etiquetas estilo código */
+.badge-code {
+	background: var(--bg-surface);
+	color: var(--color-primary);
+	padding: var(--spacing-xs) var(--spacing-sm);
+	border-radius: var(--border-radius-sm);
+	border: var(--border-thin);
+	font-size: var(--text-sm);
+}
+
+main {
+	padding: clamp(1rem, 2vw, 3rem) 0;
+}
