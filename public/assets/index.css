@@ -57,8 +57,8 @@
 	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 	--shadow-glow: 0 0 15px oklch(85% 0.25 145 / 0.3); /* Glow verde actualizado */
 
-	--transition-fast: 0.15s ease-in-out;
-	--transition-normal: 0.3s ease-in-out;
+	--transition-fast: 150ms ease-in-out;
+	--transition-normal: 250ms ease-in-out;
 
 	/* Z-index layers (esencial para modales y carritos flotantes) */
 	--z-header: 100;
@@ -142,7 +142,7 @@ a {
 	color: var(--color-primary);
 	text-decoration: none;
 	transition:
-		color var(--transition-normal),
+		color var(--transition-fast),
 		text-shadow var(--transition-fast);
 }
 
