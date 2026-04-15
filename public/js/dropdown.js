@@ -1,20 +1,21 @@
-// 1. Agregamos "export" para que otro archivo pueda llamarla
 export function toggleDropdown(elemento) {
     let contenido = elemento.nextElementSibling;
+
+    // Alternamos mostrar el menú
     contenido.classList.toggle("mostrar");
+
+    // NUEVO: Alternamos un estado "abierto" en el botón para las animaciones
+    elemento.classList.toggle("abierto");
 }
 
-// 2. El código del window.onclick lo cambiamos ligeramente por un event listener 
-// (Es mejor práctica en módulos y se ejecutará solito al importar el archivo)
 window.addEventListener('click', function (evento) {
     if (!evento.target.closest('.dropdown-trigger-wrapper')) {
-        let dropdowns = document.getElementsByClassName("dropdown-content");
+        // Buscamos todos los menús y botones que estén abiertos
+        let menusAbiertos = document.querySelectorAll(".dropdown-content.mostrar");
+        let botonesAbiertos = document.querySelectorAll(".dropdown-trigger-wrapper.abierto");
 
-        for (let i = 0; i < dropdowns.length; i++) {
-            let menuAbierto = dropdowns[i];
-            if (menuAbierto.classList.contains('mostrar')) {
-                menuAbierto.classList.remove('mostrar');
-            }
-        }
+        // Los cerramos todos
+        menusAbiertos.forEach(menu => menu.classList.remove('mostrar'));
+        botonesAbiertos.forEach(boton => boton.classList.remove('abierto'));
     }
 });
