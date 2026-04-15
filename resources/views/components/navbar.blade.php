@@ -1,14 +1,50 @@
-<div>
+<section class="navbar">
+    {{-- Logo --}}
+    <x-logo />
     <nav>
         <ul>
-            <li><a href="/quienes-somos">¿Quiénes somos?</a></li>
-            <li><a href="/comercializacion">Comercialización</a></li>
-            <li><a href="/informacion-de-contactos">Información de contactos</a></li>
-            <li><a href="/terminos-y-usos">Términos y usos</a></li>
-            <li><a href="/catalogo-de-productos">Catálogo de productos</a></li>
-            <li><a href="/consultas">Consultas</a></li>
-            <li><a href="/registro-de-clientes">Registro de clientes</a></li>
-            <li><a href="/formulario-de-login">Formulario de login</a></li>
+            <li>
+                <a href="/catalogo-de-productos">
+                    <x-ui.button>
+                        Ver Productos
+                    </x-ui.button>
+                </a>
+            </li>
+            <li>
+                <a href="/catalogo-de-productos">
+                    <x-ui.button variant="ghost">
+                        Quienes Somos
+                    </x-ui.button>
+                </a>
+            </li>
+            <li>
+                <x-ui.dropdown>
+                    <x-slot name="trigger">
+
+                        <x-ui.button variant="ghost">
+                            Ver mas
+                        </x-ui.button>
+
+                    </x-slot>
+
+                    <a href="/perfil">Perfil</a>
+                    <a href="/configuracion">Configuración</a>
+                </x-ui.dropdown>
+            </li>
         </ul>
     </nav>
-</div>
+    {{-- botones CTA --}}
+    <aside>
+        <a>
+            <x-ui.button variant="secondary">Iniciar Sesión</x-ui.button>
+        </a>
+        <a>
+            <x-ui.button variant="primary">Registrarse</x-ui.button>
+        </a>
+    </aside>
+    {{-- registrarse --}}
+    {{-- Login --}}
+
+    {{-- nav mobile --}}
+
+</section>
