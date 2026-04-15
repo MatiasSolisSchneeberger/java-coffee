@@ -17,16 +17,19 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         {{-- tailwind --}}
-        <link rel="stylesheet" href="{{ asset('assets/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {{-- estilos --}}
-        <link rel="stylesheet" href="{{ asset('assets/index.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     @endif
+
+    <script src=""></script>
 </head>
 
 
 <body class="cascadia-mono-400">
     <x-navbar />
     {{ $slot }}
+    <script type="module" src="{{ asset('js/index.js') }}"></script>
 </body>
 
 </html>
