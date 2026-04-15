@@ -1,7 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&display=swap");
 
-@import url(ui/button.css);
-@import url(ui/dropdown.css);
+/* UI */
+@import url(components/ui/button.css);
+@import url(components/ui/dropdown.css);
+
+/* Components */
+@import url(components/navbar.css);
+@import url(components/logo.css);
 
 :root {
 	/* Colors (OKLCH) 
@@ -201,42 +206,4 @@ select {
 
 main {
 	padding: clamp(1rem, 2vw, 3rem) 0;
-}
-
-.navbar {
-	background-color: var(--bg-surface);
-	border-bottom: var(--border-thin);
-	display: flex;
-	gap: 12px;
-
-	justify-content: space-between;
-	align-items: center;
-
-	padding: 8px 48px;
-
-	nav {
-		ul {
-			display: flex;
-			gap: 12px;
-		}
-	}
-}
-
-.logo {
-	padding: 8px 12px;
-	background-color: var(--color-primary);
-	color: var(--color-on-primary);
-	font-size: 20px;
-	font-weight: bold;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	white-space: nowrap;
-	border: 2px oklch(from var(--color-primary) calc(l - 0.3) c h) solid;
-	border-radius: var(--border-radius);
-}
-
-.logo > span {
-	flex: 1;
-	white-space: nowrap;
 }

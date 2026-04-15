@@ -1,0 +1,21 @@
+.navbar {
+	background-color: var(--bg-surface);
+	border-bottom: var(--border-thin);
+	display: flex;
+	gap: 12px;
+
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 8px 48px;
+
+	nav {
+		ul {
+			display: flex;
+			gap: 12px;
+		}
+	}
+
+	aside {
+	}
+}

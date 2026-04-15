@@ -1,0 +1,76 @@
+/* --- Botones --- */
+button.btn {
+	cursor: pointer;
+	border-radius: var(--border-radius);
+	padding: 8px 16px; /* Padding por defecto: 8 arriba/abajo, 16 lados */
+	border: none;
+	white-space: nowrap;
+	display: inline-flex; /* inline-flex es más seguro para botones */
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	color: var(--color-main);
+	transition: all 150ms ease-in-out;
+}
+
+button.btn > svg {
+	flex-shrink: 0;
+	width: 1.25em;
+	height: 1.25em;
+}
+
+/* Botón de solo icono (ej: una X de cerrar) */
+button.btn.icon {
+	padding: 10px;
+}
+
+/* --- Lógica de Padding Dinámico con :has() --- */
+
+/* Si el primer elemento es un SVG (Icono izquierdo) */
+button.btn:not(.icon):has(> svg:first-child) {
+	padding-left: 12px;
+}
+
+/* Si el último elemento es un SVG (Icono derecho) */
+button.btn:not(.icon):has(> svg:last-child) {
+	padding-right: 12px;
+}
+
+/* --- Estados y Variantes --- */
+button.btn:hover {
+	border-radius: var(--border-radius-lg);
+}
+
+.btn.primary {
+	background-color: var(--color-primary);
+	color: var(--color-on-primary);
+}
+
+.btn.secondary {
+	background-color: var(--color-secondary);
+	color: var(--color-on-secondary);
+}
+
+.btn.outline {
+	border: var(--border-thin);
+	color: var(--color-main);
+}
+
+.btn.link {
+	text-decoration: underline var(--color-primary);
+}
+
+.btn.link:hover {
+	text-decoration: underline 2px var(--color-primary);
+}
+
+.btn.ghost {
+	background-color: transparent;
+	color: var(--color-primary);
+}
+
+.btn.ghost:hover {
+	/* La sintaxis relativa que vimos antes queda perfecta aquí */
+	background-color: oklch(from var(--color-primary) l c h / 0.15);
+}
