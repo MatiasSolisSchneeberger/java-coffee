@@ -1,0 +1,49 @@
+/* Contenedor principal */
+.dropdown-basico {
+	display: inline-block;
+}
+
+.dropdown-trigger-wrapper {
+	display: inline-block;
+}
+
+/* @position-try prueba donde puede aparecer el modal y lo pone*/
+@position-try --abrir-hacia-arriba {
+	position-area: top;
+	margin-bottom: 5px; /* separacion con respecto al boton */
+	margin-top: 0;
+}
+
+/* El contenedor del menú */
+.dropdown-content {
+	display: none;
+
+	/* REGLAS DE ANCLAJE CSS */
+	position: absolute;
+	position-area: bottom; /* Intenta abrirse hacia abajo por defecto */
+	position-try-fallbacks: --abrir-hacia-arriba, flip-block; /* Alternativas si choca con el borde */
+	margin-top: 5px; /* Separación por defecto */
+
+	/* Tus estilos visuales */
+	background-color: var(--bg-surface);
+	min-width: 160px;
+	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+	border-radius: var(--border-radius);
+	z-index: 100;
+}
+
+/* JS le agregará esta clase al hacer clic */
+.dropdown-content.mostrar {
+	display: block;
+}
+
+.dropdown-content a {
+	color: var(--color-main);
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+.dropdown-content a:hover {
+	background-color: oklch(from var(--bg-surface-hover) calc(l + 0.1) c h);
+}

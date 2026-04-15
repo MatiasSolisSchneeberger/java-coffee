@@ -1,23 +1,30 @@
 @import url("https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&display=swap");
 
+@import url(ui/button.css);
+@import url(ui/dropdown.css);
+
 :root {
 	/* Colors (OKLCH) 
      * Formato: oklch(Luminosidad Croma Tono)
      */
 	/* Base Backgrounds (Sistema de elevación) */
-	--bg-base: oklch(18% 0.01 260); /* Fondo principal oscuro */
-	--bg-surface: oklch(24% 0.015 260); /* Tarjetas de café, modales */
-	--bg-surface-hover: oklch(30% 0.02 260); /* Hover en tarjetas */
+	--bg-base: oklch(13% 0.028 261.692); /* Fondo principal oscuro */
+	--bg-surface: oklch(21% 0.034 264.665); /* Tarjetas de café, modales */
+	--bg-surface-hover: oklch(27.8% 0.033 256.848); /* Hover en tarjetas */
 
 	/* Brand Colors */
-	--color-primary: oklch(85% 0.25 145); /* Verde neón terminal */
-	--color-primary-dim: oklch(85% 0.25 145 / 0.15); /* Verde con opacidad para fondos sutiles */
-	--color-secondary: oklch(65% 0.15 280); /* Púrpura (para detalles tech) */
-	--color-coffee: oklch(65% 0.14 55); /* Naranja/Marrón cálido para equilibrar (tueste de café) */
+	/* color solo: se usa para fondos y para llamar la atencion */
+	--color-primary: rgb(0, 166, 62);
+	--color-secondary: oklch(71.4% 0.203 305.504);
+	--color-coffee: oklch(65% 0.14 55);
+
+	/* on-color: se usa para cuando va texto sobre los colores anteriores */
+	--color-on-primary: oklch(96.2% 0.044 156.743);
+	--color-on-secondary: oklch(49.6% 0.265 301.924);
 
 	/* Text */
-	--text-main: oklch(95% 0.01 260); /* Blanco apagado, no quema la vista */
-	--text-muted: oklch(70% 0.03 260); /* Gris para subtítulos y descripciones */
+	--color-main: oklch(98.5% 0.002 247.839); /* Blanco apagado, no quema la vista */
+	--color-muted: oklch(92.8% 0.006 264.531); /* Gris para subtítulos y descripciones */
 
 	/* Feedback (Success/Error) */
 	--color-error: oklch(60% 0.2 25);
@@ -46,12 +53,12 @@
 	--font-bold: 700;
 
 	/* Borders, Shadows & Transitions */
-	--border-radius-sm: 0.25rem; /* Más cuadrado = más estilo tech/terminal */
-	--border-radius: 0.5rem;
-	--border-radius-lg: 1rem;
+	--border-radius: 8px;
+	--border-radius-sm: 4px; /* Más cuadrado = más estilo tech/terminal */
+	--border-radius-lg: 12px;
 
 	/* Bordes sutiles para tarjetas de e-commerce */
-	--border-thin: 1px solid oklch(35% 0.02 260);
+	--border-thin: 2px solid oklch(37.3% 0.034 259.733);
 
 	--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
 	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
@@ -146,11 +153,6 @@ a {
 		text-shadow var(--transition-fast);
 }
 
-a:hover {
-	color: var(--color-coffee); /* Detalle cafetero en hover */
-	text-shadow: var(--shadow-glow);
-}
-
 /* A11y: Accesibilidad para navegación por teclado */
 :focus-visible {
 	outline: 2px solid var(--color-primary);
@@ -199,4 +201,42 @@ select {
 
 main {
 	padding: clamp(1rem, 2vw, 3rem) 0;
+}
+
+.navbar {
+	background-color: var(--bg-surface);
+	border-bottom: var(--border-thin);
+	display: flex;
+	gap: 12px;
+
+	justify-content: space-between;
+	align-items: center;
+
+	padding: 8px 48px;
+
+	nav {
+		ul {
+			display: flex;
+			gap: 12px;
+		}
+	}
+}
+
+.logo {
+	padding: 8px 12px;
+	background-color: var(--color-primary);
+	color: var(--color-on-primary);
+	font-size: 20px;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	white-space: nowrap;
+	border: 2px oklch(from var(--color-primary) calc(l - 0.3) c h) solid;
+	border-radius: var(--border-radius);
+}
+
+.logo > span {
+	flex: 1;
+	white-space: nowrap;
 }
