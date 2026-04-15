@@ -2,8 +2,8 @@
     {{-- TODO: 
         Elegir cual queda mejor
     --}}
-    <img src={{ asset('svg/tabler-icon-coffee.svg') }} />
-    <img src={{ asset('svg/tabler-icon-mug.svg') }} />
+    <x-icons.coffee />
+    <x-icons.mug />
     <span>
         Java Coffee
     </span>

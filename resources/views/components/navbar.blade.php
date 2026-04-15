@@ -22,7 +22,10 @@
                     <x-slot name="trigger">
 
                         <x-ui.button variant="ghost">
-                            Ver mas
+                            <span>
+                                Ver mas
+                            </span>
+                            <x-icons.chevron-down class="chevron" />
                         </x-ui.button>
 
                     </x-slot>
