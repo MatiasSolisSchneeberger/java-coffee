@@ -1,11 +1,75 @@
-<article class="card">
-    <img src="/images/hero-section.png" alt="">
-    <h3>Producto 1</h3>
-    <span>
-        <p>Este es un producto con ciertas características muy interesante</p>
-    </span>
-    <x-ui.button>
-        Ver Producto
-        <x-icons.chevron-right />
-    </x-ui.button>
-</article>
+@props(['producto' => null])
+
+@if ($producto)
+    <article class="card">
+        <div class="card-image-wrapper">
+            <img src="{{ $producto['imagen'] ?? '/images/hero-section.png' }}" alt="{{ $producto['nombre'] }}">
+            @if (isset($producto['oferta']) && $producto['oferta'] > 0)
+                <span class="card-badge">Oferta</span>
+            @endif
+        </div>
+
+        <div class="card-content">
+            <span class="card-type badge-code"
+                style="color: var(--color-secondary); border-color: var(--color-secondary);">{{ $producto['tipo'] }}</span>
+            <h3 class="card-title">{{ $producto['nombre'] }}</h3>
+
+            <p class="card-description">
+                {{ $producto['descripcion'] }}
+            </p>
+
+            <div class="card-footer">
+                <div class="card-price">
+                    @if (isset($producto['oferta']) && $producto['oferta'] > 0)
+                        <span class="price-current">${{ number_format($producto['oferta'], 2) }}</span>
+                        <span class="price-original">${{ number_format($producto['precio'], 2) }}</span>
+                    @else
+                        <span class="price-current">${{ number_format($producto['precio'], 2) }}</span>
+                    @endif
+                </div>
+
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
+                        <x-icons.shopping-bag />
+                    </x-ui.button>
+                    <x-ui.button>
+                        Ver Producto
+                        <x-icons.chevron-right />
+                    </x-ui.button>
+                </div>
+            </div>
+        </div>
+    </article>
+@else
+    <article class="card">
+        <div class="card-image-wrapper">
+            <img src="/images/hero-section.png" alt="Producto de ejemplo">
+        </div>
+
+        <div class="card-content">
+            <span class="card-type badge-code"
+                style="color: var(--color-secondary); border-color: var(--color-secondary);">Ejemplo</span>
+            <h3 class="card-title">Producto 1</h3>
+
+            <p class="card-description">
+                Este es un producto con ciertas características muy interesante
+            </p>
+
+            <div class="card-footer">
+                <div class="card-price">
+                    <span class="price-current">$0.00</span>
+                </div>
+
+                <div style="display: flex; gap: var(--spacing-sm);">
+                    <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
+                        <x-icons.shopping-bag />
+                    </x-ui.button>
+                    <x-ui.button>
+                        Ver Producto
+                        <x-icons.chevron-right />
+                    </x-ui.button>
+                </div>
+            </div>
+        </div>
+    </article>
+@endif
