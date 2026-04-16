@@ -10,7 +10,7 @@ button.btn {
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
-	color: var(--color-main);
+	color: var(--color-text-main);
 	transition: all 150ms ease-in-out;
 }
 
@@ -54,7 +54,7 @@ button.btn:hover {
 
 .btn.outline {
 	border: var(--border-thin);
-	color: var(--color-main);
+	color: var(--color-text-main);
 }
 
 .btn.link {

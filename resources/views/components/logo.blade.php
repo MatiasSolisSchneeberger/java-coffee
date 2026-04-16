@@ -2,7 +2,7 @@
     {{-- TODO: 
         Elegir cual queda mejor
     --}}
-    <x-icons.coffee />
+    {{-- <x-icons.coffee /> --}}
     <x-icons.mug />
     <span>
         Java Coffee

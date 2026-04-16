@@ -23,27 +23,55 @@
 	position-area: bottom; /* Intenta abrirse hacia abajo por defecto */
 	position-try-fallbacks: --abrir-hacia-arriba, flip-block; /* Alternativas si choca con el borde */
 	margin-top: 5px;
-	gap: 8px;
 	background-color: var(--bg-surface-hover);
 	min-width: 160px;
-	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-	border-radius: var(--border-radius);
+	box-shadow: var(--shadow-lg);
+	border-radius: var(--border-radius-lg);
 	border: var(--border-thin);
 	z-index: 100;
 }
 
+.dropdown-content > hr {
+	border: none;
+	height: 1px; /* En vez de border, usamos height + background */
+
+	/* Tomamos tu color de texto principal y le bajamos la opacidad al 15% 
+       para crear una línea sutil que siempre combine con tu tema */
+	background-color: oklch(from var(--color-text-main) l c h / 0.15);
+}
 /* JS le agregará esta clase al hacer clic */
 .dropdown-content.mostrar {
-	display: block;
+	display: flex;
+	flex-direction: column;
 	overflow: hidden;
+	gap: 4px;
 }
 
 .dropdown-content a {
-	color: var(--color-main);
+	color: var(--color-text-main);
+	margin: 0 8px;
 	padding: 12px 16px;
 	text-decoration: none;
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	border-radius: var(--border-radius);
+}
+
+.dropdown-content a:has(> svg:first-child) {
+	padding-left: 12px;
+}
+
+.dropdown-content a:has(> svg:last-child) {
+	padding-right: 12px;
+}
+
+.dropdown-content a:first-child {
+	margin-top: 8px;
+}
+
+.dropdown-content a:last-child {
+	margin-bottom: 8px;
 }
 
 .dropdown-content a:hover {

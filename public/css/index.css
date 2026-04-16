@@ -3,10 +3,13 @@
 /* UI */
 @import url(components/ui/button.css);
 @import url(components/ui/dropdown.css);
+@import url(components/ui/card.css);
 
 /* Components */
 @import url(components/navbar.css);
 @import url(components/logo.css);
+@import url(components/hero-section.css);
+@import url(components/lista-productos.css);
 
 :root {
 	/* Colors (OKLCH) 
@@ -19,17 +22,17 @@
 
 	/* Brand Colors */
 	/* color solo: se usa para fondos y para llamar la atencion */
-	--color-primary: rgb(0, 166, 62);
+	--color-primary: oklch(62.7% 0.194 149.214);
 	--color-secondary: oklch(71.4% 0.203 305.504);
 	--color-coffee: oklch(65% 0.14 55);
 
 	/* on-color: se usa para cuando va texto sobre los colores anteriores */
 	--color-on-primary: oklch(96.2% 0.044 156.743);
-	--color-on-secondary: oklch(49.6% 0.265 301.924);
+	--color-on-secondary: oklch(38.1% 0.176 304.987);
 
 	/* Text */
-	--color-main: oklch(98.5% 0.002 247.839); /* Blanco apagado, no quema la vista */
-	--color-muted: oklch(92.8% 0.006 264.531); /* Gris para subtítulos y descripciones */
+	--color-text-main: oklch(98.5% 0.002 247.839); /* Blanco apagado, no quema la vista */
+	--color-text-muted: oklch(92.8% 0.006 264.531); /* Gris para subtítulos y descripciones */
 
 	/* Feedback (Success/Error) */
 	--color-error: oklch(60% 0.2 25);
@@ -87,7 +90,7 @@ html {
 
 body {
 	background: var(--bg-base);
-	color: var(--text-main);
+	color: var(--color-text-main);
 	min-height: 100dvh; /* Mejor que height: 100dvh para evitar recortes */
 	width: 100%; /* Evita 100dvw que causa scroll horizontal */
 	font-family: var(--font-primary);
@@ -127,7 +130,7 @@ h5,
 h6 {
 	line-height: 1.2;
 	font-weight: var(--font-bold);
-	color: var(--text-main);
+	color: var(--color-text-main);
 	/* UX: Evita que la última palabra quede sola en una línea */
 	text-wrap: balance;
 	letter-spacing: -0.02em;
@@ -205,5 +208,17 @@ select {
 }
 
 main {
-	padding: clamp(1rem, 2vw, 3rem) 0;
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+
+	padding: 48px;
+
+	@media (max-width: 768px) {
+		padding: 16px;
+	}
+
+	@media (max-width: 480px) {
+		padding: 8px;
+	}
 }

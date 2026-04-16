@@ -1,6 +1,6 @@
 <x-layout>
     <main>
-        <h1>Java Coffee</h1>
-        <p>El mejor café de la ciudad</p>
+        <x-sections.hero-section />
+        <x-sections.lista-productos />
     </main>
 </x-layout>

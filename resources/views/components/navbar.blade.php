@@ -45,9 +45,53 @@
             <x-ui.button variant="primary">Registrarse</x-ui.button>
         </a>
     </aside>
-    {{-- registrarse --}}
-    {{-- Login --}}
-
     {{-- nav mobile --}}
+    <aside class="nav-mobile">
+        <x-ui.dropdown>
+            <x-slot name="trigger">
+                <x-ui.button variant="secondary" class="icon">
+                    <x-icons.menu />
+                </x-ui.button>
+            </x-slot>
+            <a href="/catalogo-de-productos">
+                <x-icons.shopping-bag />
+                <span>
+                    Ver Productos
+                </span>
+            </a>
+            <a href="/catalogo-de-productos">
+                <x-icons.building-store />
+                <span>
+                    Quienes Somos
+                </span>
+            </a>
+            <hr>
+            <a href="/perfil">
+                <x-icons.user />
+                <span>
+                    Perfil
+                </span>
+            </a>
+            <a href="/configuracion">
+                <x-icons.settings />
+                <span>
+                    Configuración
+                </span>
 
+            </a>
+            <hr>
+            <a href="/login">
+                <x-icons.user />
+                <span>
+                    Iniciar Sesión
+                </span>
+            </a>
+            <a href="/register">
+                <x-icons.user-plus />
+                <span>
+                    Registrarse
+                </span>
+            </a>
+        </x-ui.dropdown>
+    </aside>
 </section>
