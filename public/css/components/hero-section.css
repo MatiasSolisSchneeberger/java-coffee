@@ -1,0 +1,29 @@
+.hero-section {
+	display: flex;
+	flex-direction: column;
+	background-image:
+		radial-gradient(ellipse 60% 50% at center, oklch(0% 0 0 / 0.55) 0%, transparent 100%),
+		url(/images/hero-section.png);
+	background-size: cover;
+
+	height: 700px;
+	color: var(--color-text-main);
+	padding: var(--spacing-md);
+	border-radius: var(--border-radius);
+	box-shadow: var(--shadow-md);
+	align-items: center;
+	justify-content: center;
+
+	h1 {
+		font-weight: 700;
+		color: var(--color-primary);
+	}
+
+	p {
+		color: var(--color-on-primary);
+	}
+
+	button {
+		margin-top: var(--spacing-md);
+	}
+}
