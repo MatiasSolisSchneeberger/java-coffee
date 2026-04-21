@@ -1,0 +1,177 @@
+/* =========================================================
+   PÁGINA: CATÁLOGO DE PRODUCTOS — Mobile First
+   ========================================================= */
+
+/* ─── Base (Mobile): todo apilado en 1 columna ──────────── */
+.catalogo-container {
+	display: grid;
+	/* En mobile: 1 columna. El toggle y el sidebar son filas. */
+	grid-template-columns: 1fr;
+	gap: var(--spacing-md);
+	align-items: start;
+}
+
+/* ─── Botón toggle de filtros (solo mobile) ─────────────── */
+.filtros-toggle {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	width: 100%;
+	background: var(--bg-surface-hover);
+	border: var(--border-thin);
+	border-radius: var(--border-radius);
+	padding: var(--spacing-sm) var(--spacing-md);
+	color: var(--color-text-main);
+	cursor: pointer;
+	font-size: var(--text-sm);
+	font-weight: var(--font-semibold);
+	transition: all var(--transition-fast);
+
+	span {
+		width: 100%;
+	}
+}
+
+.filtros-toggle:hover {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+}
+
+.filtros-toggle-chevron {
+	margin-left: auto;
+	transition: transform var(--transition-normal);
+}
+
+.filtros-toggle.is-open .filtros-toggle-chevron {
+	transform: rotate(-180deg);
+}
+
+/* ─── Sidebar collapsible en mobile ─────────────────────── */
+.filtros-sidebar {
+	background: var(--bg-surface);
+	padding: var(--spacing-lg);
+	border-radius: var(--border-radius);
+	border: var(--border-thin);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-lg);
+	position: static;
+	/* Colapsado por defecto en mobile */
+	overflow: hidden;
+	max-height: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	border-width: 0;
+	transition:
+		max-height 350ms ease,
+		padding 300ms ease,
+		border-width 300ms ease;
+}
+
+.filtros-sidebar.is-open {
+	max-height: 800px; /* Valor mayor al contenido real */
+	padding-top: var(--spacing-lg);
+	padding-bottom: var(--spacing-lg);
+	border-width: 2px;
+}
+
+.filtros-sidebar h3 {
+	margin-bottom: var(--spacing-sm);
+	color: var(--color-primary);
+}
+
+.filtro-grupo {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+}
+
+.filtro-grupo h4 {
+	color: var(--color-text-main);
+	font-size: var(--text-base);
+	margin-bottom: var(--spacing-xs);
+	border-bottom: 1px solid oklch(37.3% 0.034 259.733);
+	padding-bottom: var(--spacing-xs);
+}
+
+.filtro-grupo label {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	color: var(--color-text-muted);
+	font-size: var(--text-sm);
+	cursor: pointer;
+	transition: color var(--transition-fast);
+}
+
+.filtro-grupo label:hover {
+	color: var(--color-primary);
+}
+
+.filtro-grupo input[type="checkbox"] {
+	accent-color: var(--color-primary);
+	width: 16px;
+	height: 16px;
+}
+
+.filtro-grupo input[type="range"] {
+	width: 100%;
+	accent-color: var(--color-primary);
+}
+
+/* Grilla de productos: 1 columna en mobile */
+.productos-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-lg);
+}
+
+/* ─── Tablet chico: sidebar | 1 col productos ───── ≥ 640px ── */
+@media (min-width: 640px) {
+	/* Ocultar el botón toggle: en desktop el sidebar siempre está visible */
+	.filtros-toggle {
+		display: none;
+	}
+
+	.catalogo-container {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-2xl);
+	}
+
+	/* Reset del sidebar: siempre visible, con sus valores normales */
+	.filtros-sidebar {
+		position: sticky;
+		top: 24px;
+		max-height: none;
+		padding: var(--spacing-lg);
+		border-width: 2px;
+		overflow: visible;
+	}
+
+	/* 1 columna de productos */
+	.productos-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ─── Tablet grande: sidebar | 2 cols productos ─── ≥ 900px ── */
+@media (min-width: 900px) {
+	.catalogo-container {
+		grid-template-columns: 1fr 2fr;
+	}
+
+	.productos-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+/* ─── Desktop: sidebar | 3 cols productos ──────── ≥ 1200px ── */
+@media (min-width: 1200px) {
+	.catalogo-container {
+		grid-template-columns: 1fr 3fr;
+	}
+
+	.productos-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

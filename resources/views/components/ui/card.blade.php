@@ -28,11 +28,11 @@
                     @endif
                 </div>
 
-                <div style="display: flex; gap: var(--spacing-sm);">
+                <div class="card-actions">
                     <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
                         <x-icons.shopping-bag />
                     </x-ui.button>
-                    <x-ui.button>
+                    <x-ui.button class="btn-ver-producto">
                         Ver Producto
                         <x-icons.chevron-right />
                     </x-ui.button>
@@ -60,11 +60,11 @@
                     <span class="price-current">$0.00</span>
                 </div>
 
-                <div style="display: flex; gap: var(--spacing-sm);">
+                <div class="card-actions">
                     <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
                         <x-icons.shopping-bag />
                     </x-ui.button>
-                    <x-ui.button>
+                    <x-ui.button class="btn-ver-producto">
                         Ver Producto
                         <x-icons.chevron-right />
                     </x-ui.button>

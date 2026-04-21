@@ -10,6 +10,10 @@
 @import url(components/logo.css);
 @import url(components/hero-section.css);
 @import url(components/lista-productos.css);
+@import url(components/footer.css);
+
+/* Pages */
+@import url(pages/catalogo.css);
 
 :root {
 	/* Colors (OKLCH) 

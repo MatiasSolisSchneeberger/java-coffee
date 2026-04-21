@@ -31,7 +31,7 @@
             "id": 4,
             "nombre": "Binary Brew",
             "slug": "binary-brew",
-            "descripcion": "El café para cuando solo tienes dos estados: despierto o dormido. ",
+            "descripcion": "El café para cuando solo tienes dos estados: despierto o dormido.",
             "precio": 10.00,
             "oferta": 0.00,
             "tipo": "Instantáneo"
@@ -40,7 +40,7 @@
             "id": 5,
             "nombre": "Ruby Roast",
             "slug": "ruby-roast",
-            "descripcion": "Elegante y con cuerpo. Un tueste medio optimizado para la productividad. ",
+            "descripcion": "Elegante y con cuerpo. Un tueste medio optimizado para la productividad.",
             "precio": 22.00,
             "oferta": 19.99,
             "tipo": "Grano entero"
@@ -58,7 +58,7 @@
             "id": 7,
             "nombre": "Null Pointer Nectar",
             "slug": "null-pointer-nectar",
-            "descripcion": "Tan puro que no encontrarás errores en su sabor. Filtrado a la perfección. ",
+            "descripcion": "Tan puro que no encontrarás errores en su sabor. Filtrado a la perfección.",
             "precio": 16.50,
             "oferta": 14.50,
             "tipo": "Cold Brew"
@@ -67,7 +67,7 @@
             "id": 8,
             "nombre": "Async Arabica",
             "slug": "async-arabica",
-            "descripcion": "El sabor llega justo a tiempo, sin bloquear tus procesos mentales. ",
+            "descripcion": "El sabor llega justo a tiempo, sin bloquear tus procesos mentales.",
             "precio": 19.00,
             "oferta": 0.00,
             "tipo": "Grano entero"
@@ -76,7 +76,7 @@
             "id": 9,
             "nombre": "Recursive Roast",
             "slug": "recursive-roast",
-            "descripcion": "Un sabor que se profundiza en cada iteración. Notas de caramelo y madera. ",
+            "descripcion": "Un sabor que se profundiza en cada iteración. Notas de caramelo y madera.",
             "precio": 21.00,
             "oferta": 18.00,
             "tipo": "Molido fino"
@@ -85,7 +85,7 @@
             "id": 10,
             "nombre": "Stack Trace Stout",
             "slug": "stack-trace-stout",
-            "descripcion": "Café denso y oscuro para rastrear el origen de cualquier bug matutino. ",
+            "descripcion": "Café denso y oscuro para rastrear el origen de cualquier bug matutino.",
             "precio": 13.00,
             "oferta": 0.00,
             "tipo": "Granulado"
@@ -119,8 +119,8 @@
         },
         {
             "id": 14,
-            "nombre": "SQL Shot ",
-            "slug": "sql-shot ",
+            "nombre": "SQL Shot",
+            "slug": "sql-shot",
             "descripcion": "Consulta tus reservas de energía y extrae exactamente lo que necesitas para seguir operando.",
             "precio": 12.00,
             "oferta": 0.00,
@@ -130,7 +130,7 @@
             "id": 15,
             "nombre": "Linux Latte",
             "slug": "linux-latte",
-            "descripcion": "Completamente open source. Tú decides cuánta leche y azúcar compilar en él. ",
+            "descripcion": "Completamente open source. Tú decides cuánta leche y azúcar compilar en él.",
             "precio": 18.50,
             "oferta": 16.00,
             "tipo": "Molido fino"
@@ -148,15 +148,15 @@
             "id": 17,
             "nombre": "React Ristretto",
             "slug": "react-ristretto",
-            "descripcion": "Corto, intenso y reactivo a tus necesidades inmediatas de concentración. ",
+            "descripcion": "Corto, intenso y reactivo a tus necesidades inmediatas de concentración.",
             "precio": 21.50,
             "oferta": 19.00,
             "tipo": "Cápsulas"
         },
         {
             "id": 18,
-            "nombre": "Go Grind ",
-            "slug": "go-grind ",
+            "nombre": "Go Grind",
+            "slug": "go-grind",
             "descripcion": "Alta concurrencia en tu sistema nervioso. Tueste claro para una ejecución rápida.",
             "precio": 15.00,
             "oferta": 0.00,

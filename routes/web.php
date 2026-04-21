@@ -23,7 +23,14 @@ Route::get('/terminos-y-usos', function () {
 });
 
 Route::get('/catalogo-de-productos', function () {
-    return view('catalogo-de-productos');
+    $path = storage_path('app/productos.json');
+    $productos = [];
+    if (file_exists($path)) {
+        $json = file_get_contents($path);
+        $data = json_decode($json, true);
+        $productos = $data['productos'] ?? [];
+    }
+    return view('catalogo-de-productos', compact('productos'));
 });
 
 Route::get('/consultas', function () {
