@@ -32,10 +32,12 @@
                     <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
                         <x-icons.shopping-bag />
                     </x-ui.button>
-                    <x-ui.button class="btn-ver-producto">
-                        Ver Producto
-                        <x-icons.chevron-right />
-                    </x-ui.button>
+                    <a class="btn-ver-producto" href="/producto/{{ $producto['slug'] }}">
+                        <x-ui.button>
+                            Ver Producto
+                            <x-icons.chevron-right />
+                        </x-ui.button>
+                    </a>
                 </div>
             </div>
         </div>

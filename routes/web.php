@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductoController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -22,16 +23,7 @@ Route::get('/terminos-y-usos', function () {
     return view('terminos-y-usos');
 });
 
-Route::get('/catalogo-de-productos', function () {
-    $path = storage_path('app/productos.json');
-    $productos = [];
-    if (file_exists($path)) {
-        $json = file_get_contents($path);
-        $data = json_decode($json, true);
-        $productos = $data['productos'] ?? [];
-    }
-    return view('catalogo-de-productos', compact('productos'));
-});
+Route::get('/catalogo-de-productos', [ProductoController::class, 'index']);
 
 Route::get('/consultas', function () {
     return view('consultas');
@@ -44,3 +36,6 @@ Route::get('/registro-de-clientes', function () {
 Route::get('/formulario-de-login', function () {
     return view('formulario-de-login');
 });
+
+// {slug} toma lo que se escribe despues de producto y lo manda al controlador.
+Route::get('/producto/{slug}', [ProductoController::class, 'show']);
