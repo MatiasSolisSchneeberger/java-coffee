@@ -1,10 +1,6 @@
-<span class="logo">
-    {{-- TODO: 
-        Elegir cual queda mejor
-    --}}
-    {{-- <x-icons.coffee /> --}}
+<a class="logo" href="/">
     <x-icons.mug />
     <span>
         Java Coffee
     </span>
-</span>
+</a>
