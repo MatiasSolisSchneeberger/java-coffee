@@ -8,6 +8,8 @@
 
     <title>{{ !empty($title) ? "$title | Java Coffee" : 'Java Coffee' }}</title>
 
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon.svg') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -28,6 +30,7 @@
     <x-navbar />
     {{ $slot }}
     <script type="module" src="{{ asset('js/index.js') }}"></script>
+    <x-footer />
 </body>
 
 </html>
