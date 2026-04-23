@@ -1,9 +1,20 @@
 @props(['producto' => null])
 
+@php
+    $portada = '/images/productos/error-404.png';
+    if ($producto) {
+        if (isset($producto['imagenes']) && is_array($producto['imagenes']) && count($producto['imagenes']) > 0) {
+            $portada = '/images/productos/' . $producto['imagenes'][0];
+        } elseif (isset($producto['imagen'])) {
+            $portada = '/images/productos/' . $producto['imagen'];
+        }
+    }
+@endphp
+
 @if ($producto)
     <article class="card">
         <div class="card-image-wrapper">
-            <img src="{{ $producto['imagen'] ?? '/images/hero-section.png' }}" alt="{{ $producto['nombre'] }}">
+            <img src="{{ $portada }}" alt="{{ $producto['nombre'] }}">
             @if (isset($producto['oferta']) && $producto['oferta'] > 0)
                 <span class="card-badge">Oferta</span>
             @endif

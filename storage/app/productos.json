@@ -7,7 +7,12 @@
             "descripcion": "Un café robusto con notas de chocolate oscuro, diseñado para largas sesiones de debugging.",
             "precio": 15.50,
             "oferta": 12.00,
-            "tipo": "Grano entero"
+            "tipo": "Grano entero",
+            "imagenes": [
+                "java-jolt-1.png",
+                "java-jolt-2.png",
+                "java-jolt-3.png"
+            ]
         },
         {
             "id": 2,
@@ -16,7 +21,12 @@
             "descripcion": "Sabor suave y versátil, con baja acidez para una lectura de logs sin interrupciones.",
             "precio": 18.00,
             "oferta": 0.00,
-            "tipo": "Molido fino"
+            "tipo": "Molido fino",
+            "imagenes": [
+                "python-pour-over-1.png",
+                "python-pour-over-2.png",
+                "python-pour-over-3.png"
+            ]
         },
         {
             "id": 3,
@@ -25,7 +35,12 @@
             "descripcion": "Máximo rendimiento y eficiencia. Una descarga directa de cafeína al sistema central.",
             "precio": 20.00,
             "oferta": 15.00,
-            "tipo": "Cápsulas"
+            "tipo": "Cápsulas",
+            "imagenes": [
+                "cpp-caffeine-1.png",
+                "cpp-caffeine-2.png",
+                "cpp-caffeine-3.png"
+            ]
         },
         {
             "id": 4,
