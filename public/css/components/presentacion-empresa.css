@@ -1,0 +1,115 @@
+.presentacion-empresa {
+	padding: var(--spacing-3xl) 0;
+	background: var(--bg-base);
+}
+
+.presentacion-content {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-2xl);
+	align-items: center;
+}
+
+@media (min-width: 992px) {
+	.presentacion-content {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--spacing-3xl);
+	}
+}
+
+.presentacion-text {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+}
+
+.presentacion-text h2 {
+	margin: 0;
+	color: var(--color-text-main);
+	position: relative;
+}
+
+.presentacion-text h2::after {
+	content: "";
+	display: block;
+	width: 60px;
+	height: 4px;
+	background: var(--color-primary);
+	margin-top: var(--spacing-sm);
+	border-radius: var(--border-radius-sm);
+}
+
+.presentacion-text p {
+	font-size: var(--text-lg);
+	line-height: 1.7;
+	color: var(--color-text-muted);
+}
+
+.presentacion-text .highlight {
+	color: var(--color-primary);
+	font-weight: var(--font-bold);
+}
+
+.presentacion-actions {
+	margin-top: var(--spacing-md);
+}
+
+/* Decor box / terminal aesthetic */
+.presentacion-decor {
+	display: flex;
+	justify-content: center;
+}
+
+.decor-box {
+	background: var(--bg-surface);
+	border: var(--border-thin);
+	border-radius: var(--border-radius-lg);
+	width: 100%;
+	max-width: 500px;
+	overflow: hidden;
+	box-shadow: var(--shadow-md);
+	transition: transform var(--transition-normal);
+}
+
+.decor-box:hover {
+	transform: translateY(-5px);
+	box-shadow: var(--shadow-glow);
+}
+
+.decor-header {
+	background: rgba(0, 0, 0, 0.2);
+	padding: var(--spacing-sm) var(--spacing-md);
+	display: flex;
+	gap: 8px;
+	border-bottom: var(--border-thin);
+}
+
+.decor-header .dot {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.dot-red { background-color: #ff5f56; }
+.dot-yellow { background-color: #ffbd2e; }
+.dot-green { background-color: #27c93f; }
+
+.decor-body {
+	padding: var(--spacing-lg);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+	font-family: var(--font-primary);
+}
+
+.decor-body code {
+	color: var(--color-text-main);
+	font-size: var(--text-sm);
+}
+
+.decor-body .prompt {
+	color: var(--color-primary);
+	font-weight: var(--font-bold);
+	margin-right: var(--spacing-xs);
+}
