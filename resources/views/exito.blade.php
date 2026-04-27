@@ -1,4 +1,4 @@
-<x-layout title="Mensaje Enviado">
+<x-layout title="Operación Exitosa">
     <div class="success-page">
         <div class="success-card">
 
@@ -14,13 +14,12 @@
 
             {{-- Mensaje --}}
             <h1 class="success-title">
-                ¡Envío <span>Exitoso</span>!
+                ¡Operación <span>Exitosa</span>!
             </h1>
 
             <p class="success-message">
-                Hola <strong>{{ $nombre }}</strong>, recibimos tu mensaje con éxito.
-                Un asesor comercial se comunicará contigo a la brevedad a tu correo:
-                <strong>{{ $email }}</strong>. <br>
+                Hola <strong>{{ $nombre }}</strong>, la operación se realizó con éxito.
+                Información registrada: <strong>{{ $email }}</strong>. <br>
                 <span>¡Muchas gracias!</span>
             </p>
 

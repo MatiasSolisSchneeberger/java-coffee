@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -41,9 +42,13 @@ Route::get('/registro', function () {
     return view('registro-de-clientes');
 });
 
+Route::post('/registro', [AuthController::class, 'register']);
+
 Route::get('/login', function () {
     return view('formulario-de-login');
 });
+
+Route::post('/login', [AuthController::class, 'login']);
 
 // {slug} toma lo que se escribe despues de producto y lo manda al controlador.
 Route::get('/producto/{slug}', [ProductoController::class, 'show']);
