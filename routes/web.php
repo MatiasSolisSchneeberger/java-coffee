@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ContactoController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -11,29 +12,36 @@ Route::get('/quienes-somos', function () {
     return view('quienes-somos');
 });
 
-Route::get('/comercialización', function () {
+Route::get('/comercializacion', function () {
     return view('comercializacion');
 });
 
-Route::get('/información-de-contactos', function () {
+
+Route::get('/contacto', function () {
     return view('informacion-de-contactos');
 });
+
+Route::post('/contacto', [ContactoController::class, 'procesar']);
+
 
 Route::get('/terminos-y-usos', function () {
     return view('terminos-y-usos');
 });
 
-Route::get('/catalogo-de-productos', [ProductoController::class, 'index']);
+Route::get('/productos', [ProductoController::class, 'index']);
 
 Route::get('/consultas', function () {
     return view('consultas');
 });
 
-Route::get('/registro-de-clientes', function () {
+Route::post('/consultas', [ContactoController::class, 'procesar']);
+
+
+Route::get('/registro', function () {
     return view('registro-de-clientes');
 });
 
-Route::get('/formulario-de-login', function () {
+Route::get('/login', function () {
     return view('formulario-de-login');
 });
 

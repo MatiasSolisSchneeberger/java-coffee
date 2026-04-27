@@ -13,19 +13,24 @@
 @import url(components/servicios.css);
 @import url(components/lista-productos.css);
 @import url(components/footer.css);
+@import url(components/ide.css);
 
 /* Pages */
 @import url(pages/catalogo.css);
 @import url(pages/producto.css);
+@import url(pages/comercializacion.css);
+@import url(pages/consultas.css);
+@import url(pages/exito.css);
+@import url(pages/terminos.css);
 
 :root {
 	/* Colors (OKLCH) 
      * Formato: oklch(Luminosidad Croma Tono)
      */
 	/* Base Backgrounds (Sistema de elevación) */
-	--bg-base: oklch(13% 0.028 261.692); /* Fondo principal oscuro */
-	--bg-surface: oklch(21% 0.034 264.665); /* Tarjetas de café, modales */
-	--bg-surface-hover: oklch(27.8% 0.033 256.848); /* Hover en tarjetas */
+	--bg-base: oklch(20.8% 0.042 265.755); /* Fondo principal oscuro */
+	--bg-surface: oklch(27.9% 0.041 260.031); /* Tarjetas de café, modales */
+	--bg-surface-hover: oklch(37.2% 0.044 257.287); /* Hover en tarjetas */
 
 	/* Brand Colors */
 	/* color solo: se usa para fondos y para llamar la atencion */
@@ -42,8 +47,8 @@
 	--color-text-muted: oklch(92.8% 0.006 264.531); /* Gris para subtítulos y descripciones */
 
 	/* Feedback (Success/Error) */
-	--color-error: oklch(60% 0.2 25);
-	--color-success: oklch(75% 0.15 150);
+	--color-error: oklch(57.7% 0.245 27.325);
+	--color-success: oklch(59.6% 0.145 163.225);
 
 	/* Spacing (Escala logarítmica para UI consistente) */
 	--spacing-xs: 0.25rem;

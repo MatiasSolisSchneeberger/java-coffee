@@ -8,6 +8,8 @@
 
     <title>{{ !empty($title) ? "$title | Java Coffee" : 'Java Coffee' }}</title>
 
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+
     <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon.svg') }}">
 
     <!-- Fonts -->

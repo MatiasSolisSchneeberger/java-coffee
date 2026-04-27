@@ -1,0 +1,331 @@
+.comercializacion-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.comercializacion-hero {
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+    padding-top: var(--spacing-xl);
+}
+
+.comercializacion-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+    filter: drop-shadow(var(--shadow-md));
+}
+
+.comercializacion-hero-desc {
+    color: var(--text-muted);
+    max-width: 42rem;
+    margin: 0 auto;
+    font-size: var(--text-lg);
+    line-height: 1.625;
+}
+
+.comercializacion-hero-highlight {
+    color: var(--color-secondary);
+    font-weight: var(--font-semibold);
+}
+
+.comercializacion-section {
+    margin-bottom: 5rem;
+}
+
+.comercializacion-section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--bg-surface-hover);
+    padding-bottom: var(--spacing-md);
+}
+
+.comercializacion-section-header svg.icon-primary {
+    color: var(--color-primary);
+}
+
+.comercializacion-section-header svg.icon-secondary {
+    color: var(--color-secondary);
+}
+
+.comercializacion-section-title {
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-main);
+}
+
+/* Payment Cards Grid */
+.comercializacion-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--spacing-xl);
+}
+
+@media (min-width: 768px) {
+    .comercializacion-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.comercializacion-card {
+    background-color: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--bg-surface-hover);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.comercializacion-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow);
+}
+
+.comercializacion-card-image-container {
+    width: 100%;
+    height: 12rem;
+    background-color: #15131d;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.comercializacion-card-image-placeholder {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    font-style: italic;
+    position: absolute;
+}
+
+.comercializacion-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: 10;
+    position: relative;
+}
+
+.comercializacion-card:hover .comercializacion-card-image {
+    opacity: 1;
+}
+
+.comercializacion-card-content {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.comercializacion-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.comercializacion-card-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text-main);
+}
+
+.comercializacion-card-badge {
+    background-color: color-mix(in srgb, var(--color-success) 20%, transparent);
+    color: var(--color-success);
+    font-size: 0.75rem;
+    font-weight: var(--font-bold);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.comercializacion-card-desc {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    flex: 1;
+}
+
+/* Delivery Cards */
+.comercializacion-delivery-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.comercializacion-delivery-card {
+    background-color: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--bg-surface-hover);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.comercializacion-delivery-card:hover {
+    border-color: var(--color-secondary);
+}
+
+@media (min-width: 768px) {
+    .comercializacion-delivery-card {
+        flex-direction: row;
+    }
+    
+    .comercializacion-delivery-card.reverse {
+        flex-direction: row-reverse;
+    }
+}
+
+.comercializacion-delivery-image-container {
+    width: 100%;
+    height: 16rem;
+    background-color: #15131d;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--bg-surface-hover);
+}
+
+@media (min-width: 768px) {
+    .comercializacion-delivery-image-container {
+        width: 40%;
+        height: auto;
+        border-bottom: none;
+    }
+    
+    .comercializacion-delivery-card:not(.reverse) .comercializacion-delivery-image-container {
+        border-right: 1px solid var(--bg-surface-hover);
+    }
+    
+    .comercializacion-delivery-card.reverse .comercializacion-delivery-image-container {
+        border-left: 1px solid var(--bg-surface-hover);
+    }
+}
+
+.comercializacion-delivery-card:hover .comercializacion-card-image {
+    opacity: 1;
+}
+
+.comercializacion-delivery-content {
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .comercializacion-delivery-content {
+        width: 60%;
+    }
+}
+
+.comercializacion-delivery-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.comercializacion-delivery-header svg {
+    color: var(--color-secondary);
+}
+
+.comercializacion-delivery-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text-main);
+}
+
+.comercializacion-delivery-desc {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--text-lg);
+}
+
+.comercializacion-delivery-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.comercializacion-delivery-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+}
+
+.comercializacion-delivery-item svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+/* Support Section */
+.comercializacion-support {
+    background: linear-gradient(to bottom right, var(--bg-surface), var(--bg-base));
+    border-radius: var(--border-radius-lg);
+    padding: 2.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    text-align: center;
+    box-shadow: var(--shadow-glow);
+}
+
+.comercializacion-support-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    border-radius: 50%;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+}
+
+.comercializacion-support-title {
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-main);
+}
+
+.comercializacion-support-desc {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xl);
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: var(--text-lg);
+}
+
+.comercializacion-support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background-color: var(--color-primary);
+    color: var(--bg-base);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--border-radius-sm);
+    font-weight: var(--font-bold);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+}
+
+.comercializacion-support-btn:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 90%, black);
+    transform: scale(1.05);
+}

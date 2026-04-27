@@ -11,14 +11,14 @@
                 <ul>
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/quienes-somos">Quiénes Somos</a></li>
-                    <li><a href="/información-de-contactos">Contacto</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h4>Tienda</h4>
                 <ul>
-                    <li><a href="/catalogo-de-productos">Catálogo de Productos</a></li>
-                    <li><a href="/comercialización">Comercialización</a></li>
+                    <li><a href="/productos">Catálogo de Productos</a></li>
+                    <li><a href="/comercializacion">Comercialización</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -31,8 +31,8 @@
             <div class="footer-column">
                 <h4>Cuenta</h4>
                 <ul>
-                    <li><a href="/formulario-de-login">Iniciar Sesión</a></li>
-                    <li><a href="/registro-de-clientes">Registrarse</a></li>
+                    <li><a href="/login">Iniciar Sesión</a></li>
+                    <li><a href="/registro">Registrarse</a></li>
                 </ul>
             </div>
         </div>
