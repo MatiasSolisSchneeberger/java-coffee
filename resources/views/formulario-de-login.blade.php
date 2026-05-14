@@ -27,7 +27,6 @@
                         <span>Ingresar</span>
                     </x-ui.button>
 
-                    {{-- NUEVO CONTENEDOR DE ENLACE DE REGISTRO --}}
                     <div class="register-link-container">
                         En caso de no estar registrado, <a href="/registro">Regístrate</a>
                     </div>
