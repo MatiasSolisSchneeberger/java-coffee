@@ -13,16 +13,23 @@ class ProductoController extends Controller
      */
     public function obtenerProductos()
     {
-        $path = storage_path('app/productos.json');
+        $productos = \App\Models\Producto::all();
+        $imagenes = \App\Models\ImagenProducto::all()->groupBy('producto_id');
 
-        if (file_exists($path)) {
-            $json = file_get_contents($path);
-            $data = json_decode($json, true);
-            
-            return $data['productos'] ?? [];
-        }
+        return $productos->map(function ($p) use ($imagenes) {
+            $imgs = isset($imagenes[$p->id]) ? $imagenes[$p->id]->pluck('url')->toArray() : [];
 
-        return [];
+            return [
+                'id' => $p->id,
+                'nombre' => $p->nombre,
+                'slug' => \Illuminate\Support\Str::slug($p->nombre),
+                'descripcion' => $p->descripcion,
+                'precio' => (float) $p->precio,
+                'oferta' => 0, // Por defecto no hay oferta en la BD actualmente
+                'tipo' => $p->tueste,
+                'imagenes' => $imgs,
+            ];
+        })->toArray();
     }
 
     /**
@@ -31,7 +38,7 @@ class ProductoController extends Controller
     public function index()
     {
         $productos = $this->obtenerProductos();
-        
+
         return view('catalogo-de-productos', compact('productos'));
     }
 
@@ -41,7 +48,7 @@ class ProductoController extends Controller
     public function show($slug)
     {
         $productos = $this->obtenerProductos();
-        
+
         $producto = collect($productos)->firstWhere('slug', $slug);
 
         if (!$producto) {

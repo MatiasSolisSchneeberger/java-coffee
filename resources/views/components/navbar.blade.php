@@ -39,14 +39,21 @@
             </li>
         </ul>
     </nav>
-    {{-- botones CTA --}}
     <aside>
-        <a href="/login">
-            <x-ui.button variant="secondary">Iniciar Sesión</x-ui.button>
-        </a>
-        <a href="/registro">
-            <x-ui.button variant="primary">Registrarse</x-ui.button>
-        </a>
+        @auth
+            <a href="{{ auth()->user()->rol === 'admin' ? '/admin' : '/cliente' }}">
+                <x-ui.button variant="secondary" class="icon" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem;" title="Mi Cuenta">
+                    <x-icons.user style="width: 20px; height: 20px;" />
+                </x-ui.button>
+            </a>
+        @else
+            <a href="/login">
+                <x-ui.button variant="secondary">Iniciar Sesión</x-ui.button>
+            </a>
+            <a href="/registro">
+                <x-ui.button variant="primary">Registrarse</x-ui.button>
+            </a>
+        @endauth
     </aside>
     {{-- nav mobile --}}
     <aside class="nav-mobile">
@@ -80,15 +87,23 @@
                 <x-icons.trending-up />
                 <span>Comercialización</span>
             </a>
-            <hr>
-            <a href="/login">
-                <x-icons.user />
-                <span>Iniciar Sesión</span>
-            </a>
-            <a href="/registro">
-                <x-icons.user-plus />
-                <span>Registrarse</span>
-            </a>
+            @auth
+                <hr>
+                <a href="{{ auth()->user()->rol === 'admin' ? '/admin' : '/cliente' }}">
+                    <x-icons.user />
+                    <span>Mi Cuenta ({{ auth()->user()->nombre }})</span>
+                </a>
+            @else
+                <hr>
+                <a href="/login">
+                    <x-icons.user />
+                    <span>Iniciar Sesión</span>
+                </a>
+                <a href="/registro">
+                    <x-icons.user-plus />
+                    <span>Registrarse</span>
+                </a>
+            @endauth
         </x-ui.dropdown>
     </aside>
 </section>

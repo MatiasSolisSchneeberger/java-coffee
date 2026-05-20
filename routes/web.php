@@ -35,20 +35,32 @@ Route::get('/consultas', function () {
     return view('consultas');
 });
 
-Route::post('/consultas', [ContactoController::class, 'procesar']);
 
 
-Route::get('/registro', function () {
-    return view('registro-de-clientes');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/registro', [AuthController::class, 'formularioRegistro']);
+    Route::post('/registro', [AuthController::class, 'registrar']);
+    
+    Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'autenticar']);
 });
 
-Route::post('/registro', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::get('/login', function () {
-    return view('formulario-de-login');
+Route::middleware(['auth', 'rol:admin'])->group(function () {
+    Route::get('/admin', function () {
+        return view('backend.admin.dashboard');
+    });
 });
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware(['auth', 'rol:cliente'])->group(function () {
+    Route::get('/cliente', function () {
+        return view('backend.usuarios.cliente');
+    });
+});
 
 // {slug} toma lo que se escribe despues de producto y lo manda al controlador.
 Route::get('/producto/{slug}', [ProductoController::class, 'show']);
+
+Route::post('/consultas', [ContactoController::class, 'store_contact']);

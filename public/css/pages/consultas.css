@@ -268,3 +268,56 @@ textarea.form-input {
     color: var(--color-text-muted);
     line-height: 1.6;
 }
+
+/* Estilos de error tipo consola (terminal) */
+.terminal-error-alert {
+    background-color: oklch(15% 0 0);
+    color: #ff5555;
+    border: 1px solid #ff5555;
+    border-left: 4px solid #ff5555;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    font-family: 'Cascadia Mono', 'Courier New', monospace;
+    font-size: var(--text-sm);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.terminal-error-alert p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: #ff5555;
+    font-weight: bold;
+}
+
+.terminal-error-alert ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.terminal-error-alert li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.terminal-error-alert li::before {
+    content: '> ';
+    position: absolute;
+    left: 0;
+    color: #ff5555;
+}
+
+.terminal-error-text {
+    display: block;
+    margin-top: var(--spacing-xs);
+    color: #ff5555;
+    font-family: 'Cascadia Mono', 'Courier New', monospace;
+    font-size: var(--text-xs);
+}
+
+.terminal-error-text::before {
+    content: '> Error: ';
+    font-weight: bold;
+}

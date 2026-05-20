@@ -3,28 +3,67 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Request\LoginRequest;
+use App\Http\Request\RegistroRequest;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function formularioLogin()
     {
-        $email = $request->input('email');
-        
-        // As we are just mocking the behavior like ContactoController
-        return view('exito', [
-            'nombre' => 'Usuario',
-            'email' => $email
-        ]);
+        return view('backend.usuarios.login');
     }
 
-    public function register(Request $request)
+    public function formularioRegistro()
     {
-        $nombre = $request->input('nombre');
-        $email = $request->input('email');
+        return view('backend.usuarios.registro');
+    }
 
-        return view('exito', [
-            'nombre' => $nombre,
-            'email' => $email
+    public function autenticar(LoginRequest $request)
+    {
+        $credenciales = $request->validated();
+
+        if (Auth::attempt($credenciales)) {
+            $request->session()->regenerate();
+
+            if (Auth::user()->rol === 'admin') {
+                return redirect('/admin');
+            }
+
+            return redirect('/cliente');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email o contraseña incorrectos',
+        ])->onlyInput('email');
+    }
+
+    public function registrar(RegistroRequest $request)
+    {
+        $datos = $request->validated();
+
+        $user = Usuario::create([
+            'nombre' => $datos['nombre'],
+            'apellido' => $datos['apellido'],
+            'email' => $datos['email'],
+            'password' => Hash::make($datos['password']),
+            'rol' => 'cliente'
         ]);
+
+        Auth::login($user);
+
+        return redirect('/cliente');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

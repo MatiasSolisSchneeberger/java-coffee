@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('carrito_id')->constrained('carritos')->onDelete('cascade');
             $table->foreignId('producto_id')->constrained('productos');
             $table->integer('cantidad');
-            $table->timestamp('agregado_el')->useCurrent();
+            $table->timestamps();
         });
     }
 

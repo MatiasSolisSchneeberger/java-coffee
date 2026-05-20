@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Request\ContactoRequest;
 
 class ContactoController extends Controller
 {
@@ -20,5 +21,20 @@ class ContactoController extends Controller
             'nombre' => $nombre,
             'email' => $email
         ]);
+    }
+
+    public function store_contact(ContactoRequest $request)
+    {
+
+        $datos = $request->validated();
+
+        $nombre   = $datos['nombre'];
+        $email    = $datos['email'];
+        $motivo   = $datos['motivo'];
+        $consulta = $datos['consulta'];
+
+        // guardar en BD
+
+        return redirect()->back()->with('success_message', 'Tu consulta ha sido enviada correctamente');
     }
 }
