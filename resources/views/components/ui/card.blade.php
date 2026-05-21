@@ -21,8 +21,7 @@
         </div>
 
         <div class="card-content">
-            <span class="card-type badge-code"
-                style="color: var(--color-secondary); border-color: var(--color-secondary);">{{ $producto['tipo'] }}</span>
+            <span class="card-type badge-code">{{ $producto['tipo'] }}</span>
             <h3 class="card-title">{{ $producto['nombre'] }}</h3>
 
             <p class="card-description">
@@ -40,7 +39,7 @@
                 </div>
 
                 <div class="card-actions">
-                    <form action="/carrito/agregar" method="POST" style="display: inline-block;">
+                    <form action="/carrito/agregar" method="POST">
                         @csrf
                         <input type="hidden" name="producto_id" value="{{ $producto['id'] }}">
                         <x-ui.button type="submit" variant="outline" class="icon" title="Agregar al carrito">
@@ -64,8 +63,7 @@
         </div>
 
         <div class="card-content">
-            <span class="card-type badge-code"
-                style="color: var(--color-secondary); border-color: var(--color-secondary);">Ejemplo</span>
+            <span class="card-type badge-code">Ejemplo</span>
             <h3 class="card-title">Producto 1</h3>
 
             <p class="card-description">

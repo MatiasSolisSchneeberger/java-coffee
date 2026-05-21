@@ -1,0 +1,94 @@
+/* public/css/components/ui/alerts.css */
+
+/* Terminal Error Alert */
+.terminal-error-alert {
+    background-color: oklch(15% 0 0);
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+    border-left: 4px solid var(--color-error);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.terminal-error-alert p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-error);
+    font-weight: var(--font-bold);
+}
+
+.terminal-error-alert ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.terminal-error-alert li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.terminal-error-alert li::before {
+    content: '> ';
+    position: absolute;
+    left: 0;
+    color: var(--color-error);
+}
+
+/* Terminal Success Alert */
+.terminal-success-alert {
+    background-color: oklch(15% 0.03 145);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-left: 4px solid var(--color-primary);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.terminal-success-alert p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+    font-weight: var(--font-bold);
+}
+
+.terminal-success-alert ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.terminal-success-alert li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.terminal-success-alert li::before {
+    content: '> ';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+}
+
+.terminal-error-text {
+    display: block;
+    margin-top: var(--spacing-xs);
+    color: var(--color-error);
+    font-family: var(--font-primary);
+    font-size: var(--text-xs);
+}
+
+.terminal-error-text::before {
+    content: '> Error: ';
+    font-weight: var(--font-bold);
+}

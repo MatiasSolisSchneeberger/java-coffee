@@ -8,7 +8,7 @@
 
         <div class="login-container">
             <div class="login-form-card">
-                <x-ui.error-alert title="Error al registrarte:" :messages="$errors->all()" style="margin-bottom: 20px;" />
+                <x-ui.error-alert title="Error al registrarte:" :messages="$errors->all()" />
                 <form action="/registro" method="POST" class="login-form">
                     @csrf
 
@@ -17,7 +17,7 @@
                         <input type="text" name="nombre" id="nombre" class="form-input" placeholder="Juan"
                             value="{{ old('nombre') }}" required autofocus>
                         @error('nombre')
-                            <small style="color: red; display: block;">{{ $message }}</small>
+                            <small class="terminal-error-text">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -26,7 +26,7 @@
                         <input type="text" name="apellido" id="apellido" class="form-input" placeholder="Pérez"
                             value="{{ old('apellido') }}" required>
                         @error('apellido')
-                            <small style="color: red; display: block;">{{ $message }}</small>
+                            <small class="terminal-error-text">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -35,7 +35,7 @@
                         <input type="email" name="email" id="email" class="form-input"
                             placeholder="usuario@ejemplo.com" value="{{ old('email') }}" required>
                         @error('email')
-                            <small style="color: red; display: block;">{{ $message }}</small>
+                            <small class="terminal-error-text">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -44,7 +44,7 @@
                         <input type="text" name="telefono" id="telefono" class="form-input"
                             placeholder="+54 11 1234-5678" value="{{ old('telefono') }}">
                         @error('telefono')
-                            <small style="color: red; display: block;">{{ $message }}</small>
+                            <small class="terminal-error-text">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -53,7 +53,7 @@
                         <input type="text" name="direccion" id="direccion" class="form-input"
                             placeholder="Av. Siempreviva 742" value="{{ old('direccion') }}">
                         @error('direccion')
-                            <small style="color: red; display: block;">{{ $message }}</small>
+                            <small class="terminal-error-text">{{ $message }}</small>
                         @enderror
                     </div>
 
@@ -62,7 +62,7 @@
                         <input type="password" name="password" id="password" class="form-input" placeholder="••••••••"
                             required>
                         @error('password')
-                            <small style="color: red; display: block;">{{ $message }}</small>
+                            <small class="terminal-error-text">{{ $message }}</small>
                         @enderror
                     </div>
 

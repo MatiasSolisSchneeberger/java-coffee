@@ -1,0 +1,20 @@
+/* public/css/pages/pedidos.css */
+
+.pedidos-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 var(--spacing-md);
+    text-align: center;
+}
+
+.pedidos-title {
+    color: var(--color-primary);
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: var(--spacing-lg);
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(99, 218, 149, 0.2);
+}
+
+.pedidos-empty-text {
+    color: var(--color-text-muted);
+}

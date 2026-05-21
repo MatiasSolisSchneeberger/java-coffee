@@ -63,18 +63,16 @@
                             <div class="rating-general">
                                 <span class="rating-general-num">{{ number_format($promedio, 1) }}</span>
                                 <div class="rating-general-stars">
-                                    <div style="display:flex;">
+                                    <div class="flex-row">
                                         @for ($i = 1; $i <= 5; $i++)
                                             @if ($i <= round($promedio))
                                                 <x-icons.star />
                                             @else
-                                                <x-icons.star style="color: var(--color-text-muted);" />
+                                                <x-icons.star class="icon-muted" />
                                             @endif
                                         @endfor
                                     </div>
-                                    <span
-                                        style="color: var(--color-text-muted); font-size: var(--text-sm);">{{ $totalCalificaciones }}
-                                        calificaciones</span>
+                                    <span class="text-sm icon-muted">{{ $totalCalificaciones }} calificaciones</span>
                                 </div>
                             </div>
 
@@ -82,12 +80,12 @@
                                 @foreach ($comentarios as $com)
                                     <div class="comentario-item">
                                         <div class="comentario-item-meta">
-                                            <div style="display:flex; margin-bottom: var(--spacing-xs);">
+                                            <div class="flex-row mb-xs">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     @if ($i <= $com['calificacion'])
-                                                        <x-icons.star style="width: 14px; height: 14px;" />
+                                                        <x-icons.star class="icon-xs" />
                                                     @else
-                                                        <x-icons.star style="width: 14px; height: 14px; color: var(--color-text-muted);" />
+                                                        <x-icons.star class="icon-xs icon-muted" />
                                                     @endif
                                                 @endfor
                                             </div>
@@ -99,10 +97,8 @@
                                 @endforeach
                             </div>
                         @else
-                            <div class="rating-general"
-                                style="flex-direction: column; align-items: flex-start; gap: var(--spacing-xs);">
-                                <span style="font-size: var(--text-lg); color: var(--color-text-muted);">Aún no hay
-                                    calificaciones para este producto. ¡Sé el primero en opinar!</span>
+                            <div class="rating-general flex-col mb-xs">
+                                <span class="text-lg icon-muted">Aún no hay calificaciones para este producto. ¡Sé el primero en opinar!</span>
                             </div>
                         @endif
 
@@ -112,9 +108,7 @@
                                 class="form-calificar">
                                 @csrf
                                 <div class="form-group">
-                                    <label
-                                        style="display: block; margin-bottom: var(--spacing-sm); color: var(--color-text-muted);">Tu
-                                        calificación</label>
+                                    <label class="display-block mb-sm icon-muted">Tu calificación</label>
                                     <div class="star-rating-input">
                                         <input type="radio" id="star5" name="rating" value="5" /><label
                                             for="star5" title="5 estrellas">★</label>
@@ -129,15 +123,12 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-top: var(--spacing-md);">
-                                    <label
-                                        style="display: block; margin-bottom: var(--spacing-sm); color: var(--color-text-muted);">Tu
-                                        opinión (opcional)</label>
+                                <div class="form-group mt-md">
+                                    <label class="display-block mb-sm icon-muted">Tu opinión (opcional)</label>
                                     <textarea name="comentario" placeholder="¿Qué te pareció el producto?"></textarea>
                                 </div>
 
-                                <x-ui.button style="margin-top: var(--spacing-md); width: fit-content;">Enviar
-                                    calificación</x-ui.button>
+                                <x-ui.button class="mt-md w-fit">Enviar calificación</x-ui.button>
                             </form>
                         </div>
                     </div>
@@ -156,18 +147,17 @@
                         <h1 class="producto-titulo">{{ $producto['nombre'] }}</h1>
 
                         <div class="producto-rating-resumen">
-                            <div class="estrellas" style="display: flex;">
+                            <div class="estrellas flex-row">
                                 @if ($totalCalificaciones > 0)
                                     @for ($i = 1; $i <= 5; $i++)
                                         @if ($i <= round($promedio))
                                             <x-icons.star />
                                         @else
-                                            <x-icons.star style="color: var(--color-text-muted);" />
+                                            <x-icons.star class="icon-muted" />
                                         @endif
                                     @endfor
                                 @else
-                                    <span style="color: var(--text-muted); font-size: var(--text-sm);">Aún sin
-                                        calificaciones</span>
+                                    <span class="text-sm icon-muted">Aún sin calificaciones</span>
                                 @endif
                             </div>
                             @if ($totalCalificaciones > 0)
@@ -175,9 +165,8 @@
                             @endif
                         </div>
 
-                        <div style="margin-top: var(--spacing-sm);">
-                            <span class="badge-code"
-                                style="color: var(--color-secondary); border-color: var(--color-secondary);">{{ $producto['tipo'] }}</span>
+                        <div class="mt-sm">
+                            <span class="badge-code badge-secondary">{{ $producto['tipo'] }}</span>
                         </div>
 
                         <div class="producto-precio-info">
@@ -201,16 +190,14 @@
                                     <x-icons.truck />
                                 </span>
                                 <div>
-                                    <span style="font-weight: var(--font-semibold);">Llega gratis
+                                    <span class="font-semibold">Llega gratis
                                         <b>mañana</b></span><br>
-                                    <span style="color: var(--color-text-muted); font-size: var(--text-sm);">Comprando
-                                        dentro de las próximas 4 h</span>
+                                    <span class="text-sm icon-muted">Comprando dentro de las próximas 4 h</span>
                                 </div>
                             </div>
 
-                            <div style="margin-top: var(--spacing-md);">
-                                <p class="producto-descripcion"
-                                    style="margin-bottom: var(--spacing-sm); font-weight: var(--font-bold); color: var(--color-text-main);">
+                            <div class="mt-md">
+                                <p class="producto-descripcion mb-sm font-bold">
                                     Lo que tenés que saber de este producto
                                 </p>
                                 <ul class="caracteristicas-list">
@@ -221,15 +208,13 @@
                             </div>
 
                             <div class="producto-acciones">
-                                <form action="/carrito/agregar" method="POST" style="width: 100%; display: flex; flex-direction: column; gap: var(--spacing-md);">
+                                <form action="/carrito/agregar" method="POST" class="product-buy-form">
                                     @csrf
                                     <input type="hidden" name="producto_id" value="{{ $producto['id'] }}">
-                                    <x-ui.button type="submit" class="btn-block"
-                                        style="width: 100%; justify-content: center; font-size: 1rem; padding: var(--spacing-md) 0;">
+                                    <x-ui.button type="submit" class="btn-block">
                                         Comprar ahora
                                     </x-ui.button>
-                                    <x-ui.button type="submit" variant="outline"
-                                        style="width: 100%; justify-content: center; font-size: 1rem; padding: var(--spacing-md) 0;">
+                                    <x-ui.button type="submit" variant="outline">
                                         Agregar al carrito
                                     </x-ui.button>
                                 </form>
@@ -250,7 +235,7 @@
                         @endforeach
                     </div>
                     {{-- Add spacing at the bottom --}}
-                    <div style="height: var(--spacing-2xl);"></div>
+                    <div class="h-2xl"></div>
                 </div>
             @endif
 

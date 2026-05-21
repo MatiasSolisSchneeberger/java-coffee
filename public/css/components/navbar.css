@@ -38,4 +38,27 @@
 			display: flex;
 		}
 	}
+
+	.nav-cart-link {
+		margin-right: 0.5rem;
+		position: relative;
+		display: flex;
+	}
+
+	.cart-badge-count {
+		position: absolute;
+		top: -6px;
+		right: -6px;
+		background: var(--color-primary);
+		color: var(--bg-base);
+		font-size: 10px;
+		font-weight: var(--font-bold);
+		border-radius: 50%;
+		width: 18px;
+		height: 18px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 0 5px rgba(99, 218, 149, 0.5);
+	}
 }

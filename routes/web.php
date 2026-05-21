@@ -53,6 +53,30 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
     Route::get('/admin', function () {
         return view('backend.admin.dashboard');
     });
+
+    Route::get('/admin/productos', function () {
+        return view('backend.admin.productos.index');
+    });
+
+    Route::get('/admin/producto/crear', function () {
+        return view('backend.admin.productos.crear');
+    });
+
+    Route::get('/admin/producto/{slug}', function ($slug) {
+        return view('backend.admin.productos.editar', ['slug' => $slug]);
+    });
+
+    Route::get('/admin/pedidos', function () {
+        return view('backend.admin.pedidos.index');
+    });
+
+    Route::get('/admin/consultas', function () {
+        return view('backend.admin.consultas.index');
+    });
+
+    Route::get('/admin/comentarios', function () {
+        return view('backend.admin.comentarios.index');
+    });
 });
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {

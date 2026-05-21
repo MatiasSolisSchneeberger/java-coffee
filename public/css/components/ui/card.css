@@ -77,6 +77,8 @@
 	font-size: 0.75rem;
 	padding: 0.2rem 0.5rem;
 	margin-bottom: 2px;
+	color: var(--color-secondary);
+	border-color: var(--color-secondary);
 }
 
 .card-title {
@@ -146,4 +148,8 @@
 /* El botón "Ver Producto" se estira para ocupar el espacio restante */
 .card-actions .btn-ver-producto {
 	flex: 1;
+}
+
+.card-actions form {
+	display: inline-block;
 }

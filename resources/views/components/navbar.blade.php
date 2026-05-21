@@ -42,31 +42,16 @@
     <aside>
         @auth
             @if(auth()->user()->rol === 'cliente')
-                <a href="/carrito" style="margin-right: 0.5rem; position: relative; display: flex;">
-                    <x-ui.button variant="secondary" class="icon" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem;" title="Carrito de Compras">
-                        <x-icons.shopping-bag style="width: 20px; height: 20px;" />
-                        <span class="cart-badge-count" style="
-                            position: absolute;
-                            top: -6px;
-                            right: -6px;
-                            background: var(--color-primary);
-                            color: var(--bg-base);
-                            font-size: 10px;
-                            font-weight: var(--font-bold);
-                            border-radius: 50%;
-                            width: 18px;
-                            height: 18px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            box-shadow: 0 0 5px rgba(99, 218, 149, 0.5);
-                        ">{{ \App\Models\Carrito::getCartCount() }}</span>
+                <a href="/carrito" class="nav-cart-link">
+                    <x-ui.button variant="secondary" class="icon" title="Carrito de Compras">
+                        <x-icons.shopping-bag class="icon-md" />
+                        <span class="cart-badge-count">{{ \App\Models\Carrito::getCartCount() }}</span>
                     </x-ui.button>
                 </a>
             @endif
             <a href="{{ auth()->user()->rol === 'admin' ? '/admin' : '/cliente' }}">
-                <x-ui.button variant="secondary" class="icon" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem;" title="Mi Cuenta">
-                    <x-icons.user style="width: 20px; height: 20px;" />
+                <x-ui.button variant="secondary" class="icon" title="Mi Cuenta">
+                    <x-icons.user class="icon-md" />
                 </x-ui.button>
             </a>
         @else

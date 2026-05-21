@@ -3,24 +3,22 @@
         <div class="carrito-container">
             <h1 class="carrito-main-title">Tu <span>Carrito</span></h1>
 
-            @if(session('success'))
-                <div class="alert alert-success" style="margin-bottom: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-surface); border-left: 4px solid var(--color-success); border-radius: var(--border-radius-sm); color: var(--color-success);">
-                    {{ session('success') }}
-                </div>
+            @if (session('success'))
+                <x-ui.success-alert :messages="[session('success')]" />
             @endif
 
-            @if(session('error'))
-                <x-ui.error-alert title="Error:" :messages="[session('error')]" style="margin-bottom: var(--spacing-md);" />
+            @if (session('error'))
+                <x-ui.error-alert title="Error:" :messages="[session('error')]" />
             @endif
 
-            @if($errors->any())
-                <x-ui.error-alert title="Campos requeridos:" :messages="$errors->all()" style="margin-bottom: var(--spacing-md);" />
+            @if ($errors->any())
+                <x-ui.error-alert title="Campos requeridos:" :messages="$errors->all()" />
             @endif
 
-            @if($items->isEmpty())
+            @if ($items->isEmpty())
                 <div class="carrito-vacio-card">
                     <div class="vacio-icon-wrapper">
-                        <x-icons.coffee style="width: 60px; height: 60px; color: var(--color-text-muted);" />
+                        <x-icons.coffee class="icon-xl icon-muted" />
                     </div>
                     <h2>El carrito está vacío</h2>
                     <p>Parece que aún no has agregado ningún producto a tu carrito de compras.</p>
@@ -34,13 +32,16 @@
                 <div class="carrito-layout">
                     {{-- Lista de Items --}}
                     <div class="carrito-items-col">
-                        @foreach($items as $item)
+                        @foreach ($items as $item)
                             @php
                                 $portada = '/images/productos/error-404.png';
                                 if ($item->producto) {
                                     $productoModel = $item->producto;
                                     // Buscar si tiene imágenes asociadas
-                                    $imagenes = \App\Models\ImagenProducto::where('producto_id', $productoModel->id)->get();
+                                    $imagenes = \App\Models\ImagenProducto::where(
+                                        'producto_id',
+                                        $productoModel->id,
+                                    )->get();
                                     if ($imagenes->count() > 0) {
                                         $portada = '/images/productos/' . $imagenes->first()->url;
                                     }
@@ -55,42 +56,45 @@
                                     <h3 class="item-title">{{ $item->producto->nombre }}</h3>
                                     <p class="item-price-unit">${{ number_format($item->producto->precio, 2) }} c/u</p>
                                 </div>
-                                
+
                                 {{-- Controles de cantidad --}}
                                 <div class="item-qty-actions">
-                                    <form action="/carrito/actualizar/{{ $item->id }}" method="POST">
+                                    <form action="/carrito/actualizar/{{ $item->id }}" method="POST" class="qty-form">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="cantidad" value="{{ $item->cantidad - 1 }}">
-                                        <button type="submit" class="qty-btn" {{ $item->cantidad <= 1 ? 'disabled' : '' }}>
-                                            <x-icons.minus style="width: 14px; height: 14px;" />
+                                        <button type="submit" class="qty-btn"
+                                            {{ $item->cantidad <= 1 ? 'disabled' : '' }}>
+                                            <x-icons.minus class="icon-xs" />
                                         </button>
                                     </form>
 
                                     <span class="qty-val">{{ $item->cantidad }}</span>
 
-                                    <form action="/carrito/actualizar/{{ $item->id }}" method="POST">
+                                    <form action="/carrito/actualizar/{{ $item->id }}" method="POST" class="qty-form">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="cantidad" value="{{ $item->cantidad + 1 }}">
-                                        <button type="submit" class="qty-btn" {{ $item->cantidad >= $item->producto->stock ? 'disabled' : '' }}>
-                                            <x-icons.plus style="width: 14px; height: 14px;" />
+                                        <button type="submit" class="qty-btn"
+                                            {{ $item->cantidad >= $item->producto->stock ? 'disabled' : '' }}>
+                                            <x-icons.plus class="icon-xs" />
                                         </button>
                                     </form>
                                 </div>
 
                                 {{-- Subtotal del item --}}
                                 <div class="item-subtotal">
-                                    <p class="subtotal-price">${{ number_format($item->producto->precio * $item->cantidad, 2) }}</p>
+                                    <p class="subtotal-price">
+                                        ${{ number_format($item->producto->precio * $item->cantidad, 2) }}</p>
                                 </div>
 
                                 {{-- Eliminar del carrito --}}
                                 <div class="item-delete">
-                                    <form action="/carrito/eliminar/{{ $item->id }}" method="POST">
+                                    <form action="/carrito/eliminar/{{ $item->id }}" method="POST" class="delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="delete-btn" title="Eliminar del carrito">
-                                            <x-icons.x-circle style="width: 20px; height: 20px;" />
+                                            <x-icons.x-circle class="icon-md" />
                                         </button>
                                     </form>
                                 </div>
@@ -102,10 +106,10 @@
                     <div class="carrito-checkout-col">
                         <div class="checkout-card">
                             <h2>Resumen de Compra</h2>
-                            
+
                             @php
                                 $subtotalGeneral = 0;
-                                foreach($items as $item) {
+                                foreach ($items as $item) {
                                     $subtotalGeneral += $item->producto->precio * $item->cantidad;
                                 }
                             @endphp
@@ -130,35 +134,39 @@
 
                                 <div class="form-group">
                                     <label for="direccion_envio" class="form-label">Dirección de Envío</label>
-                                    <input type="text" name="direccion_envio" id="direccion_envio" class="form-input" 
-                                        value="{{ old('direccion_envio', $usuario->direccion) }}" 
+                                    <input type="text" name="direccion_envio" id="direccion_envio" class="form-input"
+                                        value="{{ old('direccion_envio', $usuario->direccion) }}"
                                         placeholder="Calle 123, Departamento 2B, Ciudad" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="telefono" class="form-label">Teléfono de Contacto</label>
-                                    <input type="text" name="telefono" id="telefono" class="form-input" 
-                                        value="{{ old('telefono', $usuario->telefono) }}" 
+                                    <input type="text" name="telefono" id="telefono" class="form-input"
+                                        value="{{ old('telefono', $usuario->telefono) }}"
                                         placeholder="+54 9 11 1234-5678" required>
                                 </div>
 
-                                <h3 style="margin-top: var(--spacing-md);">Método de Pago</h3>
+                                <h3 class="mt-md">Método de Pago</h3>
                                 <div class="payment-methods">
                                     <label class="payment-option">
-                                        <input type="radio" name="metodo_pago" value="Tarjeta" {{ old('metodo_pago', 'Tarjeta') === 'Tarjeta' ? 'checked' : '' }} required>
+                                        <input type="radio" name="metodo_pago" value="Tarjeta"
+                                            {{ old('metodo_pago', 'Tarjeta') === 'Tarjeta' ? 'checked' : '' }}
+                                            required>
                                         <span class="option-label">Tarjeta de Crédito/Débito</span>
                                     </label>
                                     <label class="payment-option">
-                                        <input type="radio" name="metodo_pago" value="Transferencia" {{ old('metodo_pago') === 'Transferencia' ? 'checked' : '' }}>
+                                        <input type="radio" name="metodo_pago" value="Transferencia"
+                                            {{ old('metodo_pago') === 'Transferencia' ? 'checked' : '' }}>
                                         <span class="option-label">Transferencia Bancaria</span>
                                     </label>
                                     <label class="payment-option">
-                                        <input type="radio" name="metodo_pago" value="Efectivo" {{ old('metodo_pago') === 'Efectivo' ? 'checked' : '' }}>
+                                        <input type="radio" name="metodo_pago" value="Efectivo"
+                                            {{ old('metodo_pago') === 'Efectivo' ? 'checked' : '' }}>
                                         <span class="option-label">Efectivo al Retirar</span>
                                     </label>
                                 </div>
 
-                                <x-ui.button type="submit" class="checkout-submit-btn" style="width: 100%; justify-content: center; margin-top: var(--spacing-lg);">
+                                <x-ui.button type="submit" class="checkout-submit-btn">
                                     <span>Confirmar y Comprar</span>
                                 </x-ui.button>
                             </form>
