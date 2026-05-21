@@ -40,9 +40,13 @@
                 </div>
 
                 <div class="card-actions">
-                    <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
-                        <x-icons.shopping-bag />
-                    </x-ui.button>
+                    <form action="/carrito/agregar" method="POST" style="display: inline-block;">
+                        @csrf
+                        <input type="hidden" name="producto_id" value="{{ $producto['id'] }}">
+                        <x-ui.button type="submit" variant="outline" class="icon" title="Agregar al carrito">
+                            <x-icons.shopping-bag />
+                        </x-ui.button>
+                    </form>
                     <a class="btn-ver-producto" href="/producto/{{ $producto['slug'] }}">
                         <x-ui.button>
                             Ver Producto

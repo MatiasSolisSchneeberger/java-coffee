@@ -221,14 +221,18 @@
                             </div>
 
                             <div class="producto-acciones">
-                                <x-ui.button class="btn-block"
-                                    style="width: 100%; justify-content: center; font-size: 1rem; padding: var(--spacing-md) 0;">
-                                    Comprar ahora
-                                </x-ui.button>
-                                <x-ui.button variant="outline"
-                                    style="width: 100%; justify-content: center; font-size: 1rem; padding: var(--spacing-md) 0;">
-                                    Agregar al carrito
-                                </x-ui.button>
+                                <form action="/carrito/agregar" method="POST" style="width: 100%; display: flex; flex-direction: column; gap: var(--spacing-md);">
+                                    @csrf
+                                    <input type="hidden" name="producto_id" value="{{ $producto['id'] }}">
+                                    <x-ui.button type="submit" class="btn-block"
+                                        style="width: 100%; justify-content: center; font-size: 1rem; padding: var(--spacing-md) 0;">
+                                        Comprar ahora
+                                    </x-ui.button>
+                                    <x-ui.button type="submit" variant="outline"
+                                        style="width: 100%; justify-content: center; font-size: 1rem; padding: var(--spacing-md) 0;">
+                                        Agregar al carrito
+                                    </x-ui.button>
+                                </form>
                             </div>
                         </div>
                     </div>

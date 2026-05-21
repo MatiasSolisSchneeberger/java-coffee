@@ -40,6 +40,24 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="telefono" class="form-label">Teléfono (Opcional)</label>
+                        <input type="text" name="telefono" id="telefono" class="form-input"
+                            placeholder="+54 11 1234-5678" value="{{ old('telefono') }}">
+                        @error('telefono')
+                            <small style="color: red; display: block;">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion" class="form-label">Dirección (Opcional)</label>
+                        <input type="text" name="direccion" id="direccion" class="form-input"
+                            placeholder="Av. Siempreviva 742" value="{{ old('direccion') }}">
+                        @error('direccion')
+                            <small style="color: red; display: block;">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
                         <label for="password" class="form-label">Contraseña</label>
                         <input type="password" name="password" id="password" class="form-input" placeholder="••••••••"
                             required>

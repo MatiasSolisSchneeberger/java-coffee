@@ -11,4 +11,14 @@ class ItemCarrito extends Model
     protected $casts = [
         'cantidad' => 'integer'
     ];
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class, 'producto_id');
+    }
+
+    public function carrito()
+    {
+        return $this->belongsTo(Carrito::class, 'carrito_id');
+    }
 }

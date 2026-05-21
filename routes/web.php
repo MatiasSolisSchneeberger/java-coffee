@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarritoController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -57,6 +58,16 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente', function () {
         return view('backend.usuarios.cliente');
+    });
+
+    Route::get('/carrito', [CarritoController::class, 'index']);
+    Route::post('/carrito/agregar', [CarritoController::class, 'agregar']);
+    Route::patch('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar']);
+    Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar']);
+    Route::post('/carrito/comprar', [CarritoController::class, 'comprar']);
+    
+    Route::get('/pedidos', function () {
+        return view('pedidos');
     });
 });
 

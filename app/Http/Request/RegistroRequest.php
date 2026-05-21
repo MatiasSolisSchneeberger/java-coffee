@@ -18,6 +18,8 @@ class RegistroRequest extends FormRequest
             'apellido' => 'required|string|max:100',
             'email'    => 'required|email|max:150|unique:usuarios',
             'password' => 'required|string|min:8|confirmed',
+            'telefono' => 'nullable|string|max:20',
+            'direccion' => 'nullable|string|max:255',
         ];
     }
 
@@ -37,6 +39,8 @@ class RegistroRequest extends FormRequest
             'password.string'   => 'La contraseña debe ser una cadena de texto.',
             'password.min'      => 'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed' => 'Las contraseñas no coinciden.',
+            'telefono.max'      => 'El teléfono no puede superar los 20 caracteres.',
+            'direccion.max'     => 'La dirección no puede superar los 255 caracteres.',
         ];
     }
 }

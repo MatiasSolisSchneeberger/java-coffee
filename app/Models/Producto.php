@@ -16,4 +16,9 @@ class Producto extends Model
         'stock' => 'integer',
         'peso_gramos' => 'integer'
     ];
+
+    public function itemsCarrito()
+    {
+        return $this->hasMany(ItemCarrito::class, 'producto_id');
+    }
 }
