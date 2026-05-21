@@ -36,22 +36,26 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/productos" class="admin-nav-link {{ request()->is('admin/productos*') || request()->is('admin/producto*') ? 'active' : '' }}">
+                        <a href="/admin/productos"
+                            class="admin-nav-link {{ request()->is('admin/productos*') || request()->is('admin/producto*') ? 'active' : '' }}">
                             <span class="nav-icon">></span> Productos
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/pedidos" class="admin-nav-link {{ request()->is('admin/pedidos*') ? 'active' : '' }}">
+                        <a href="/admin/pedidos"
+                            class="admin-nav-link {{ request()->is('admin/pedidos*') ? 'active' : '' }}">
                             <span class="nav-icon">></span> Pedidos
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/consultas" class="admin-nav-link {{ request()->is('admin/consultas*') ? 'active' : '' }}">
+                        <a href="/admin/consultas"
+                            class="admin-nav-link {{ request()->is('admin/consultas*') ? 'active' : '' }}">
                             <span class="nav-icon">></span> Consultas
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/comentarios" class="admin-nav-link {{ request()->is('admin/comentarios*') ? 'active' : '' }}">
+                        <a href="/admin/comentarios"
+                            class="admin-nav-link {{ request()->is('admin/comentarios*') ? 'active' : '' }}">
                             <span class="nav-icon">></span> Comentarios
                         </a>
                     </li>

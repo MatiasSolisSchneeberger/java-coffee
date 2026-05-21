@@ -61,7 +61,8 @@
                             <td>Efectivo</td>
                             <td><span class="admin-badge admin-badge-pending">Pendiente</span></td>
                             <td>
-                                <a href="/admin/pedidos" class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
+                                <a href="/admin/pedidos"
+                                    class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
                             </td>
                         </tr>
                         <tr>
@@ -71,7 +72,8 @@
                             <td>Tarjeta</td>
                             <td><span class="admin-badge admin-badge-success">Entregado</span></td>
                             <td>
-                                <a href="/admin/pedidos" class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
+                                <a href="/admin/pedidos"
+                                    class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
                             </td>
                         </tr>
                         <tr>
@@ -81,7 +83,8 @@
                             <td>Transferencia</td>
                             <td><span class="admin-badge admin-badge-info">Enviado</span></td>
                             <td>
-                                <a href="/admin/pedidos" class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
+                                <a href="/admin/pedidos"
+                                    class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
                             </td>
                         </tr>
                         <tr>
@@ -91,7 +94,8 @@
                             <td>Tarjeta</td>
                             <td><span class="admin-badge admin-badge-success">Entregado</span></td>
                             <td>
-                                <a href="/admin/pedidos" class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
+                                <a href="/admin/pedidos"
+                                    class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -112,7 +116,8 @@
                         <span class="recent-comment-user">Matias Schnee</span>
                         <span class="comment-stars">★★★★★</span>
                     </header>
-                    <p class="recent-comment-text">"El mejor café de especialidad que probé en Buenos Aires. Tostado ideal."</p>
+                    <p class="recent-comment-text">"El mejor café de especialidad que probé en Buenos Aires. Tostado
+                        ideal."</p>
                 </article>
 
                 <article class="recent-comment-item">
@@ -120,7 +125,8 @@
                         <span class="recent-comment-user">Laura Benítez</span>
                         <span class="comment-stars">★★★★☆</span>
                     </header>
-                    <p class="recent-comment-text">"Muy rica la cafetera de prensa francesa, llegó rápido y bien embalada."</p>
+                    <p class="recent-comment-text">"Muy rica la cafetera de prensa francesa, llegó rápido y bien
+                        embalada."</p>
                 </article>
 
                 <article class="recent-comment-item">
@@ -128,7 +134,8 @@
                         <span class="recent-comment-user">Esteban Quito</span>
                         <span class="comment-stars">★★★★★</span>
                     </header>
-                    <p class="recent-comment-text">"Excelente la atención al cliente, me explicaron muy bien las variedades."</p>
+                    <p class="recent-comment-text">"Excelente la atención al cliente, me explicaron muy bien las
+                        variedades."</p>
                 </article>
             </div>
         </section>
