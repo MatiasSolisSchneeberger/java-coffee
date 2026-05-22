@@ -27,6 +27,7 @@
 @import url(pages/carrito.css);
 @import url(pages/pedidos.css);
 @import url(pages/admin.css);
+@import url(pages/cliente.css);
 
 :root {
 	/* Colors (OKLCH) 

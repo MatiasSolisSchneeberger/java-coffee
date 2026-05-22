@@ -29,7 +29,7 @@
 
                         <div class="contact-card">
                             <div class="contact-icon">
-                                <x-icons.envelope />
+                                <x-icons.mail />
                             </div>
                             <div class="contact-details">
                                 <h3>Escríbenos</h3>
