@@ -20,7 +20,7 @@
                         <span class="query-meta">l.fernandez@email.com — Asunto: Consulta sobre envíos al interior</span>
                     </div>
                     <div class="admin-btn-group">
-                        <span class="admin-badge admin-badge-pending">Pendiente</span>
+                        <x-ui.status-badge status="pendiente" />
                         <span class="nav-icon" id="arrow-1">></span>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         <span class="query-meta">martin.altieri@email.com — Asunto: Stock de molinillo eléctrico</span>
                     </div>
                     <div class="admin-btn-group">
-                        <span class="admin-badge admin-badge-success">Respondido</span>
+                        <x-ui.status-badge status="entregado">Respondido</x-ui.status-badge>
                         <span class="nav-icon" id="arrow-2">></span>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                             "Hola Martín, ¿cómo estás? Estimamos el reingreso de los molinillos para la primera semana del próximo mes. Te sugerimos activar la alerta de stock para recibir una notificación apenas estén disponibles. Saludos!"
                         </p>
                         <div style="font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 8px;">
-                            Enviado por: Administrador — Fecha: 2026-05-18
+                             Enviado por: Administrador — Fecha: 2026-05-18
                         </div>
                     </div>
                 </div>
@@ -94,8 +94,8 @@
             textarea.value = "";
             // Simular cambio de estado visual
             var card = textarea.closest('.query-card');
-            var badge = card.querySelector('.admin-badge');
-            badge.className = 'admin-badge admin-badge-success';
+            var badge = card.querySelector('.status-badge');
+            badge.className = 'status-badge status-success';
             badge.textContent = 'Respondido';
             toggleQueryBody(id);
         }

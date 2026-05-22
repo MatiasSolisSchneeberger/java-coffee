@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\ClienteController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -80,9 +81,9 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
-    Route::get('/cliente', function () {
-        return view('backend.usuarios.cliente');
-    });
+    Route::get('/cliente', [ClienteController::class, 'index']);
+    Route::put('/cliente/perfil', [ClienteController::class, 'actualizarPerfil']);
+    Route::delete('/cliente/favoritos/eliminar/{id}', [ClienteController::class, 'eliminarFavorito']);
 
     Route::get('/carrito', [CarritoController::class, 'index']);
     Route::post('/carrito/agregar', [CarritoController::class, 'agregar']);

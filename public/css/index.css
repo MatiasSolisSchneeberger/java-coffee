@@ -5,8 +5,11 @@
 @import url(components/ui/dropdown.css);
 @import url(components/ui/card.css);
 @import url(components/ui/alerts.css);
+@import url(components/ui/status-badge.css);
+@import url(components/ui/stat-card.css);
 
 /* Components */
+@import url(components/dashboard-layout.css);
 @import url(components/navbar.css);
 @import url(components/logo.css);
 @import url(components/hero-section.css);

@@ -42,7 +42,7 @@
                         </td>
                         <td>2026-05-20</td>
                         <td>
-                            <span class="admin-badge admin-badge-success" id="comment-badge-1">Aprobado</span>
+                            <x-ui.status-badge status="entregado" id="comment-badge-1">Aprobado</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">
@@ -69,7 +69,7 @@
                         </td>
                         <td>2026-05-19</td>
                         <td>
-                            <span class="admin-badge admin-badge-pending" id="comment-badge-2">Pendiente</span>
+                            <x-ui.status-badge status="pendiente" id="comment-badge-2">Pendiente</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">
@@ -96,7 +96,7 @@
                         </td>
                         <td>2026-05-18</td>
                         <td>
-                            <span class="admin-badge admin-badge-success" id="comment-badge-3">Aprobado</span>
+                            <x-ui.status-badge status="entregado" id="comment-badge-3">Aprobado</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">
@@ -115,7 +115,7 @@
             alert("Simulación: Comentario #" + id + " aprobado con éxito. Ahora es visible públicamente.");
             // Actualizar interfaz visual
             var badge = document.getElementById('comment-badge-' + id);
-            badge.className = 'admin-badge admin-badge-success';
+            badge.className = 'status-badge status-success';
             badge.textContent = 'Aprobado';
             
             var approveBtn = document.getElementById('approve-btn-' + id);

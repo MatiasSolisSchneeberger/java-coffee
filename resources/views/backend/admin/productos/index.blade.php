@@ -36,7 +36,7 @@
                         <td>$8,500.00</td>
                         <td>-</td>
                         <td>
-                            <span class="admin-badge admin-badge-success">24 unidades</span>
+                            <x-ui.status-badge status="entregado">24 unidades</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">
@@ -54,7 +54,7 @@
                         <td>$22,000.00</td>
                         <td>$19,500.00</td>
                         <td>
-                            <span class="admin-badge admin-badge-pending">4 unidades</span>
+                            <x-ui.status-badge status="pendiente">4 unidades</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">
@@ -72,7 +72,7 @@
                         <td>$14,500.00</td>
                         <td>-</td>
                         <td>
-                            <span class="admin-badge admin-badge-pending" style="color: var(--color-error); border-color: var(--color-error); background-color: rgba(239, 68, 68, 0.1);">Sin Stock</span>
+                            <x-ui.status-badge status="cancelado">Sin Stock</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">
@@ -90,7 +90,7 @@
                         <td>$4,800.00</td>
                         <td>-</td>
                         <td>
-                            <span class="admin-badge admin-badge-success">85 unidades</span>
+                            <x-ui.status-badge status="entregado">85 unidades</x-ui.status-badge>
                         </td>
                         <td>
                             <div class="admin-btn-group">

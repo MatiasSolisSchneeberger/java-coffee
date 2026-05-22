@@ -1,173 +1,48 @@
-<x-layout title="Mi Cuenta">
-    @php
-        // Prepare variables with fallback mock data to prevent errors if the controller doesn't pass them
-$pedidos =
-    $pedidos ??
-    collect([
-        (object) [
-            'id' => 1024,
-            'fecha' => '2026-05-15',
-            'estado' => 'entregado', // 'pendiente', 'enviado', 'entregado', 'cancelado'
-            'metodo_pago' => 'Tarjeta de Crédito',
-            'direccion_envio' => auth()->user()->direccion ?? 'Av. de Mayo 1234, CABA',
-            'total' => 14500.0,
-            'detalles' => collect([
-                (object) [
-                    'producto_nombre' => 'Java Jolt Espresso',
-                    'cantidad' => 2,
-                    'precio_unitario' => 4500.0,
-                    'subtotal' => 9000.0,
-                ],
-                (object) [
-                    'producto_nombre' => 'Filtros V60 Hario',
-                    'cantidad' => 1,
-                    'precio_unitario' => 5500.0,
-                    'subtotal' => 5500.0,
-                ],
-            ]),
-        ],
-        (object) [
-            'id' => 982,
-            'fecha' => '2026-05-02',
-            'estado' => 'enviado',
-            'metodo_pago' => 'MercadoPago',
-            'direccion_envio' => auth()->user()->direccion ?? 'Av. de Mayo 1234, CABA',
-            'total' => 4800.0,
-            'detalles' => collect([
-                (object) [
-                    'producto_nombre' => 'Python Pour Over Blend',
-                    'cantidad' => 1,
-                    'precio_unitario' => 4800.0,
-                    'subtotal' => 4800.0,
-                ],
-            ]),
-        ],
-    ]);
+<x-dashboard-layout title="Mi Cuenta" type="client">
+    <x-slot:navigation>
+        <li>
+            <button class="dashboard-nav-btn active" data-tab="resumen">
+                <x-icons.user class="icon-sm" />
+                <span>Resumen</span>
+            </button>
+        </li>
+        <li>
+            <button class="dashboard-nav-btn" data-tab="pedidos">
+                <x-icons.shopping-bag class="icon-sm" />
+                <span>Mis Pedidos</span>
+                <span class="nav-count">{{ $pedidos->count() }}</span>
+            </button>
+        </li>
+        <li>
+            <button class="dashboard-nav-btn" data-tab="favoritos">
+                <x-icons.star class="icon-sm" />
+                <span>Favoritos</span>
+                <span class="nav-count">{{ $favoritos->count() }}</span>
+            </button>
+        </li>
+        <li>
+            <button class="dashboard-nav-btn" data-tab="consultas">
+                <x-icons.mail class="icon-sm" />
+                <span>Mis Consultas</span>
+                <span class="nav-count">{{ $consultas->count() }}</span>
+            </button>
+        </li>
+        <li>
+            <button class="dashboard-nav-btn" data-tab="perfil">
+                <x-icons.settings class="icon-sm" />
+                <span>Editar Perfil</span>
+            </button>
+        </li>
+    </x-slot:navigation>
 
-$favoritos =
-    $favoritos ??
-    collect([
-        (object) [
-            'id' => 1,
-            'nombre' => 'Java Jolt Espresso',
-            'slug' => 'java-jolt-espresso',
-            'descripcion' => 'Un blend intenso con gran cuerpo y notas marcadas de chocolate amargo.',
-            'precio' => 4500.0,
-            'tipo' => 'Grano',
-            'imagen' => 'java-jolt-1.png',
-        ],
-        (object) [
-            'id' => 2,
-            'nombre' => 'Python Pour Over Blend',
-            'slug' => 'python-pour-over-blend',
-            'descripcion' => 'Café de especialidad con acidez cítrica media-alta y notas florales.',
-            'precio' => 4800.0,
-            'tipo' => 'Molido',
-            'imagen' => 'python-pour-over-1.png',
-        ],
-    ]);
+        <!-- Alert Section -->
+        @if (session('success'))
+            <x-ui.success-alert :messages="[session('success')]" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
+        @endif
 
-$consultas =
-    $consultas ??
-    collect([
-        (object) [
-            'id' => 1,
-            'asunto' => 'Consulta sobre envíos a la provincia de Córdoba',
-            'mensaje' =>
-                'Hola, buenas tardes. Quería saber si realizan envíos de café en grano a la provincia de Córdoba y cuál es el costo aproximado por un pedido de 2 kilos. Muchas gracias.',
-            'estado' => 'respondido',
-            'created_at' => '2026-05-17 14:32:00',
-            'respuesta' =>
-                'Hola, ¿cómo estás? Sí, hacemos envíos a todo el país a través de Correo Argentino. Para Córdoba, el envío de un paquete de hasta 2 kg tiene un costo aproximado de $2.500 y tarda de 3 a 5 días hábiles. Quedamos a tu disposición.',
-            'updated_at' => '2026-05-18 10:15:00',
-        ],
-        (object) [
-            'id' => 2,
-            'asunto' => 'Stock de molinillo eléctrico de muelas cerámicas',
-            'mensaje' =>
-                'Buenas, quería consultar cuándo vuelve a entrar stock del molinillo eléctrico de muelas cerámicas. Quería comprar uno para regalar.',
-            'estado' => 'pendiente',
-            'created_at' => '2026-05-20 18:40:00',
-            'respuesta' => null,
-            'updated_at' => null,
-                ],
-            ]);
-    @endphp
-
-    <div class="dashboard-wrapper">
-        <aside class="dashboard-sidebar">
-            <div class="user-avatar-section">
-                <div class="avatar-circle">
-                    <span>{{ strtoupper(substr(auth()->user()->nombre, 0, 1)) }}{{ strtoupper(substr(auth()->user()->apellido, 0, 1)) }}</span>
-                </div>
-                <div class="user-info">
-                    <h3 class="user-name">{{ auth()->user()->nombre }} {{ auth()->user()->apellido }}</h3>
-                    <span class="user-role-badge">Cliente Java Coffee</span>
-                </div>
-            </div>
-
-            <nav class="dashboard-nav">
-                <ul class="dashboard-nav-list">
-                    <li>
-                        <button class="dashboard-nav-btn active" data-tab="resumen">
-                            <x-icons.user class="icon-sm" />
-                            <span>Resumen</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dashboard-nav-btn" data-tab="pedidos">
-                            <x-icons.shopping-bag class="icon-sm" />
-                            <span>Mis Pedidos</span>
-                            <span class="nav-count">{{ $pedidos->count() }}</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dashboard-nav-btn" data-tab="favoritos">
-                            <x-icons.star class="icon-sm" />
-                            <span>Favoritos</span>
-                            <span class="nav-count">{{ $favoritos->count() }}</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dashboard-nav-btn" data-tab="consultas">
-                            <x-icons.mail class="icon-sm" />
-                            <span>Mis Consultas</span>
-                            <span class="nav-count">{{ $consultas->count() }}</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="dashboard-nav-btn" data-tab="perfil">
-                            <x-icons.settings class="icon-sm" />
-                            <span>Editar Perfil</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-
-            <div class="sidebar-footer">
-                <a href="/productos" class="store-back-link">
-                    <x-icons.chevron-left class="icon-xs" />
-                    <span>Volver a la Tienda</span>
-                </a>
-                <form action="/logout" method="POST" class="logout-form">
-                    @csrf
-                    <button type="submit" class="logout-button">
-                        <x-icons.logout-2 class="icon-sm" />
-                        <span>Cerrar Sesión</span>
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <main class="dashboard-main">
-            <!-- Alert Section -->
-            @if (session('success'))
-                <x-ui.success-alert :messages="[session('success')]" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
-            @endif
-
-            @if ($errors->any())
-                <x-ui.error-alert :messages="$errors->all()" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
-            @endif
+        @if ($errors->any())
+            <x-ui.error-alert :messages="$errors->all()" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
+        @endif
 
             <!-- Tab: Resumen -->
             <section class="dashboard-tab-content active" id="tab-resumen">
@@ -177,33 +52,21 @@ $consultas =
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon-wrapper text-primary">
+                    <x-ui.stat-card label="Pedidos Realizados" :value="$pedidos->count()" iconColor="primary">
+                        <x-slot:icon>
                             <x-icons.shopping-bag class="icon-lg" />
-                        </div>
-                        <div class="stat-details">
-                            <span class="stat-label">Pedidos Realizados</span>
-                            <span class="stat-value">{{ $pedidos->count() }}</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon-wrapper text-secondary">
+                        </x-slot:icon>
+                    </x-ui.stat-card>
+                    <x-ui.stat-card label="Favoritos Guardados" :value="$favoritos->count()" iconColor="secondary">
+                        <x-slot:icon>
                             <x-icons.star class="icon-lg" />
-                        </div>
-                        <div class="stat-details">
-                            <span class="stat-label">Favoritos Guardados</span>
-                            <span class="stat-value">{{ $favoritos->count() }}</span>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon-wrapper text-coffee">
+                        </x-slot:icon>
+                    </x-ui.stat-card>
+                    <x-ui.stat-card label="Consultas" :value="$consultas->count()" iconColor="coffee">
+                        <x-slot:icon>
                             <x-icons.mail class="icon-lg" />
-                        </div>
-                        <div class="stat-details">
-                            <span class="stat-label">Consultas</span>
-                            <span class="stat-value">{{ $consultas->count() }}</span>
-                        </div>
-                    </div>
+                        </x-slot:icon>
+                    </x-ui.stat-card>
                 </div>
 
                 <div class="resumen-details-layout">
@@ -231,10 +94,10 @@ $consultas =
                                 <span>{{ auth()->user()->direccion ?? 'No especificada' }}</span>
                             </li>
                         </ul>
-                        <button class="edit-profile-shortcut" onclick="window.switchTab('perfil')">
+                        <x-ui.button variant="outline" class="w-fit" onclick="window.switchTab('perfil')">
                             <span>Editar mis datos</span>
                             <x-icons.chevron-right class="icon-xs" />
-                        </button>
+                        </x-ui.button>
                     </div>
 
                     <!-- Last Order Summary -->
@@ -250,18 +113,16 @@ $consultas =
                                     </span>
                                 </div>
                                 <div class="order-status-wrapper">
-                                    <span class="order-status-badge status-{{ $ultimoPedido->estado }}">
-                                        {{ ucfirst(str_replace('_', ' ', $ultimoPedido->estado)) }}
-                                    </span>
+                                    <x-ui.status-badge :status="$ultimoPedido->estado" />
                                 </div>
                                 <div class="order-total-compact">
                                     <span>Total:</span>
                                     <strong>${{ number_format($ultimoPedido->total, 2, ',', '.') }}</strong>
                                 </div>
-                                <button class="view-orders-btn" onclick="window.switchTab('pedidos')">
+                                <x-ui.button variant="outline" class="w-full" onclick="window.switchTab('pedidos')">
                                     <span>Ver historial de pedidos</span>
                                     <x-icons.chevron-right class="icon-xs" />
-                                </button>
+                                </x-ui.button>
                             </div>
                         @else
                             <div class="empty-state">
@@ -291,9 +152,7 @@ $consultas =
                                     </span>
                                 </div>
                                 <div class="header-status-info">
-                                    <span class="pedido-status-badge status-{{ $pedido->estado }}">
-                                        {{ ucfirst(str_replace('_', ' ', $pedido->estado)) }}
-                                    </span>
+                                    <x-ui.status-badge :status="$pedido->estado" />
                                 </div>
                             </div>
                             <div class="pedido-card-body">
@@ -437,9 +296,7 @@ $consultas =
                                     </span>
                                 </div>
                                 <div class="consulta-badge-group">
-                                    <span class="consulta-status-badge status-{{ $consulta->estado }}">
-                                        {{ ucfirst(str_replace('_', ' ', $consulta->estado)) }}
-                                    </span>
+                                    <x-ui.status-badge :status="$consulta->estado" />
                                     <span class="consulta-arrow">&gt;</span>
                                 </div>
                             </div>
@@ -557,13 +414,11 @@ $consultas =
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="save-profile-btn">
+                            <x-ui.button type="submit" variant="primary">
                                 <span>Guardar Cambios</span>
-                            </button>
+                            </x-ui.button>
                         </div>
                     </form>
                 </div>
             </section>
-        </main>
-    </div>
-</x-layout>
+    </x-dashboard-layout>

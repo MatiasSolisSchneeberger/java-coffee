@@ -4,8 +4,16 @@ window.toggleDropdown = toggleDropdown;
 
 // catalogo
 import { initFiltrosToggle } from './catalogo.js';
-document.addEventListener('DOMContentLoaded', initFiltrosToggle);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFiltrosToggle);
+} else {
+    initFiltrosToggle();
+}
 
 // cliente dashboard
 import { initClienteDashboard } from './cliente.js';
-document.addEventListener('DOMContentLoaded', initClienteDashboard);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initClienteDashboard);
+} else {
+    initClienteDashboard();
+}

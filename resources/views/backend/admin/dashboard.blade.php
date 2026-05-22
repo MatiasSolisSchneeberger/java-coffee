@@ -1,35 +1,15 @@
 <x-admin-layout title="Inicio Panel">
     <!-- Fila de Estadísticas -->
     <div class="admin-stats-grid">
-        <article class="stat-card">
-            <span class="stat-card-label">Total Ventas</span>
-            <span class="stat-card-value">$324,500.00</span>
-            <span class="stat-card-footer">Últimos 30 días</span>
-        </article>
+        <x-ui.stat-card label="Total Ventas" value="$324,500.00" footer="Últimos 30 días" iconColor="primary" />
 
-        <article class="stat-card">
-            <span class="stat-card-label">Pedidos Pendientes</span>
-            <span class="stat-card-value accent-purple">12</span>
-            <span class="stat-card-footer">Requieren atención</span>
-        </article>
+        <x-ui.stat-card class="accent-purple" label="Pedidos Pendientes" value="12" footer="Requieren atención" iconColor="secondary" />
 
-        <article class="stat-card">
-            <span class="stat-card-label">Consultas Activas</span>
-            <span class="stat-card-value accent-purple">4</span>
-            <span class="stat-card-footer">Mensajes sin responder</span>
-        </article>
+        <x-ui.stat-card class="accent-purple" label="Consultas Activas" value="4" footer="Mensajes sin responder" iconColor="coffee" />
 
-        <article class="stat-card">
-            <span class="stat-card-label">Comentarios Nuevos</span>
-            <span class="stat-card-value">8</span>
-            <span class="stat-card-footer">Pendientes de moderación</span>
-        </article>
+        <x-ui.stat-card label="Comentarios Nuevos" value="8" footer="Pendientes de moderación" iconColor="primary" />
 
-        <article class="stat-card">
-            <span class="stat-card-label">Stock Crítico</span>
-            <span class="stat-card-value accent-error">3</span>
-            <span class="stat-card-footer">Productos con bajo stock</span>
-        </article>
+        <x-ui.stat-card class="accent-error" label="Stock Crítico" value="3" footer="Productos con bajo stock" iconColor="primary" />
     </div>
 
     <!-- Layout de Dos Columnas -->
@@ -59,7 +39,7 @@
                             <td>Carlos Rodríguez</td>
                             <td>$14,500.00</td>
                             <td>Efectivo</td>
-                            <td><span class="admin-badge admin-badge-pending">Pendiente</span></td>
+                            <td><x-ui.status-badge status="pendiente" /></td>
                             <td>
                                 <a href="/admin/pedidos"
                                     class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
@@ -70,7 +50,7 @@
                             <td>María Gómez</td>
                             <td>$8,200.00</td>
                             <td>Tarjeta</td>
-                            <td><span class="admin-badge admin-badge-success">Entregado</span></td>
+                            <td><x-ui.status-badge status="entregado" /></td>
                             <td>
                                 <a href="/admin/pedidos"
                                     class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
@@ -81,7 +61,7 @@
                             <td>Juan Pérez</td>
                             <td>$24,000.00</td>
                             <td>Transferencia</td>
-                            <td><span class="admin-badge admin-badge-info">Enviado</span></td>
+                            <td><x-ui.status-badge status="enviado" /></td>
                             <td>
                                 <a href="/admin/pedidos"
                                     class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>
@@ -92,7 +72,7 @@
                             <td>Ana López</td>
                             <td>$5,400.00</td>
                             <td>Tarjeta</td>
-                            <td><span class="admin-badge admin-badge-success">Entregado</span></td>
+                            <td><x-ui.status-badge status="entregado" /></td>
                             <td>
                                 <a href="/admin/pedidos"
                                     class="admin-btn admin-btn-secondary admin-btn-sm">Gestionar</a>

@@ -8,6 +8,8 @@ export function initClienteDashboard() {
     const tabContents = document.querySelectorAll('.dashboard-tab-content');
     const queryHeaders = document.querySelectorAll('.consulta-card-header');
 
+    console.log("[Java Coffee] initClienteDashboard: Found", navButtons.length, "nav buttons and", tabContents.length, "tabs.");
+
     // Return early if we are not on the dashboard page
     if (navButtons.length === 0) return;
 
@@ -16,6 +18,7 @@ export function initClienteDashboard() {
      * @param {string} tabId - The ID of the tab (e.g. 'resumen', 'pedidos', 'favoritos', 'perfil')
      */
     function switchTab(tabId) {
+        console.log("[Java Coffee] Switching to tab:", tabId);
         let tabFound = false;
 
         // Toggle active tab content

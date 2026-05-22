@@ -25,15 +25,16 @@ class ContactoController extends Controller
 
     public function store_contact(ContactoRequest $request)
     {
-
         $datos = $request->validated();
 
-        $nombre   = $datos['nombre'];
-        $email    = $datos['email'];
-        $motivo   = $datos['motivo'];
-        $consulta = $datos['consulta'];
-
-        // guardar en BD
+        \App\Models\Consulta::create([
+            'usuario_id' => auth()->id(), // Asocia el id de usuario si está logueado
+            'nombre'     => $datos['nombre'],
+            'email'      => $datos['email'],
+            'asunto'     => $datos['motivo'],
+            'mensaje'    => $datos['consulta'],
+            'estado'     => 'no leido', // Estado inicial
+        ]);
 
         return redirect()->back()->with('success_message', 'Tu consulta ha sido enviada correctamente');
     }

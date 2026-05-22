@@ -13,4 +13,19 @@ class Pedido extends Model
     protected $casts = [
         'total' => 'decimal:2'
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
+    public function detalles()
+    {
+        return $this->hasMany(DetallePedido::class, 'pedido_id');
+    }
+
+    public function getFechaAttribute()
+    {
+        return $this->created_at;
+    }
 }
