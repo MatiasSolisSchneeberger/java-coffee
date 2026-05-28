@@ -13,7 +13,7 @@ class Usuario extends Authenticatable
     protected $table = 'usuarios';
 
     protected $fillable = [
-        'nombre', 'apellido', 'email', 'password', 'telefono', 'direccion', 'rol'
+        'nombre', 'apellido', 'email', 'password', 'telefono', 'direccion', 'provincia_id', 'rol'
     ];
 
     protected $hidden = [
@@ -46,5 +46,10 @@ class Usuario extends Authenticatable
     public function consultas()
     {
         return $this->hasMany(Consulta::class, 'usuario_id');
+    }
+
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class, 'provincia_id');
     }
 }

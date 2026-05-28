@@ -143,12 +143,20 @@
 
 
 /* --- Tarjetas de Panel Administrativo --- */
+/* Eliminar márgenes del dashboard en páginas de listados de administración */
+body:has(.admin-table-wrapper) .dashboard-main-content {
+    padding: 0;
+}
+
 .admin-panel-card {
-    background-color: var(--bg-surface);
-    border: var(--border-thin);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+    position: relative;
+    overflow: visible;
 }
 
 .admin-panel-card-header {
@@ -175,25 +183,43 @@
 
 .admin-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     text-align: left;
 }
 
 .admin-table th {
-    background-color: var(--bg-base);
+    background-color: color-mix(in oklab, var(--bg-base) 80%, black);
     color: var(--color-text-main);
-    font-weight: var(--font-semibold);
+    font-weight: var(--font-bold);
     padding: var(--spacing-md);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     border-bottom: 2px solid oklch(37.3% 0.034 259.733 / 0.5);
+}
+
+.admin-table th:first-child,
+.admin-table td:first-child {
+    padding-left: var(--spacing-xl);
+}
+
+.admin-table th:last-child,
+.admin-table td:last-child {
+    padding-right: var(--spacing-xl);
 }
 
 .admin-table td {
     padding: var(--spacing-md);
     font-size: var(--text-sm);
-    border-bottom: 1px solid oklch(37.3% 0.034 259.733 / 0.5);
+    border-bottom: 1px solid oklch(37.3% 0.034 259.733 / 0.3);
     color: var(--color-text-muted);
     vertical-align: middle;
+    transition: all var(--transition-fast);
+}
+
+.admin-table tr {
+    transition: all var(--transition-fast);
 }
 
 .admin-table tr:hover td {
@@ -202,11 +228,16 @@
 }
 
 .admin-table-img {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--border-radius-sm);
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius);
     object-fit: cover;
     border: var(--border-thin);
+    transition: border-color var(--transition-fast);
+}
+
+.admin-table tr:hover .admin-table-img {
+    border-color: var(--color-primary);
 }
 
 
@@ -229,6 +260,7 @@
     text-decoration: none;
     transition: all var(--transition-fast);
     font-family: inherit;
+    gap: 6px;
 }
 
 .admin-btn-primary {
@@ -304,18 +336,19 @@
 .admin-form-field {
     background-color: var(--bg-base);
     border: var(--border-thin);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius);
     padding: var(--spacing-md);
     color: var(--color-text-main);
     font-size: var(--text-sm);
     font-family: inherit;
-    transition: border-color var(--transition-fast);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     width: 100%;
 }
 
 .admin-form-field:focus {
     outline: none;
     border-color: var(--color-primary);
+    box-shadow: 0 0 8px oklch(62.7% 0.194 149.214 / 0.25);
 }
 
 .admin-form-textarea {
@@ -350,6 +383,7 @@
     margin-bottom: var(--spacing-lg);
     gap: var(--spacing-md);
     flex-wrap: wrap;
+    padding: var(--spacing-xl) var(--spacing-xl) 0 var(--spacing-xl);
 }
 
 .admin-search-wrapper {

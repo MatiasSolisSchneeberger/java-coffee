@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password', 255);
             $table->string('telefono', 20)->nullable();
             $table->string('direccion', 255)->nullable();
+            $table->foreignId('provincia_id')->nullable()->constrained('provincias')->nullOnDelete();
             $table->string('rol', 50)->default('cliente');
             $table->timestamps();
         });

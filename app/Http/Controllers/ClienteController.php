@@ -55,7 +55,7 @@ class ClienteController extends Controller
             ->latest()
             ->get();
 
-        return view('backend.usuarios.cliente', compact('pedidos', 'favoritos', 'consultas'));
+        return view('pages.auth.cliente', compact('pedidos', 'favoritos', 'consultas'));
     }
 
     /**

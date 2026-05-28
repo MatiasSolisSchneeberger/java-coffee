@@ -17,7 +17,7 @@ class ContactoController extends Controller
         $mensaje = $request->input('consulta');
 
         // Retornamos la vista pasando las variables para la personalización
-        return view('exito', [
+        return view('pages.frontend.exito', [
             'nombre' => $nombre,
             'email' => $email
         ]);

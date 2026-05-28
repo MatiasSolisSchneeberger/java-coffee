@@ -411,3 +411,12 @@
 .delete-form {
     display: inline-block;
 }
+
+.vaciar-form {
+    margin-top: var(--spacing-sm);
+}
+
+.vaciar-submit-btn {
+    width: 100%;
+    justify-content: center;
+}

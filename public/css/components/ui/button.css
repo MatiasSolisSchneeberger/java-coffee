@@ -98,3 +98,16 @@ button.btn:hover {
 	/* La sintaxis relativa que vimos antes queda perfecta aquí */
 	background-color: oklch(from var(--color-primary) l c h / 0.15);
 }
+
+.btn.danger {
+	background-color: var(--color-error);
+	color: var(--color-on-error);
+	border: 2px solid transparent;
+}
+
+.btn.danger:hover {
+	background-color: transparent;
+	color: var(--color-error);
+	border-color: var(--color-error);
+	box-shadow: var(--shadow-glow);
+}

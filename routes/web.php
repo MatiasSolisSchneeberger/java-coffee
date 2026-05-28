@@ -12,29 +12,29 @@ use App\Http\Controllers\ClienteController;
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/quienes-somos', function () {
-    return view('quienes-somos');
+    return view('pages.frontend.quienes-somos');
 });
 
 Route::get('/comercializacion', function () {
-    return view('comercializacion');
+    return view('pages.frontend.comercializacion');
 });
 
 
 Route::get('/contacto', function () {
-    return view('informacion-de-contactos');
+    return view('pages.frontend.contactos');
 });
 
 Route::post('/contacto', [ContactoController::class, 'procesar']);
 
 
 Route::get('/terminos-y-usos', function () {
-    return view('terminos-y-usos');
+    return view('pages.frontend.terminos-y-usos');
 });
 
 Route::get('/productos', [ProductoController::class, 'index']);
 
 Route::get('/consultas', function () {
-    return view('consultas');
+    return view('pages.frontend.consultas');
 });
 
 
@@ -43,40 +43,76 @@ Route::get('/consultas', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/registro', [AuthController::class, 'formularioRegistro']);
     Route::post('/registro', [AuthController::class, 'registrar']);
-    
+
     Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'autenticar']);
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
+
 Route::middleware(['auth', 'rol:admin'])->group(function () {
     Route::get('/admin', function () {
-        return view('backend.admin.dashboard');
+        $totalVentas = \App\Models\Pedido::where('estado', 'entregado')->sum('total');
+        $pedidosPendientes = \App\Models\Pedido::where('estado', 'pendiente')->count();
+        $consultasActivas = \App\Models\Consulta::where('estado', 'no leido')->count();
+        $comentariosNuevos = \App\Models\Comentario::where('estado', 'pendiente')->count();
+        $stockCritico = \App\Models\Producto::where('stock', '<', 5)->count();
+
+        $pedidos = \App\Models\Pedido::with('usuario')->latest()->take(4)->get();
+        $comentarios = \App\Models\Comentario::with(['usuario', 'producto'])->latest()->take(3)->get();
+
+        return view('pages.auth.admin.dashboard', compact(
+            'totalVentas',
+            'pedidosPendientes',
+            'consultasActivas',
+            'comentariosNuevos',
+            'stockCritico',
+            'pedidos',
+            'comentarios'
+        ));
     });
 
     Route::get('/admin/productos', function () {
-        return view('backend.admin.productos.index');
+        $productos = \App\Models\Producto::with(['categoria', 'origen', 'imagenes'])->get();
+        return view('pages.auth.admin.productos.index', compact('productos'));
     });
 
+    Route::post('/admin/productos', [ProductoController::class, 'store']);
+    Route::put('/admin/productos/{id}', [ProductoController::class, 'update']);
+    Route::delete('/admin/productos/{id}', [ProductoController::class, 'destroy']);
+
     Route::get('/admin/producto/crear', function () {
-        return view('backend.admin.productos.crear');
+        $categorias = \App\Models\Categoria::all();
+        $origenes = \App\Models\Origen::all();
+        return view('pages.auth.admin.productos.crear', compact('categorias', 'origenes'));
     });
 
     Route::get('/admin/producto/{slug}', function ($slug) {
-        return view('backend.admin.productos.editar', ['slug' => $slug]);
+        // Map slug to product
+        $producto = \App\Models\Producto::with(['categoria', 'origen'])->get()->first(function ($p) use ($slug) {
+            return \Illuminate\Support\Str::slug($p->nombre) === $slug;
+        });
+
+        $categorias = \App\Models\Categoria::all();
+        $origenes = \App\Models\Origen::all();
+
+        return view('pages.auth.admin.productos.editar', compact('slug', 'producto', 'categorias', 'origenes'));
     });
 
     Route::get('/admin/pedidos', function () {
-        return view('backend.admin.pedidos.index');
+        $pedidos = \App\Models\Pedido::with(['usuario', 'provincia', 'detalles.producto'])->latest()->get();
+        return view('pages.auth.admin.pedidos.index', compact('pedidos'));
     });
 
     Route::get('/admin/consultas', function () {
-        return view('backend.admin.consultas.index');
+        $consultas = \App\Models\Consulta::latest()->get();
+        return view('pages.auth.admin.consultas.index', compact('consultas'));
     });
 
     Route::get('/admin/comentarios', function () {
-        return view('backend.admin.comentarios.index');
+        $comentarios = \App\Models\Comentario::with(['usuario', 'producto'])->latest()->get();
+        return view('pages.auth.admin.comentarios.index', compact('comentarios'));
     });
 });
 
@@ -89,12 +125,14 @@ Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::post('/carrito/agregar', [CarritoController::class, 'agregar']);
     Route::patch('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar']);
     Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar']);
+    Route::delete('/carrito/vaciar', [CarritoController::class, 'vaciar']);
     Route::post('/carrito/comprar', [CarritoController::class, 'comprar']);
-    
+
     Route::get('/pedidos', function () {
-        return view('pedidos');
+        return view('pages.auth.pedidos');
     });
 });
+
 
 // {slug} toma lo que se escribe despues de producto y lo manda al controlador.
 Route::get('/producto/{slug}', [ProductoController::class, 'show']);

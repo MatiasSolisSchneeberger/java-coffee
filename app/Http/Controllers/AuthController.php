@@ -13,12 +13,12 @@ class AuthController extends Controller
 {
     public function formularioLogin()
     {
-        return view('backend.usuarios.login');
+        return view('pages.frontend.login');
     }
 
     public function formularioRegistro()
     {
-        return view('backend.usuarios.registro');
+        return view('pages.frontend.registro');
     }
 
     public function autenticar(LoginRequest $request)

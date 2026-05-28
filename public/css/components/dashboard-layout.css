@@ -275,18 +275,10 @@
     /* Set Layout grid to single column */
     .dashboard-layout-container {
         grid-template-columns: 1fr;
-        border-radius: 0 !important;
-        border: none !important;
-    }
-
-    /* Padding adjustments on body to allow room for fixed bars */
-    body {
-        padding-top: var(--mobile-header-height) !important;
-        padding-bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 10px) !important;
-    }
-    
-    /* Make sure main store pages don't get messed up but dashboard does */
-    .dashboard-layout-container {
+        border-radius: 0;
+        border: none;
+        padding-top: var(--mobile-header-height);
+        padding-bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 10px);
         margin-top: 0;
         margin-bottom: 0;
     }

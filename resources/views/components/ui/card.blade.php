@@ -48,7 +48,7 @@
                     </form>
                     <a class="btn-ver-producto" href="/producto/{{ $producto['slug'] }}">
                         <x-ui.button>
-                            Ver Producto
+                            <span>Ver Producto</span>
                             <x-icons.chevron-right />
                         </x-ui.button>
                     </a>
@@ -80,7 +80,7 @@
                         <x-icons.shopping-bag />
                     </x-ui.button>
                     <x-ui.button class="btn-ver-producto">
-                        Ver Producto
+                        <span>Ver Producto</span>
                         <x-icons.chevron-right />
                     </x-ui.button>
                 </div>

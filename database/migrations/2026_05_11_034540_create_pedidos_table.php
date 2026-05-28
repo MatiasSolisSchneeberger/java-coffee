@@ -14,6 +14,7 @@ return new class extends Migration
        Schema::create('pedidos', function (Blueprint $table) {
     $table->id();
     $table->foreignId('usuario_id')->constrained('usuarios');
+    $table->foreignId('provincia_id')->nullable()->constrained('provincias')->nullOnDelete();
     $table->string('estado', 50); // pendiente, pagado, etc.
     $table->decimal('total', 10, 2);
     $table->string('metodo_pago', 50);

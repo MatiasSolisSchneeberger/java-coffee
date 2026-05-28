@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pedido extends Model
 {
     protected $fillable = [
-        'usuario_id', 'estado', 'total', 'metodo_pago', 'direccion_envio'
+        'usuario_id', 'provincia_id', 'estado', 'total', 'metodo_pago', 'direccion_envio'
     ];
 
     protected $casts = [
@@ -22,6 +22,11 @@ class Pedido extends Model
     public function detalles()
     {
         return $this->hasMany(DetallePedido::class, 'pedido_id');
+    }
+
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class, 'provincia_id');
     }
 
     public function getFechaAttribute()

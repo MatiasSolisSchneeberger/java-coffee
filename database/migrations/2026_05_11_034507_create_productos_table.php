@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('nombre', 150);
             $table->text('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
+            $table->decimal('oferta', 10, 2)->nullable();
             $table->integer('stock')->default(0);
-            $table->string('origen', 100)->nullable();
+            $table->foreignId('origen_id')->nullable()->constrained('origenes')->nullOnDelete();
             $table->string('tueste', 50)->nullable();
             $table->integer('peso_gramos');
             $table->string('estado', 50)->default('activo');

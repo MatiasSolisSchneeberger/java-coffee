@@ -16,6 +16,6 @@ class HomeController extends Controller
         // Obtener los primeros 6 productos para mostrar en el inicio
         $productos = collect($todosLosProductos)->take(6)->toArray();
 
-        return view('welcome', compact('productos'));
+        return view('pages.frontend.welcome', compact('productos'));
     }
 }

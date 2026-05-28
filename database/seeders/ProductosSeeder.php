@@ -5,9 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Models\Origen;
 use App\Models\ImagenProducto;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class ProductosSeeder extends Seeder
 {
@@ -16,234 +15,235 @@ class ProductosSeeder extends Seeder
      */
     public function run(): void
     {
-        // Asegurarnos de que haya al menos una categoría
-        $categoria = Categoria::firstOrCreate([
-            'nombre' => 'Café',
-            'descripcion' => 'Nuestros mejores granos de café'
-        ]);
+        // 1. Sembrar Orígenes
+        $origenes = [
+            'Colombia' => 'Café suave con aroma pronunciado, acidez media-alta y cuerpo medio.',
+            'Brasil' => 'Café con cuerpo pronunciado, baja acidez y notas dulces a chocolate o nuez.',
+            'Etiopía' => 'Café con acidez cítrica brillante, notas florales muy aromáticas y frutales.',
+            'Honduras' => 'Café equilibrado con acidez cítrica media y notas de caramelo y chocolate.',
+            'Kenia' => 'Café de acidez vinosa brillante, cuerpo medio y marcados sabores frutales.',
+            'Blend' => 'Mezcla balanceada de granos de diversos orígenes seleccionados.',
+        ];
 
-        // Leer el JSON directamente
+        $origenIds = [];
+        foreach ($origenes as $nombre => $descripcion) {
+            $origen = Origen::firstOrCreate([
+                'nombre' => $nombre
+            ], [
+                'descripcion' => $descripcion
+            ]);
+            $origenIds[$nombre] = $origen->id;
+        }
+
+        // 2. Sembrar Categorías
+        $categorias = [
+            'Café en Grano' => 'Granos de café seleccionados de los mejores orígenes, listos para moler.',
+            'Cápsulas' => 'Cápsulas compatibles con sistemas express para una taza rápida y perfecta.',
+            'Molido' => 'Café molido con el grosor ideal para filtro, prensa o espresso.',
+            'Descafeinado' => 'Todo el aroma y sabor del buen café, libre de cafeína.'
+        ];
+
+        $categoriaIds = [];
+        foreach ($categorias as $nombre => $descripcion) {
+            $categoria = Categoria::firstOrCreate([
+                'nombre' => $nombre
+            ], [
+                'descripcion' => $descripcion
+            ]);
+            $categoriaIds[$nombre] = $categoria->id;
+        }
+
+        // 3. Productos del JSON
         $json = <<<JSON
 {
     "productos": [
         {
-            "id": 1,
             "nombre": "Java Jolt",
-            "slug": "java-jolt",
             "descripcion": "Un café robusto con notas de chocolate oscuro, diseñado para largas sesiones de debugging.",
             "precio": 15.50,
             "oferta": 12.00,
-            "tipo": "Grano entero",
-            "imagenes": [
-                "java-jolt-1.png",
-                "java-jolt-2.png",
-                "java-jolt-3.png"
-            ]
+            "tipo": "Café en Grano",
+            "origen": "Colombia",
+            "tueste": "Grano entero",
+            "imagenes": ["java-jolt-1.png", "java-jolt-2.png", "java-jolt-3.png"]
         },
         {
-            "id": 2,
             "nombre": "Python Pour-over",
-            "slug": "python-pour-over",
             "descripcion": "Sabor suave y versátil, con baja acidez para una lectura de logs sin interrupciones.",
             "precio": 18.00,
-            "oferta": 0.00,
-            "tipo": "Molido fino",
-            "imagenes": [
-                "python-pour-over-1.png",
-                "python-pour-over-2.png",
-                "python-pour-over-3.png"
-            ]
+            "tipo": "Molido",
+            "origen": "Brasil",
+            "tueste": "Molido fino",
+            "imagenes": ["python-pour-over-1.png", "python-pour-over-2.png", "python-pour-over-3.png"]
         },
         {
-            "id": 3,
             "nombre": "C++ Caffeine",
-            "slug": "cpp-caffeine",
             "descripcion": "Máximo rendimiento y eficiencia. Una descarga directa de cafeína al sistema central.",
             "precio": 20.00,
-            "oferta": 15.00,
             "tipo": "Cápsulas",
-            "imagenes": [
-                "cpp-caffeine-1.png",
-                "cpp-caffeine-2.png",
-                "cpp-caffeine-3.png"
-            ]
+            "origen": "Brasil",
+            "tueste": "Cápsulas",
+            "imagenes": ["cpp-caffeine-1.png", "cpp-caffeine-2.png", "cpp-caffeine-3.png"]
         },
         {
-            "id": 4,
             "nombre": "Binary Brew",
-            "slug": "binary-brew",
             "descripcion": "El café para cuando solo tienes dos estados: despierto o dormido.",
             "precio": 10.00,
-            "oferta": 0.00,
-            "tipo": "Instantáneo"
+            "tipo": "Molido",
+            "origen": "Brasil",
+            "tueste": "Instantáneo"
         },
         {
-            "id": 5,
             "nombre": "Ruby Roast",
-            "slug": "ruby-roast",
             "descripcion": "Elegante y con cuerpo. Un tueste medio optimizado para la productividad.",
             "precio": 22.00,
-            "oferta": 19.99,
-            "tipo": "Grano entero"
+            "tipo": "Café en Grano",
+            "origen": "Etiopía",
+            "tueste": "Grano entero"
         },
         {
-            "id": 6,
             "nombre": "Overflow Espresso",
-            "slug": "overflow-espresso",
             "descripcion": "Advertencia: Puede causar un exceso de energía. Tueste intenso para proyectos críticos.",
             "precio": 14.00,
-            "oferta": 0.00,
-            "tipo": "Molido medio"
+            "oferta": 10.50,
+            "tipo": "Molido",
+            "origen": "Brasil",
+            "tueste": "Molido medio"
         },
         {
-            "id": 7,
             "nombre": "Null Pointer Nectar",
-            "slug": "null-pointer-nectar",
             "descripcion": "Tan puro que no encontrarás errores en su sabor. Filtrado a la perfección.",
             "precio": 16.50,
-            "oferta": 14.50,
-            "tipo": "Cold Brew"
+            "tipo": "Molido",
+            "origen": "Etiopía",
+            "tueste": "Cold Brew"
         },
         {
-            "id": 8,
             "nombre": "Async Arabica",
-            "slug": "async-arabica",
             "descripcion": "El sabor llega justo a tiempo, sin bloquear tus procesos mentales.",
             "precio": 19.00,
-            "oferta": 0.00,
-            "tipo": "Grano entero"
+            "tipo": "Café en Grano",
+            "origen": "Colombia",
+            "tueste": "Grano entero"
         },
         {
-            "id": 9,
             "nombre": "Recursive Roast",
-            "slug": "recursive-roast",
             "descripcion": "Un sabor que se profundiza en cada iteración. Notas de caramelo y madera.",
             "precio": 21.00,
-            "oferta": 18.00,
-            "tipo": "Molido fino"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Molido fino"
         },
         {
-            "id": 10,
             "nombre": "Stack Trace Stout",
-            "slug": "stack-trace-stout",
             "descripcion": "Café denso y oscuro para rastrear el origen de cualquier bug matutino.",
             "precio": 13.00,
-            "oferta": 0.00,
-            "tipo": "Granulado"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Granulado"
         },
         {
-            "id": 11,
             "nombre": "Docker Dark Roast",
-            "slug": "docker-dark-roast",
             "descripcion": "Empaquetado a la perfección. Funciona igual de bien en cualquier taza o entorno.",
             "precio": 17.00,
-            "oferta": 15.00,
-            "tipo": "Grano entero"
+            "tipo": "Café en Grano",
+            "origen": "Blend",
+            "tueste": "Grano entero"
         },
         {
-            "id": 12,
             "nombre": "JavaScript Juice",
-            "slug": "javascript-juice",
             "descripcion": "Para los creadores web. A veces impredecible, pero absolutamente necesario para el front-end.",
             "precio": 16.00,
-            "oferta": 0.00,
-            "tipo": "Cápsulas"
+            "tipo": "Cápsulas",
+            "origen": "Blend",
+            "tueste": "Cápsulas"
         },
         {
-            "id": 13,
             "nombre": "Git Grind",
-            "slug": "git-grind",
             "descripcion": "Guarda tu estado actual y haz un commit a tu energía matutina con esta mezcla balanceada.",
             "precio": 14.50,
-            "oferta": 12.50,
-            "tipo": "Molido medio"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Molido medio"
         },
         {
-            "id": 14,
             "nombre": "SQL Shot",
-            "slug": "sql-shot",
             "descripcion": "Consulta tus reservas de energía y extrae exactamente lo que necesitas para seguir operando.",
             "precio": 12.00,
-            "oferta": 0.00,
-            "tipo": "Instantáneo"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Instantáneo"
         },
         {
-            "id": 15,
             "nombre": "Linux Latte",
-            "slug": "linux-latte",
             "descripcion": "Completamente open source. Tú decides cuánta leche y azúcar compilar en él.",
             "precio": 18.50,
-            "oferta": 16.00,
-            "tipo": "Molido fino"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Molido fino"
         },
         {
-            "id": 16,
             "nombre": "CSS Cappuccino",
-            "slug": "css-cappuccino",
             "descripcion": "Todo sobre la presentación. Una capa perfecta de espuma que estiliza tu mañana.",
             "precio": 19.00,
-            "oferta": 0.00,
-            "tipo": "Granulado"
+            "oferta": 15.00,
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Granulado"
         },
         {
-            "id": 17,
             "nombre": "React Ristretto",
-            "slug": "react-ristretto",
             "descripcion": "Corto, intenso y reactivo a tus necesidades inmediatas de concentración.",
             "precio": 21.50,
-            "oferta": 19.00,
-            "tipo": "Cápsulas"
+            "tipo": "Cápsulas",
+            "origen": "Blend",
+            "tueste": "Cápsulas"
         },
         {
-            "id": 18,
             "nombre": "Go Grind",
-            "slug": "go-grind",
             "descripcion": "Alta concurrencia en tu sistema nervioso. Tueste claro para una ejecución rápida.",
             "precio": 15.00,
-            "oferta": 0.00,
-            "tipo": "Grano entero"
+            "tipo": "Café en Grano",
+            "origen": "Honduras",
+            "tueste": "Grano entero"
         },
         {
-            "id": 19,
             "nombre": "Cloud Computing Cold Brew",
-            "slug": "cloud-computing-cold-brew",
             "descripcion": "Servido en la nube, frío y listo para escalar según tus exigencias de la tarde.",
             "precio": 17.50,
-            "oferta": 15.50,
-            "tipo": "Cold Brew"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Cold Brew"
         },
         {
-            "id": 20,
             "nombre": "Malware Macchiato",
-            "slug": "malware-macchiato",
             "descripcion": "Una deliciosa infección de caramelo y chocolate que tomará control de tu paladar.",
             "precio": 23.00,
-            "oferta": 20.00,
-            "tipo": "Molido medio"
+            "tipo": "Molido",
+            "origen": "Blend",
+            "tueste": "Molido medio"
         }
     ]
 }
 JSON;
 
-        // Decodificar el JSON
         $data = json_decode($json, true);
 
         if (isset($data['productos'])) {
             foreach ($data['productos'] as $prodData) {
                 $producto = Producto::create([
-                    'categoria_id' => $categoria->id,
+                    'categoria_id' => $categoriaIds[$prodData['tipo']] ?? $categoriaIds['Café en Grano'],
                     'nombre' => $prodData['nombre'],
                     'descripcion' => $prodData['descripcion'] ?? '',
                     'precio' => $prodData['precio'],
-                    // Llenando campos que no vienen en el JSON con valores por defecto
-                    'stock' => rand(10, 100),
-                    'origen' => 'Internacional',
-                    'tueste' => $prodData['tipo'] ?? 'Desconocido', // Usamos el "tipo" como "tueste"
+                    'oferta' => $prodData['oferta'] ?? null,
+                    'stock' => rand(15, 60),
+                    'origen_id' => $origenIds[$prodData['origen']] ?? $origenIds['Blend'],
+                    'tueste' => $prodData['tueste'] ?? 'Desconocido',
                     'peso_gramos' => 250,
                     'estado' => 'activo'
                 ]);
 
-                // Si hay imágenes, guardarlas en la tabla imagen_productos
                 if (isset($prodData['imagenes']) && is_array($prodData['imagenes'])) {
                     foreach ($prodData['imagenes'] as $imagen) {
                         ImagenProducto::create([
@@ -251,11 +251,100 @@ JSON;
                             'url' => $imagen
                         ]);
                     }
+                } else {
+                    ImagenProducto::create([
+                        'producto_id' => $producto->id,
+                        'url' => 'error-404.png'
+                    ]);
                 }
             }
-            $this->command->info("Productos importados correctamente.");
-        } else {
-            $this->command->error("El formato del JSON no es el esperado. No se encontró la clave 'productos'.");
+        }
+
+        // 4. Sembrar PRODUCTOS NUEVOS (Sin Stock, Inactivos, Descafeinados)
+        $nuevosProductos = [
+            [
+                'nombre' => 'Café de Especialidad Kenia AA',
+                'categoria' => 'Café en Grano',
+                'descripcion' => 'Excepcional café de la región de Nyeri. Notas de frutos del bosque, acidez cítrica brillante y cuerpo sedoso. De los granos más cotizados de África.',
+                'precio' => 24.50,
+                'stock' => 0, // Sin stock!
+                'origen' => 'Kenia',
+                'tueste' => 'Grano entero',
+                'peso' => 250,
+                'estado' => 'activo',
+                'imagenes' => ['error-404.png']
+            ],
+            [
+                'nombre' => 'Edición Limitada Kona Hawái',
+                'categoria' => 'Café en Grano',
+                'descripcion' => 'Granos extremadamente exclusivos cultivados en suelo volcánico en las laderas de Hawái. Perfil de sabor dulce con toques de nuez y flores. Próximamente disponible.',
+                'precio' => 35.00,
+                'stock' => 15,
+                'origen' => 'Blend',
+                'tueste' => 'Grano entero',
+                'peso' => 250,
+                'estado' => 'inactivo', // No a la venta!
+                'imagenes' => ['error-404.png']
+            ],
+            [
+                'nombre' => 'Decaf Debugger Blend',
+                'categoria' => 'Descafeinado',
+                'descripcion' => 'Café de especialidad descafeinado mediante proceso al agua natural. Mantiene todo el cuerpo y notas acarameladas del café de origen colombiano.',
+                'precio' => 16.00,
+                'oferta' => 13.50,
+                'stock' => 45,
+                'origen' => 'Colombia',
+                'tueste' => 'Molido medio',
+                'peso' => 250,
+                'estado' => 'activo',
+                'imagenes' => ['error-404.png']
+            ],
+            [
+                'nombre' => 'Cápsulas Decaf Coffee',
+                'categoria' => 'Descafeinado',
+                'descripcion' => 'Tus cápsulas favoritas compatibles con cafeteras express en su versión descafeinada. Sabor balanceado y excelente crema.',
+                'precio' => 18.50,
+                'stock' => 30,
+                'origen' => 'Brasil',
+                'tueste' => 'Cápsulas',
+                'peso' => 120,
+                'estado' => 'activo',
+                'imagenes' => ['cpp-caffeine-1.png']
+            ],
+            [
+                'nombre' => 'Café Colombia Bourbon Amarillo',
+                'categoria' => 'Café en Grano',
+                'descripcion' => 'Café de especialidad cultivado a más de 1800 msnm. Proceso natural con fermentación controlada que resalta notas de frutos amarillos y chocolate con leche.',
+                'precio' => 22.50,
+                'stock' => 24,
+                'origen' => 'Colombia',
+                'tueste' => 'Grano entero',
+                'peso' => 250,
+                'estado' => 'activo',
+                'imagenes' => ['java-jolt-1.png', 'java-jolt-2.png']
+            ]
+        ];
+
+        foreach ($nuevosProductos as $prod) {
+            $producto = Producto::create([
+                'categoria_id' => $categoriaIds[$prod['categoria']],
+                'nombre' => $prod['nombre'],
+                'descripcion' => $prod['descripcion'],
+                'precio' => $prod['precio'],
+                'oferta' => $prod['oferta'] ?? null,
+                'stock' => $prod['stock'],
+                'origen_id' => $origenIds[$prod['origen']],
+                'tueste' => $prod['tueste'],
+                'peso_gramos' => $prod['peso'],
+                'estado' => $prod['estado']
+            ]);
+
+            foreach ($prod['imagenes'] as $img) {
+                ImagenProducto::create([
+                    'producto_id' => $producto->id,
+                    'url' => $img
+                ]);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ class CarritoController extends Controller
         $carrito = Carrito::firstOrCreate(['usuario_id' => $usuario->id]);
         $items = $carrito->items()->with('producto')->get();
 
-        return view('carrito', compact('items', 'usuario'));
+        return view('pages.frontend.carrito', compact('items', 'usuario'));
     }
 
     /**
@@ -112,6 +112,21 @@ class CarritoController extends Controller
     }
 
     /**
+     * Vacía el carrito del cliente.
+     */
+    public function vaciar()
+    {
+        $usuario = Auth::user();
+        $carrito = $usuario->carrito;
+
+        if ($carrito) {
+            $carrito->items()->delete();
+        }
+
+        return redirect('/carrito')->with('success', 'Carrito vaciado con éxito.');
+    }
+
+    /**
      * Procesa la compra (checkout).
      */
     public function comprar(Request $request)
@@ -151,7 +166,7 @@ class CarritoController extends Controller
         DB::transaction(function () use ($usuario, $items, $request) {
             $total = 0;
             foreach ($items as $item) {
-                $total += $item->producto->precio * $item->cantidad;
+                $total += $item->producto->precio_actual * $item->cantidad;
             }
 
             $pedido = Pedido::create([
@@ -163,7 +178,7 @@ class CarritoController extends Controller
             ]);
 
             foreach ($items as $item) {
-                $precio = $item->producto->precio;
+                $precio = $item->producto->precio_actual;
                 $subtotal = $precio * $item->cantidad;
 
                 DetallePedido::create([
@@ -182,6 +197,6 @@ class CarritoController extends Controller
             $usuario->carrito->items()->delete();
         });
 
-        return redirect('/pedidos')->with('success', '¡Compra realizada con éxito!');
+        return redirect('/cliente#pedidos')->with('success', '¡Compra realizada con éxito!');
     }
 }
