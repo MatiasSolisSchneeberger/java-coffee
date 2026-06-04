@@ -31,9 +31,9 @@
                 <tbody>
                     @forelse ($productos as $producto)
                         @php
-                            $portada = '/images/productos/error-404.png';
+                            $portada = '/storage/productos/error-404.png';
                             if (isset($producto->imagenes) && count($producto->imagenes) > 0) {
-                                $portada = '/images/productos/' . $producto->imagenes->first()->url;
+                                $portada = '/storage/productos/' . $producto->imagenes->first()->url;
                             }
                         @endphp
                         <tr>
@@ -76,7 +76,7 @@
                                         @method('DELETE')
                                     </form>
                                     <x-ui.button variant="danger" size="default"
-                                        onclick="confirmDelete({{ $producto->nombre }})">
+                                        onclick="confirmDelete({{ $producto->id }}, '{{ addslashes($producto->nombre) }}')">
                                         <x-icons.x-circle class="icon-xs" />
                                         <span>Eliminar</span>
                                     </x-ui.button>
@@ -97,9 +97,9 @@
 
     <!-- Script de Interacción para Visualización de Borrado -->
     <script>
-        function confirmDelete(productName) {
+        function confirmDelete(productId, productName) {
             if (confirm("¿Estás seguro de que deseas eliminar el producto '" + productName + "'?")) {
-                alert("Simulación: Producto '" + productName + "' marcado para eliminación.");
+                document.getElementById('delete-form-' + productId).submit();
             }
         }
     </script>

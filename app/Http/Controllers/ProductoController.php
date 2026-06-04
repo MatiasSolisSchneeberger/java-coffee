@@ -42,22 +42,25 @@ class ProductoController extends Controller
         $categorias = \App\Models\Categoria::all();
         $origenes = \App\Models\Origen::all();
 
-        // Obtener tipos de tueste / presentación únicos
-        $tuestes = \App\Models\Producto::whereNotNull('tueste')
+        // Obtener tipos de tueste / presentación únicos de productos activos y con stock
+        $tuestes = \App\Models\Producto::where('estado', 'activo')
+            ->where('stock', '>', 0)
+            ->whereNotNull('tueste')
             ->where('tueste', '!=', '')
             ->distinct()
             ->pluck('tueste')
             ->toArray();
 
-        // Obtener precios reales para los límites del slider
-        $minPrecio = (float) \App\Models\Producto::min('precio') ?: 0;
+        // Obtener precios reales para los límites del slider de productos activos y con stock
+        $minPrecio = (float) \App\Models\Producto::where('estado', 'activo')->where('stock', '>', 0)->min('precio') ?: 0;
 
         // El precio máximo podría ser de oferta o regular, tomamos el mayor precio normal
-        $maxPrecio = (float) \App\Models\Producto::max('precio') ?: 10000;
+        $maxPrecio = (float) \App\Models\Producto::where('estado', 'activo')->where('stock', '>', 0)->max('precio') ?: 10000;
 
-        // Construir query de productos activos
+        // Construir query de productos activos y con stock
         $query = \App\Models\Producto::with(['origen', 'categoria', 'imagenes'])
-            ->where('estado', 'activo');
+            ->where('estado', 'activo')
+            ->where('stock', '>', 0);
 
         // Filtrar por categoría
         if ($request->filled('categoria')) {
@@ -198,6 +201,8 @@ class ProductoController extends Controller
             'tueste' => 'nullable|string|max:50',
             'peso_gramos' => 'required|integer|min:0',
             'descripcion' => 'required|string',
+            'imagenes' => 'nullable|array',
+            'imagenes.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:12000',
         ]);
 
         $origenId = null;
@@ -221,11 +226,28 @@ class ProductoController extends Controller
             'estado' => 'activo',
         ]);
 
-        // Simulación: asociar una imagen por defecto
-        \App\Models\ImagenProducto::create([
-            'producto_id' => $producto->id,
-            'url' => 'error-404.png'
-        ]);
+        $hasImages = false;
+        if ($request->hasFile('imagenes')) {
+            foreach ($request->file('imagenes') as $file) {
+                if ($file->isValid()) {
+                    $path = $file->store('productos', 'public');
+                    $filename = basename($path);
+                    
+                    \App\Models\ImagenProducto::create([
+                        'producto_id' => $producto->id,
+                        'url' => $filename
+                    ]);
+                    $hasImages = true;
+                }
+            }
+        }
+
+        if (!$hasImages) {
+            \App\Models\ImagenProducto::create([
+                'producto_id' => $producto->id,
+                'url' => 'error-404.png'
+            ]);
+        }
 
         return redirect('/admin/productos')->with('success', 'Producto creado exitosamente.');
     }
@@ -246,6 +268,10 @@ class ProductoController extends Controller
             'peso_gramos' => 'required|integer|min:0',
             'estado' => 'required|in:activo,inactivo',
             'descripcion' => 'required|string',
+            'eliminar_imagenes' => 'nullable|array',
+            'eliminar_imagenes.*' => 'exists:imagen_productos,id',
+            'imagenes' => 'nullable|array',
+            'imagenes.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:12000',
         ]);
 
         $producto = \App\Models\Producto::findOrFail($id);
@@ -271,6 +297,48 @@ class ProductoController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
+        // Procesar borrado de imágenes
+        if ($request->filled('eliminar_imagenes')) {
+            foreach ($request->input('eliminar_imagenes') as $imgId) {
+                $imagen = \App\Models\ImagenProducto::find($imgId);
+                if ($imagen) {
+                    if ($imagen->url !== 'error-404.png') {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete('productos/' . $imagen->url);
+                    }
+                    $imagen->delete();
+                }
+            }
+        }
+
+        // Procesar subida de nuevas imágenes
+        if ($request->hasFile('imagenes')) {
+            // Si tiene la imagen por defecto como única imagen, la borramos antes de agregar las nuevas
+            $defaultImg = $producto->imagenes()->where('url', 'error-404.png')->first();
+            if ($defaultImg && $producto->imagenes()->count() === 1) {
+                $defaultImg->delete();
+            }
+
+            foreach ($request->file('imagenes') as $file) {
+                if ($file->isValid()) {
+                    $path = $file->store('productos', 'public');
+                    $filename = basename($path);
+                    
+                    \App\Models\ImagenProducto::create([
+                        'producto_id' => $producto->id,
+                        'url' => $filename
+                    ]);
+                }
+            }
+        }
+
+        // Si no le quedan imágenes al producto, asignamos la por defecto
+        if ($producto->imagenes()->count() === 0) {
+            \App\Models\ImagenProducto::create([
+                'producto_id' => $producto->id,
+                'url' => 'error-404.png'
+            ]);
+        }
+
         return redirect('/admin/productos')->with('success', 'Producto actualizado exitosamente.');
     }
 
@@ -280,6 +348,14 @@ class ProductoController extends Controller
     public function destroy($id)
     {
         $producto = \App\Models\Producto::findOrFail($id);
+        
+        // Eliminar archivos físicos asociados
+        foreach ($producto->imagenes as $imagen) {
+            if ($imagen->url !== 'error-404.png') {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete('productos/' . $imagen->url);
+            }
+        }
+
         $producto->delete();
 
         return redirect('/admin/productos')->with('success', 'Producto eliminado exitosamente.');

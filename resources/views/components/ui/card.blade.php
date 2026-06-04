@@ -1,12 +1,12 @@
 @props(['producto' => null])
 
 @php
-    $portada = '/images/productos/error-404.png';
+    $portada = '/storage/productos/error-404.png';
     if ($producto) {
         if (isset($producto['imagenes']) && is_array($producto['imagenes']) && count($producto['imagenes']) > 0) {
-            $portada = '/images/productos/' . $producto['imagenes'][0];
+            $portada = '/storage/productos/' . $producto['imagenes'][0];
         } elseif (isset($producto['imagen'])) {
-            $portada = '/images/productos/' . $producto['imagen'];
+            $portada = '/storage/productos/' . $producto['imagen'];
         }
     }
 @endphp

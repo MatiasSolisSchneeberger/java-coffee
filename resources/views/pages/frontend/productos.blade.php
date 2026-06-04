@@ -1,5 +1,17 @@
 <x-layouts.layout>
     <main>
+        @if (session('success'))
+            <div style="max-width: var(--max-width); margin: 0 auto var(--spacing-md); padding: 0 var(--spacing-md);">
+                <x-ui.success-alert :messages="[session('success')]" />
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div style="max-width: var(--max-width); margin: 0 auto var(--spacing-md); padding: 0 var(--spacing-md);">
+                <x-ui.error-alert title="Error:" :messages="[session('error')]" />
+            </div>
+        @endif
+
         <div class="catalogo-container">
 
             {{-- Botón toggle: visible solo en mobile (< 640px) --}}

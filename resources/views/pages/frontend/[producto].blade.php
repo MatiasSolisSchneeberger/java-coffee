@@ -13,9 +13,20 @@
             $imagenes = ['error-404.png', 'error-404.png', 'error-404.png'];
         }
 
-        $link_img = '/images/productos/';
+        $link_img = '/storage/productos/';
     @endphp
     <main>
+        @if (session('success'))
+            <div style="max-width: var(--max-width); margin: 0 auto var(--spacing-md); padding: 0 var(--spacing-md);">
+                <x-ui.success-alert :messages="[session('success')]" />
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div style="max-width: var(--max-width); margin: 0 auto var(--spacing-md); padding: 0 var(--spacing-md);">
+                <x-ui.error-alert title="Error:" :messages="[session('error')]" />
+            </div>
+        @endif
         <section class="producto-page">
             <div class="producto-layout">
 

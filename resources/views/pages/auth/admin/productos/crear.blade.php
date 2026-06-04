@@ -1,6 +1,6 @@
 <x-layouts.admin-layout title="Añadir Nuevo Producto">
     <div class="admin-panel-card">
-        <form action="/admin/productos" method="POST" class="admin-form">
+        <form action="/admin/productos" method="POST" enctype="multipart/form-data" class="admin-form">
             @csrf
 
             <!-- Fila 1: Nombre y Slug -->
@@ -65,6 +65,13 @@
                 <label for="descripcion" class="admin-form-label">Descripción Corta</label>
                 <textarea id="descripcion" name="descripcion" class="admin-form-field admin-form-textarea"
                     placeholder="Breve resumen del producto que se muestra en el catálogo..." required></textarea>
+            </div>
+
+            <!-- Imágenes -->
+            <div class="admin-form-group">
+                <label for="imagenes" class="admin-form-label">Imágenes del Producto</label>
+                <input type="file" id="imagenes" name="imagenes[]" class="admin-form-field" accept="image/*" multiple>
+                <small style="color: var(--color-text-muted); margin-top: 4px; display: block;">Puedes seleccionar múltiples imágenes. Se guardarán en el servidor.</small>
             </div>
 
             <!-- Acciones -->

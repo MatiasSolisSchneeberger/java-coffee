@@ -40,6 +40,10 @@
             <x-ui.success-alert :messages="[session('success')]" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
         @endif
 
+        @if (session('error'))
+            <x-ui.error-alert :messages="is_array(session('error')) ? session('error') : [session('error')]" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
+        @endif
+
         @if ($errors->any())
             <x-ui.error-alert :messages="$errors->all()" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
         @endif

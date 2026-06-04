@@ -4,7 +4,7 @@
             <h2 class="admin-panel-card-title">Modificando: {{ str_replace('-', ' ', ucwords($slug ?? 'cafe-colombia-bourbon-amarillo', '-')) }}</h2>
         </div>
 
-        <form action="/admin/productos/{{ $producto->id }}" method="POST" class="admin-form">
+        <form action="/admin/productos/{{ $producto->id }}" method="POST" enctype="multipart/form-data" class="admin-form">
             @csrf
             @method('PUT')
 
@@ -73,6 +73,31 @@
             <div class="admin-form-group">
                 <label for="descripcion" class="admin-form-label">Descripción</label>
                 <textarea id="descripcion" name="descripcion" class="admin-form-field admin-form-textarea" required>{{ $producto->descripcion }}</textarea>
+            </div>
+
+            <!-- Imágenes Actuales -->
+            @if(isset($producto->imagenes) && count($producto->imagenes) > 0)
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Imágenes Actuales (Marcar para eliminar)</label>
+                    <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap; margin-top: var(--spacing-sm);">
+                        @foreach($producto->imagenes as $imagen)
+                            <div style="border: 1px solid var(--color-border); padding: var(--spacing-xs); border-radius: var(--border-radius); text-align: center; background-color: var(--color-bg-light); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-xs);">
+                                <img src="/storage/productos/{{ $imagen->url }}" alt="Imagen de {{ $producto->nombre }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--border-radius-sm);">
+                                <label style="display: flex; align-items: center; gap: 4px; font-size: var(--text-sm); cursor: pointer; color: var(--color-error);">
+                                    <input type="checkbox" name="eliminar_imagenes[]" value="{{ $imagen->id }}">
+                                    <span>Eliminar</span>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            <!-- Subir Nuevas Imágenes -->
+            <div class="admin-form-group">
+                <label for="imagenes" class="admin-form-label">Añadir Nuevas Imágenes</label>
+                <input type="file" id="imagenes" name="imagenes[]" class="admin-form-field" accept="image/*" multiple>
+                <small style="color: var(--color-text-muted); margin-top: 4px; display: block;">Puedes seleccionar múltiples imágenes para agregar al producto.</small>
             </div>
 
             <!-- Acciones -->

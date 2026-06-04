@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ItemCarrito extends Model
 {
-    protected $fillable = ['carrito_id', 'producto_id', 'cantidad'];
+    protected $fillable = ['carrito_id', 'producto_id', 'cantidad', 'precio_unitario'];
 
     protected $casts = [
-        'cantidad' => 'integer'
+        'cantidad' => 'integer',
+        'precio_unitario' => 'decimal:2'
     ];
 
     public function producto()

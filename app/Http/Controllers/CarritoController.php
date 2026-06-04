@@ -11,6 +11,8 @@ use App\Models\DetallePedido;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+/* TODO: hay que controlar stock cuando se agrega el producto y cuando se realiza la compra */
+
 class CarritoController extends Controller
 {
     /**
@@ -21,6 +23,46 @@ class CarritoController extends Controller
         $usuario = Auth::user();
         $carrito = Carrito::firstOrCreate(['usuario_id' => $usuario->id]);
         $items = $carrito->items()->with('producto')->get();
+
+        $precioActualizadoMensajes = [];
+        $sinStockMensajes = [];
+        $carritoModificado = false;
+
+        foreach ($items as $item) {
+            $producto = $item->producto;
+            if ($producto) {
+                if (is_null($item->precio_unitario)) {
+                    $item->precio_unitario = $producto->precio_actual;
+                    $item->save();
+                }
+
+                if ($item->precio_unitario != $producto->precio_actual) {
+                    $precioActualizadoMensajes[] = "El precio de {$producto->nombre} se ha actualizado de $" . number_format($item->precio_unitario, 2) . " a $" . number_format($producto->precio_actual, 2) . ".";
+                    $item->precio_unitario = $producto->precio_actual;
+                    $item->save();
+                    $carritoModificado = true;
+                }
+
+                if ($item->cantidad > $producto->stock) {
+                    if ($producto->stock <= 0) {
+                        $sinStockMensajes[] = "El producto {$producto->nombre} ya no tiene stock disponible y ha sido removido de tu carrito.";
+                        $item->delete();
+                    } else {
+                        $sinStockMensajes[] = "El stock de {$producto->nombre} ha cambiado. La cantidad en tu carrito fue ajustada al stock máximo disponible ({$producto->stock} unidades).";
+                        $item->cantidad = $producto->stock;
+                        $item->save();
+                    }
+                    $carritoModificado = true;
+                }
+            }
+        }
+
+        if ($carritoModificado) {
+            $mensajes = array_merge($sinStockMensajes, $precioActualizadoMensajes);
+            session()->flash('error', $mensajes);
+            // Recargar items para reflejar los cambios en la vista
+            $items = $carrito->items()->with('producto')->get();
+        }
 
         return view('pages.frontend.carrito', compact('items', 'usuario'));
     }
@@ -40,8 +82,12 @@ class CarritoController extends Controller
 
         $producto = Producto::findOrFail($productoId);
 
+        if ($producto->stock <= 0) {
+            return redirect()->back()->with('error', "El stock de {$producto->nombre} se ha agotado justo antes de que pudieras agregarlo al carrito.");
+        }
+
         if ($producto->stock < $cantidad) {
-            return redirect()->back()->with('error', "No hay suficiente stock disponible para {$producto->nombre}.");
+            return redirect()->back()->with('error', "No hay suficiente stock disponible para {$producto->nombre}. Solo quedan {$producto->stock} unidades.");
         }
 
         $usuario = Auth::user();
@@ -51,14 +97,19 @@ class CarritoController extends Controller
 
         if ($item) {
             if ($item->cantidad + $cantidad > $producto->stock) {
-                return redirect()->back()->with('error', "No hay suficiente stock para agregar esa cantidad de {$producto->nombre}.");
+                if ($producto->stock <= 0) {
+                    return redirect()->back()->with('error', "El stock de {$producto->nombre} se ha agotado.");
+                }
+                return redirect()->back()->with('error', "No hay suficiente stock para agregar esa cantidad de {$producto->nombre}. (Stock disponible: {$producto->stock}, en tu carrito: {$item->cantidad}).");
             }
             $item->cantidad += $cantidad;
+            $item->precio_unitario = $producto->precio_actual;
             $item->save();
         } else {
             $carrito->items()->create([
                 'producto_id' => $productoId,
-                'cantidad' => $cantidad
+                'cantidad' => $cantidad,
+                'precio_unitario' => $producto->precio_actual
             ]);
         }
 
@@ -87,6 +138,7 @@ class CarritoController extends Controller
         }
 
         $item->cantidad = $request->input('cantidad');
+        $item->precio_unitario = $item->producto->precio_actual;
         $item->save();
 
         return redirect('/carrito')->with('success', "Cantidad de {$item->producto->nombre} actualizada.");
@@ -151,11 +203,44 @@ class CarritoController extends Controller
 
         $items = $carrito->items()->with('producto')->get();
 
-        // Validar stock antes de empezar la transacción
+        $precioActualizadoMensajes = [];
+        $sinStockMensajes = [];
+        $carritoModificado = false;
+
         foreach ($items as $item) {
-            if ($item->cantidad > $item->producto->stock) {
-                return redirect()->back()->with('error', "No hay suficiente stock de {$item->producto->nombre} para completar la compra.");
+            $producto = $item->producto;
+
+            // Si el precio_unitario es nulo (por registros anteriores a la migración), inicializarlo
+            if (is_null($item->precio_unitario)) {
+                $item->precio_unitario = $producto->precio_actual;
+                $item->save();
             }
+
+            // Verificar si el precio cambió
+            if ($item->precio_unitario != $producto->precio_actual) {
+                $precioActualizadoMensajes[] = "El precio de {$producto->nombre} se ha actualizado de $" . number_format($item->precio_unitario, 2) . " a $" . number_format($producto->precio_actual, 2) . ".";
+                $item->precio_unitario = $producto->precio_actual;
+                $item->save();
+                $carritoModificado = true;
+            }
+
+            // Verificar stock
+            if ($item->cantidad > $producto->stock) {
+                if ($producto->stock <= 0) {
+                    $sinStockMensajes[] = "El producto {$producto->nombre} ya no tiene stock disponible y ha sido removido de tu carrito.";
+                    $item->delete();
+                } else {
+                    $sinStockMensajes[] = "El stock de {$producto->nombre} ha cambiado. La cantidad en tu carrito fue ajustada al stock máximo disponible ({$producto->stock} unidades).";
+                    $item->cantidad = $producto->stock;
+                    $item->save();
+                }
+                $carritoModificado = true;
+            }
+        }
+
+        if ($carritoModificado) {
+            $mensajes = array_merge($sinStockMensajes, $precioActualizadoMensajes);
+            return redirect('/carrito')->with('error', $mensajes);
         }
 
         // Actualizar el teléfono en el perfil del usuario (según indicaciones)

@@ -19,6 +19,49 @@ class ClienteController extends Controller
     {
         $usuario = Auth::user();
 
+        // Validar stock y precios en el carrito del usuario al entrar al panel
+        $carrito = $usuario->carrito;
+        if ($carrito) {
+            $items = $carrito->items()->with('producto')->get();
+            $precioActualizadoMensajes = [];
+            $sinStockMensajes = [];
+            $carritoModificado = false;
+
+            foreach ($items as $item) {
+                $producto = $item->producto;
+                if ($producto) {
+                    if (is_null($item->precio_unitario)) {
+                        $item->precio_unitario = $producto->precio_actual;
+                        $item->save();
+                    }
+
+                    if ($item->precio_unitario != $producto->precio_actual) {
+                        $precioActualizadoMensajes[] = "El precio de {$producto->nombre} en tu carrito se ha actualizado de $" . number_format($item->precio_unitario, 2) . " a $" . number_format($producto->precio_actual, 2) . ".";
+                        $item->precio_unitario = $producto->precio_actual;
+                        $item->save();
+                        $carritoModificado = true;
+                    }
+
+                    if ($item->cantidad > $producto->stock) {
+                        if ($producto->stock <= 0) {
+                            $sinStockMensajes[] = "El producto {$producto->nombre} ya no tiene stock disponible y fue removido de tu carrito.";
+                            $item->delete();
+                        } else {
+                            $sinStockMensajes[] = "El stock de {$producto->nombre} ha cambiado. La cantidad en tu carrito fue ajustada al stock máximo disponible ({$producto->stock} unidades).";
+                            $item->cantidad = $producto->stock;
+                            $item->save();
+                        }
+                        $carritoModificado = true;
+                    }
+                }
+            }
+
+            if ($carritoModificado) {
+                $mensajes = array_merge($sinStockMensajes, $precioActualizadoMensajes);
+                session()->flash('error', $mensajes);
+            }
+        }
+
         // Obtener pedidos del usuario con sus detalles e información de productos
         $pedidos = Pedido::where('usuario_id', $usuario->id)
             ->with('detalles.producto')

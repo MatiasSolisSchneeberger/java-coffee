@@ -8,7 +8,7 @@
             @endif
 
             @if (session('error'))
-                <x-ui.error-alert title="Error:" :messages="[session('error')]" />
+                <x-ui.error-alert title="Error:" :messages="is_array(session('error')) ? session('error') : [session('error')]" />
             @endif
 
             @if ($errors->any())
