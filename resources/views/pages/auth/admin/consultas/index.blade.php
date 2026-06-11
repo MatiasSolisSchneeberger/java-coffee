@@ -81,14 +81,32 @@
 
         function submitResponse(id) {
             var textarea = document.getElementById('respuesta-' + id);
-            alert("Simulación: Respuesta enviada por correo electrónico:\n\n\"" + textarea.value + "\"");
-            textarea.value = "";
-            // Simular cambio de estado visual
-            var card = textarea.closest('.query-card');
-            var badge = card.querySelector('.status-badge');
-            badge.className = 'status-badge status-success';
-            badge.textContent = 'Respondido';
-            toggleQueryBody(id);
+            var respuestaTexto = textarea.value;
+
+            fetch(`/admin/consultas/${id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    estado: 'respondido',
+                    respuesta: respuestaTexto
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Ocurrió un inconveniente al responder la consulta.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error de conexión con el servidor.');
+            });
         }
 
         function filterQueries(value) {

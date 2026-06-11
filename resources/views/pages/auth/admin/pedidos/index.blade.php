@@ -86,7 +86,29 @@
 
     <script>
         function updateStatus(orderId, status) {
-            alert("Simulación: Pedido #" + orderId + " cambiado al estado '" + status.toUpperCase() + "'.");
+            // Hacemos la llamada al endpoint que acabamos de crear
+            fetch(`/admin/pedidos/${orderId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Enviamos el token CSRF que genera Laravel de fondo
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ estado: status })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Podés reemplazar este alert por una notificación flotante/toast si preferís
+                    alert(data.message);
+                } else {
+                    alert('Ocurrió un inconveniente al actualizar el estado.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error de conexión con el servidor.');
+            });
         }
 
         function filterOrders(filter) {

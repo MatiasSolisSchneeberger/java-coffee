@@ -114,6 +114,38 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
         $comentarios = \App\Models\Comentario::with(['usuario', 'producto'])->latest()->get();
         return view('pages.auth.admin.comentarios.index', compact('comentarios'));
     });
+
+    Route::patch('/admin/pedidos/{id}/status', function (\Illuminate\Http\Request $request, $id) {
+        $request->validate([
+            'estado' => 'required|in:pendiente,preparando,enviado,entregado,cancelado'
+        ]);
+
+        $pedido = \App\Models\Pedido::findOrFail($id);
+        $pedido->estado = $request->input('estado');
+        $pedido->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => "El pedido #{$id} cambió al estado: " . strtoupper($pedido->estado)
+        ]);
+    });
+
+    Route::patch('/admin/consultas/{id}/status', function (\Illuminate\Http\Request $request, $id) {
+        $request->validate([
+            'estado' => 'required|in:pendiente,no leido,respondido',
+            'respuesta' => 'required|string'
+        ]);
+
+        $consulta = \App\Models\Consulta::findOrFail($id);
+        $consulta->estado = $request->input('estado');
+        $consulta->respuesta = $request->input('respuesta');
+        $consulta->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => "La consulta se actualizó correctamente."
+        ]);
+    });
 });
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
