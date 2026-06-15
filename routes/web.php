@@ -105,9 +105,18 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
         return view('pages.auth.admin.pedidos.index', compact('pedidos'));
     });
 
-    Route::get('/admin/consultas', function () {
-        $consultas = \App\Models\Consulta::latest()->get();
-        return view('pages.auth.admin.consultas.index', compact('consultas'));
+    Route::get('/admin/consultas', function (\Illuminate\Http\Request $request) {
+        $estado = $request->query('estado');
+        $query = \App\Models\Consulta::latest();
+
+        if ($estado === 'pendientes') {
+            $query->where('estado', '!=', 'respondido');
+        } elseif ($estado === 'respondidas') {
+            $query->where('estado', 'respondido');
+        }
+
+        $consultas = $query->get();
+        return view('pages.auth.admin.consultas.index', compact('consultas', 'estado'));
     });
 
     Route::get('/admin/comentarios', function () {

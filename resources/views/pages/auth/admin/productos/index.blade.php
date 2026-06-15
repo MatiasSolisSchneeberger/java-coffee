@@ -44,8 +44,8 @@
                             <td>{{ $producto->categoria ? $producto->categoria->nombre : 'Sin Categoría' }}</td>
                             <td>${{ number_format($producto->precio, 2) }}</td>
                             <td>
-                                @if ($producto->precio_oferta > 0)
-                                    ${{ number_format($producto->precio_oferta, 2) }}
+                                @if ($producto->oferta > 0)
+                                    ${{ number_format($producto->oferta, 2) }}
                                 @else
                                     -
                                 @endif
