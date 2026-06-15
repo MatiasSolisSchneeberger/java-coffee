@@ -161,9 +161,7 @@ Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::delete('/carrito/vaciar', [CarritoController::class, 'vaciar']);
     Route::post('/carrito/comprar', [CarritoController::class, 'comprar']);
 
-    Route::get('/pedidos', function () {
-        return view('pages.auth.pedidos');
-    });
+    Route::redirect('/pedidos', '/cliente#pedidos');
 });
 
 
