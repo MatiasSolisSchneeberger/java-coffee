@@ -4,9 +4,9 @@
             <h2 class="admin-panel-card-title">Consultas de Clientes</h2>
             <div class="admin-search-wrapper" style="max-width: 300px;">
                 <select class="admin-form-field admin-form-select" onchange="filterQueries(this.value)">
-                    <option value="todas">Todas las consultas</option>
-                    <option value="pendientes">Pendientes</option>
-                    <option value="respondidas">Respondidas</option>
+                    <option value="todas" {{ ($estado ?? 'todas') === 'todas' ? 'selected' : '' }}>Todas las consultas</option>
+                    <option value="pendientes" {{ ($estado ?? '') === 'pendientes' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="respondidas" {{ ($estado ?? '') === 'respondidas' ? 'selected' : '' }}>Respondidas</option>
                 </select>
             </div>
         </div>
@@ -110,7 +110,7 @@
         }
 
         function filterQueries(value) {
-            alert("Simulación: Filtrando consultas por estado '" + value.toUpperCase() + "'.");
+            window.location.href = `/admin/consultas?estado=${value}`;
         }
     </script>
 </x-layouts.admin-layout>
