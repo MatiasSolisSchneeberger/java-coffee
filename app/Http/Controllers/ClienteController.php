@@ -156,6 +156,39 @@ class ClienteController extends Controller
     }
 
     /**
+     * Actualiza un único campo del perfil del cliente (usado habitualmente de forma dinámica desde el checkout).
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function actualizarCampoRapido(Request $request)
+    {
+        $usuario = Auth::user();
+
+        $request->validate([
+            'campo' => 'required|string|in:direccion,telefono,provincia_id',
+            'valor' => 'required|string|max:255',
+        ]);
+
+        $campo = $request->input('campo');
+        $valor = $request->input('valor');
+
+        if ($campo === 'provincia_id') {
+            $request->validate([
+                'valor' => 'required|exists:provincias,id'
+            ]);
+        }
+
+        $usuario->$campo = $valor;
+        $usuario->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => '¡Perfil actualizado con éxito!'
+        ]);
+    }
+
+    /**
      * Elimina un producto de favoritos.
      *
      * @param int $productoId

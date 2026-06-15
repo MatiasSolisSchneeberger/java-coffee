@@ -151,6 +151,7 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente', [ClienteController::class, 'index']);
     Route::put('/cliente/perfil', [ClienteController::class, 'actualizarPerfil']);
+    Route::patch('/cliente/perfil/actualizar-campo', [ClienteController::class, 'actualizarCampoRapido']);
     Route::delete('/cliente/favoritos/eliminar/{id}', [ClienteController::class, 'eliminarFavorito']);
 
     Route::get('/carrito', [CarritoController::class, 'index']);

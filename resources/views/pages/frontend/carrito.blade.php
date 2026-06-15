@@ -144,14 +144,38 @@
                                     <label for="direccion_envio" class="form-label">Dirección de Envío</label>
                                     <input type="text" name="direccion_envio" id="direccion_envio" class="form-input"
                                         value="{{ old('direccion_envio', $usuario->direccion) }}"
-                                        placeholder="Calle 123, Departamento 2B, Ciudad" required>
+                                        placeholder="Calle 123, Departamento 2B, Ciudad" required
+                                        data-original="{{ $usuario->direccion }}">
+                                    <button type="button" class="update-profile-btn" id="update-direccion-btn" style="display: none;">
+                                        ¿Desea actualizar dirección en tu perfil?
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="provincia_id" class="form-label">Provincia</label>
+                                    <select name="provincia_id" id="provincia_id" class="form-input" required
+                                        data-original="{{ $usuario->provincia_id }}">
+                                        <option value="" disabled {{ is_null(old('provincia_id', $usuario->provincia_id)) ? 'selected' : '' }}>Selecciona una provincia</option>
+                                        @foreach ($provincias as $provincia)
+                                            <option value="{{ $provincia->id }}" {{ old('provincia_id', $usuario->provincia_id) == $provincia->id ? 'selected' : '' }}>
+                                                {{ $provincia->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="update-profile-btn" id="update-provincia-btn" style="display: none;">
+                                        ¿Desea actualizar provincia en tu perfil?
+                                    </button>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="telefono" class="form-label">Teléfono de Contacto</label>
                                     <input type="text" name="telefono" id="telefono" class="form-input"
                                         value="{{ old('telefono', $usuario->telefono) }}"
-                                        placeholder="+54 9 11 1234-5678" required>
+                                        placeholder="+54 9 11 1234-5678" required
+                                        data-original="{{ $usuario->telefono }}">
+                                    <button type="button" class="update-profile-btn" id="update-telefono-btn" style="display: none;">
+                                        ¿Desea actualizar teléfono en tu perfil?
+                                    </button>
                                 </div>
 
                                 <h3 class="mt-md">Método de Pago</h3>
@@ -192,4 +216,92 @@
             @endif
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fields = [
+                { id: 'direccion_envio', dbField: 'direccion', buttonId: 'update-direccion-btn', label: 'dirección' },
+                { id: 'telefono', dbField: 'telefono', buttonId: 'update-telefono-btn', label: 'teléfono' },
+                { id: 'provincia_id', dbField: 'provincia_id', buttonId: 'update-provincia-btn', label: 'provincia' }
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                const button = document.getElementById(field.buttonId);
+
+                if (!element || !button) return;
+
+                const checkChange = () => {
+                    const currentValue = element.value;
+                    const originalValue = element.getAttribute('data-original');
+
+                    // If value has changed, show update profile button
+                    if (currentValue !== originalValue && (originalValue !== "" || currentValue !== "")) {
+                        button.style.display = 'inline-flex';
+                    } else {
+                        button.style.display = 'none';
+                    }
+                };
+
+                element.addEventListener('input', checkChange);
+                element.addEventListener('change', checkChange);
+
+                button.addEventListener('click', function() {
+                    const newValue = element.value;
+                    if (!newValue) return;
+
+                    if (!confirm(`¿Estás seguro de que deseas actualizar tu ${field.label} en tu perfil?`)) {
+                        return;
+                    }
+
+                    button.disabled = true;
+                    button.textContent = 'Actualizando...';
+
+                    fetch('/cliente/perfil/actualizar-campo', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            campo: field.dbField,
+                            valor: newValue
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            element.setAttribute('data-original', newValue);
+                            button.style.display = 'none';
+                            
+                            // Visual success alert toast
+                            const alertWrapper = document.createElement('div');
+                            alertWrapper.style.position = 'fixed';
+                            alertWrapper.style.bottom = '20px';
+                            alertWrapper.style.right = '20px';
+                            alertWrapper.style.zIndex = '9999';
+                            alertWrapper.innerHTML = `
+                                <div style="background: var(--bg-surface); border: 1px solid var(--color-success); border-left: 4px solid var(--color-success); padding: 12px 20px; border-radius: var(--border-radius); box-shadow: var(--shadow-md); color: var(--color-text-main); font-size: var(--text-sm);">
+                                    ${data.message}
+                                </div>
+                            `;
+                            document.body.appendChild(alertWrapper);
+                            setTimeout(() => alertWrapper.remove(), 3000);
+                        } else {
+                            alert(data.message || 'Error al actualizar el perfil.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Ocurrió un error al intentar actualizar el perfil.');
+                    })
+                    .finally(() => {
+                        button.disabled = false;
+                        button.textContent = `¿Desea actualizar ${field.label} en tu perfil?`;
+                    });
+                });
+            });
+        });
+    </script>
 </x-layouts.layout>

@@ -8,6 +8,7 @@ use App\Models\ItemCarrito;
 use App\Models\Producto;
 use App\Models\Pedido;
 use App\Models\DetallePedido;
+use App\Models\Provincia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,7 +69,8 @@ class CarritoController extends Controller
             $items = $carrito->items()->with('producto')->get();
         }
 
-        return view('pages.frontend.carrito', compact('items', 'usuario'));
+        $provincias = Provincia::orderBy('nombre')->get();
+        return view('pages.frontend.carrito', compact('items', 'usuario', 'provincias'));
     }
 
     /**
@@ -205,10 +207,13 @@ class CarritoController extends Controller
         $request->validate([
             'direccion_envio' => 'required|string|max:255',
             'telefono' => 'required|string|max:20',
+            'provincia_id' => 'required|exists:provincias,id',
             'metodo_pago' => 'required|string|in:Tarjeta,Efectivo,Transferencia',
         ], [
             'direccion_envio.required' => 'La dirección de envío es obligatoria.',
             'telefono.required' => 'El teléfono es obligatorio.',
+            'provincia_id.required' => 'La provincia es obligatoria.',
+            'provincia_id.exists' => 'La provincia seleccionada no es válida.',
             'metodo_pago.required' => 'El método de pago es obligatorio.',
             'metodo_pago.in' => 'El método de pago seleccionado no es válido.',
         ]);
@@ -272,6 +277,7 @@ class CarritoController extends Controller
 
             $pedido = Pedido::create([
                 'usuario_id' => $usuario->id,
+                'provincia_id' => $request->input('provincia_id'),
                 'estado' => 'pendiente',
                 'total' => $total,
                 'metodo_pago' => $request->input('metodo_pago'),

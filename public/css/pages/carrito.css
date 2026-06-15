@@ -420,3 +420,38 @@
     width: 100%;
     justify-content: center;
 }
+
+/* Botón interactivo para actualizar perfil desde checkout */
+.update-profile-btn {
+    background: rgba(99, 218, 149, 0.08);
+    border: 1px dashed var(--color-primary);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--text-xs);
+    font-family: var(--font-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+    transition: background-color var(--transition-fast), border-style var(--transition-fast), transform var(--transition-fast);
+    width: 100%;
+    text-align: center;
+}
+
+.update-profile-btn:hover {
+    background: rgba(99, 218, 149, 0.15);
+    border-style: solid;
+    transform: translateY(-1px);
+}
+
+.update-profile-btn:active {
+    transform: translateY(0);
+}
+
+.update-profile-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
