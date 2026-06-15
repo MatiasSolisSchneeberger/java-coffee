@@ -4,13 +4,22 @@ namespace App\Http\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Validaciones para el formulario de registro.
+ */
 class RegistroRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [
@@ -23,6 +32,9 @@ class RegistroRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array
+     */
     public function messages(): array
     {
         return [
@@ -44,3 +56,5 @@ class RegistroRequest extends FormRequest
         ];
     }
 }
+
+

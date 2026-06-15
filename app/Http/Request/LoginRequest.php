@@ -2,24 +2,35 @@
 
 namespace App\Http\Request;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Validaciones para el formulario de login.
+ */
 class LoginRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [
             'email'    => 'required|email|max:150',
-            'password' => 'required|string|min:8', // Agregamos la validación de la contraseña
+            'password' => 'required|string|min:8',
         ];
     }
 
+    /**
+     * @return array
+     */
     public function messages(): array
     {
         return [
@@ -30,3 +41,5 @@ class LoginRequest extends FormRequest
         ];
     }
 }
+
+

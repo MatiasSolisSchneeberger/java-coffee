@@ -10,23 +10,28 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+/**
+ * Controlador para la sección y perfil del cliente registrado.
+ */
 class ClienteController extends Controller
 {
     /**
-     * Muestra el panel de control del cliente con sus datos reales.
+     * Muestra el panel del cliente. Valida stock y precios del carrito.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
         $usuario = Auth::user();
-
-        // Validar stock y precios en el carrito del usuario al entrar al panel
         $carrito = $usuario->carrito;
+
         if ($carrito) {
             $items = $carrito->items()->with('producto')->get();
             $precioActualizadoMensajes = [];
             $sinStockMensajes = [];
             $carritoModificado = false;
 
+            // Validación en tiempo real de stock y precios de ítems en carrito antes de cargar el panel
             foreach ($items as $item) {
                 $producto = $item->producto;
                 if ($producto) {
@@ -62,13 +67,12 @@ class ClienteController extends Controller
             }
         }
 
-        // Obtener pedidos del usuario con sus detalles e información de productos
         $pedidos = Pedido::where('usuario_id', $usuario->id)
             ->with('detalles.producto')
             ->latest()
             ->get();
 
-        // Obtener favoritos del usuario formateados para que coincidan con la vista
+        // Mapeo dinámico de favoritos para adaptar las propiedades al formato esperado por la UI
         $favoritos = ProductoFavorito::where('usuario_id', $usuario->id)
             ->with('producto.imagenes')
             ->get()
@@ -93,7 +97,6 @@ class ClienteController extends Controller
             ->filter()
             ->values();
 
-        // Obtener consultas enviadas por el usuario
         $consultas = Consulta::where('usuario_id', $usuario->id)
             ->latest()
             ->get();
@@ -102,7 +105,10 @@ class ClienteController extends Controller
     }
 
     /**
-     * Actualiza la información del perfil del cliente.
+     * Actualiza los datos del perfil del cliente.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function actualizarPerfil(Request $request)
     {
@@ -131,7 +137,7 @@ class ClienteController extends Controller
 
         $request->validate($rules, $messages);
 
-        // Lógica de cambio de contraseña
+        // Validación de contraseña actual antes de aplicar el hasheo de la nueva
         if ($request->filled('password')) {
             if (! Hash::check($request->current_password, $usuario->password)) {
                 return back()->withErrors(['current_password' => 'La contraseña actual es incorrecta.'])->withInput();
@@ -139,7 +145,6 @@ class ClienteController extends Controller
             $usuario->password = Hash::make($request->password);
         }
 
-        // Actualizar datos de contacto y envío
         $usuario->nombre = $request->nombre;
         $usuario->apellido = $request->apellido;
         $usuario->email = $request->email;
@@ -151,7 +156,10 @@ class ClienteController extends Controller
     }
 
     /**
-     * Elimina un producto de la lista de favoritos del cliente.
+     * Elimina un producto de favoritos.
+     *
+     * @param int $productoId
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function eliminarFavorito($productoId)
     {
@@ -162,3 +170,5 @@ class ClienteController extends Controller
         return redirect()->back()->with('success', 'Producto quitado de favoritos.');
     }
 }
+
+

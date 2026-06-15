@@ -11,12 +11,16 @@ use App\Models\DetallePedido;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-/* TODO: hay que controlar stock cuando se agrega el producto y cuando se realiza la compra */
-
+/**
+ * Controlador de gestión del carrito de compras y del proceso de checkout.
+ */
 class CarritoController extends Controller
 {
     /**
-     * Muestra la vista del carrito.
+     * Muestra la vista del carrito de compras.
+     * Valida en tiempo real que los productos mantengan stock suficiente y que no cambiasen de precio.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -28,6 +32,7 @@ class CarritoController extends Controller
         $sinStockMensajes = [];
         $carritoModificado = false;
 
+        // Comprobación de consistencia de stock y precio para cada ítem en el carrito
         foreach ($items as $item) {
             $producto = $item->producto;
             if ($producto) {
@@ -60,7 +65,6 @@ class CarritoController extends Controller
         if ($carritoModificado) {
             $mensajes = array_merge($sinStockMensajes, $precioActualizadoMensajes);
             session()->flash('error', $mensajes);
-            // Recargar items para reflejar los cambios en la vista
             $items = $carrito->items()->with('producto')->get();
         }
 
@@ -68,7 +72,10 @@ class CarritoController extends Controller
     }
 
     /**
-     * Agrega un producto al carrito.
+     * Agrega un producto al carrito de compras.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function agregar(Request $request)
     {
@@ -92,9 +99,9 @@ class CarritoController extends Controller
 
         $usuario = Auth::user();
         $carrito = Carrito::firstOrCreate(['usuario_id' => $usuario->id]);
-
         $item = $carrito->items()->where('producto_id', $productoId)->first();
 
+        // Control de stock agregado al carrito acumulado
         if ($item) {
             if ($item->cantidad + $cantidad > $producto->stock) {
                 if ($producto->stock <= 0) {
@@ -117,7 +124,11 @@ class CarritoController extends Controller
     }
 
     /**
-     * Actualiza la cantidad de un ítem del carrito.
+     * Actualiza la cantidad de un ítem en el carrito.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function actualizar(Request $request, $id)
     {
@@ -146,6 +157,9 @@ class CarritoController extends Controller
 
     /**
      * Elimina un ítem del carrito.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function eliminar($id)
     {
@@ -164,7 +178,9 @@ class CarritoController extends Controller
     }
 
     /**
-     * Vacía el carrito del cliente.
+     * Vacía el carrito del usuario.
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function vaciar()
     {
@@ -179,7 +195,10 @@ class CarritoController extends Controller
     }
 
     /**
-     * Procesa la compra (checkout).
+     * Procesa la compra. Ejecuta transaccionalmente la creación del pedido y decremento de stock.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function comprar(Request $request)
     {
@@ -207,16 +226,15 @@ class CarritoController extends Controller
         $sinStockMensajes = [];
         $carritoModificado = false;
 
+        // Comprobación de integridad de precios y stock justo antes del guardado definitivo
         foreach ($items as $item) {
             $producto = $item->producto;
 
-            // Si el precio_unitario es nulo (por registros anteriores a la migración), inicializarlo
             if (is_null($item->precio_unitario)) {
                 $item->precio_unitario = $producto->precio_actual;
                 $item->save();
             }
 
-            // Verificar si el precio cambió
             if ($item->precio_unitario != $producto->precio_actual) {
                 $precioActualizadoMensajes[] = "El precio de {$producto->nombre} se ha actualizado de $" . number_format($item->precio_unitario, 2) . " a $" . number_format($producto->precio_actual, 2) . ".";
                 $item->precio_unitario = $producto->precio_actual;
@@ -224,7 +242,6 @@ class CarritoController extends Controller
                 $carritoModificado = true;
             }
 
-            // Verificar stock
             if ($item->cantidad > $producto->stock) {
                 if ($producto->stock <= 0) {
                     $sinStockMensajes[] = "El producto {$producto->nombre} ya no tiene stock disponible y ha sido removido de tu carrito.";
@@ -243,11 +260,10 @@ class CarritoController extends Controller
             return redirect('/carrito')->with('error', $mensajes);
         }
 
-        // Actualizar el teléfono en el perfil del usuario (según indicaciones)
         $usuario->telefono = $request->input('telefono');
         $usuario->save();
 
-        // Crear pedido y detalles en transacción
+        // Procesamiento transaccional de la orden (Atomicidad)
         DB::transaction(function () use ($usuario, $items, $request) {
             $total = 0;
             foreach ($items as $item) {
@@ -274,11 +290,10 @@ class CarritoController extends Controller
                     'subtotal' => $subtotal,
                 ]);
 
-                // Descontar stock
+                // Descuento de stock en base de datos
                 $item->producto->decrement('stock', $item->cantidad);
             }
 
-            // Vaciar el carrito
             $usuario->carrito->items()->delete();
         });
 

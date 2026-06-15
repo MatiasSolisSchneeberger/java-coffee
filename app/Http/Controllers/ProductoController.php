@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * Controlador de gestión del catálogo de productos e inventario.
+ */
 class ProductoController extends Controller
 {
-    // Cantidad de productos a mostrar por página en el catálogo
     const PRODUCTOS_POR_PAGINA = 6;
 
     /**
-     * Método centralizado para obtener todos los productos.
+     * Recupera todos los productos estructurados para uso interno.
+     *
+     * @return array
      */
     public function obtenerProductos()
     {
@@ -35,14 +39,16 @@ class ProductoController extends Controller
     }
 
     /**
-     * Muestra la vista del catálogo con todos los productos y filtros dinámicos.
+     * Muestra el catálogo público. Realiza filtros y paginación en base de datos.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
         $categorias = \App\Models\Categoria::all();
         $origenes = \App\Models\Origen::all();
 
-        // Obtener tipos de tueste / presentación únicos de productos activos y con stock
         $tuestes = \App\Models\Producto::where('estado', 'activo')
             ->where('stock', '>', 0)
             ->whereNotNull('tueste')
@@ -51,33 +57,27 @@ class ProductoController extends Controller
             ->pluck('tueste')
             ->toArray();
 
-        // Obtener precios reales para los límites del slider de productos activos y con stock
+        // Obtención del rango de precios reales de productos activos para los límites del slider en UI
         $minPrecio = (float) \App\Models\Producto::where('estado', 'activo')->where('stock', '>', 0)->min('precio') ?: 0;
-
-        // El precio máximo podría ser de oferta o regular, tomamos el mayor precio normal
         $maxPrecio = (float) \App\Models\Producto::where('estado', 'activo')->where('stock', '>', 0)->max('precio') ?: 10000;
 
-        // Construir query de productos activos y con stock
         $query = \App\Models\Producto::with(['origen', 'categoria', 'imagenes'])
             ->where('estado', 'activo')
             ->where('stock', '>', 0);
 
-        // Filtrar por categoría
+        // Bloque de construcción dinámica de filtros SQL
         if ($request->filled('categoria')) {
             $query->where('categoria_id', $request->input('categoria'));
         }
 
-        // Filtrar por origen
         if ($request->filled('origen')) {
             $query->where('origen_id', $request->input('origen'));
         }
 
-        // Filtrar por tueste (presentación)
         if ($request->filled('tueste')) {
             $query->where('tueste', $request->input('tueste'));
         }
 
-        // Filtrar por oferta (en oferta o no)
         if ($request->filled('oferta')) {
             $ofertaVal = $request->input('oferta');
             if ($ofertaVal === '1') {
@@ -89,7 +89,7 @@ class ProductoController extends Controller
             }
         }
 
-        // Filtrar por precio máximo, considerando el precio de oferta si está activo
+        // Filtro por precio máximo evaluando tanto el precio regular como el precio de oferta si aplica
         if ($request->filled('precio_max')) {
             $precioMax = (float) $request->input('precio_max');
             $query->where(function ($q) use ($precioMax) {
@@ -106,10 +106,8 @@ class ProductoController extends Controller
             });
         }
 
-        // Paginar los resultados conservando los parámetros de la URL
         $paginador = $query->paginate(self::PRODUCTOS_POR_PAGINA)->withQueryString();
 
-        // Mapear al formato esperado por la vista
         $productos = collect($paginador->items())->map(function ($p) {
             $imgs = $p->imagenes->pluck('url')->toArray();
             return [
@@ -137,25 +135,27 @@ class ProductoController extends Controller
     }
 
     /**
-     * Muestra la vista de un producto específico según su slug.
+     * Muestra la ficha del producto, promedios de reviews y sugerencia de recomendados.
+     *
+     * @param string $slug
+     * @return \Illuminate\View\View
      */
     public function show($slug)
     {
         $productos = $this->obtenerProductos();
-
         $producto = collect($productos)->firstWhere('slug', $slug);
 
         if (!$producto) {
             abort(404);
         }
 
-        // Obtener comentarios de la base de datos que estén aprobados
         $dbComments = \App\Models\Comentario::where('producto_id', $producto['id'])
             ->where('estado', 'aprobado')
             ->with('usuario')
             ->latest()
             ->get();
 
+        // Cálculo del promedio de calificaciones de los comentarios aprobados
         $calificaciones = \App\Models\Comentario::where('producto_id', $producto['id'])
             ->where('estado', 'aprobado')
             ->pluck('calificacion');
@@ -187,7 +187,10 @@ class ProductoController extends Controller
     }
 
     /**
-     * Almacena un nuevo producto en la base de datos.
+     * Crea un nuevo producto y guarda sus imágenes.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -226,6 +229,7 @@ class ProductoController extends Controller
             'estado' => 'activo',
         ]);
 
+        // Procesamiento en bucle para el almacenamiento local de múltiples imágenes
         $hasImages = false;
         if ($request->hasFile('imagenes')) {
             foreach ($request->file('imagenes') as $file) {
@@ -253,7 +257,11 @@ class ProductoController extends Controller
     }
 
     /**
-     * Actualiza un producto existente en la base de datos.
+     * Actualiza el producto y sus imágenes.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -297,7 +305,7 @@ class ProductoController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        // Procesar borrado de imágenes
+        // Procesamiento de borrado físico de imágenes seleccionadas en disco local
         if ($request->filled('eliminar_imagenes')) {
             foreach ($request->input('eliminar_imagenes') as $imgId) {
                 $imagen = \App\Models\ImagenProducto::find($imgId);
@@ -310,9 +318,7 @@ class ProductoController extends Controller
             }
         }
 
-        // Procesar subida de nuevas imágenes
         if ($request->hasFile('imagenes')) {
-            // Si tiene la imagen por defecto como única imagen, la borramos antes de agregar las nuevas
             $defaultImg = $producto->imagenes()->where('url', 'error-404.png')->first();
             if ($defaultImg && $producto->imagenes()->count() === 1) {
                 $defaultImg->delete();
@@ -331,7 +337,6 @@ class ProductoController extends Controller
             }
         }
 
-        // Si no le quedan imágenes al producto, asignamos la por defecto
         if ($producto->imagenes()->count() === 0) {
             \App\Models\ImagenProducto::create([
                 'producto_id' => $producto->id,
@@ -343,13 +348,15 @@ class ProductoController extends Controller
     }
 
     /**
-     * Elimina un producto de la base de datos.
+     * Borrado físico del producto y sus recursos.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         $producto = \App\Models\Producto::findOrFail($id);
         
-        // Eliminar archivos físicos asociados
         foreach ($producto->imagenes as $imagen) {
             if ($imagen->url !== 'error-404.png') {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete('productos/' . $imagen->url);
@@ -361,4 +368,3 @@ class ProductoController extends Controller
         return redirect('/admin/productos')->with('success', 'Producto eliminado exitosamente.');
     }
 }
-

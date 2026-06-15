@@ -4,18 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * Controlador para la página de inicio (welcome).
+ */
 class HomeController extends Controller
 {
+    /**
+     * Muestra la landing page con 6 productos destacados.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
-        // Instanciamos ProductoController para aprovechar su método obtenerProductos()
-        // Cuando en el futuro se conecte a BD, obtenerProductos() internamente traerá datos de allí.
         $productoController = new ProductoController();
         $todosLosProductos = $productoController->obtenerProductos();
 
-        // Obtener los primeros 6 productos para mostrar en el inicio
         $productos = collect($todosLosProductos)->take(6)->toArray();
 
         return view('pages.frontend.welcome', compact('productos'));
     }
 }
+
+

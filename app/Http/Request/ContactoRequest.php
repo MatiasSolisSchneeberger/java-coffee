@@ -4,13 +4,22 @@ namespace App\Http\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Validaciones para el formulario de consultas/contacto.
+ */
 class ContactoRequest extends FormRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [
@@ -21,6 +30,9 @@ class ContactoRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array
+     */
     public function messages(): array
     {
         return [
@@ -30,8 +42,8 @@ class ContactoRequest extends FormRequest
             'consulta.min'      => 'Debe tener al menos 10 caracteres.',
             'motivo.required'   => 'Falta motivo de consulta',
             'consulta.required' => 'Falta consulta',
-
-            'consulta.min'      => 'Debe tener al menos 10 caracteres.'
         ];
     }
 }
+
+
