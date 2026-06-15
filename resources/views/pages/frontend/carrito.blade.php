@@ -34,7 +34,7 @@
                     <div class="carrito-items-col">
                         @foreach ($items as $item)
                             @php
-                                $portada = '/images/productos/error-404.png';
+                                $portada = '/storage/productos/error-404.png';
                                 if ($item->producto) {
                                     $productoModel = $item->producto;
                                     // Buscar si tiene imágenes asociadas
@@ -43,7 +43,7 @@
                                         $productoModel->id,
                                     )->get();
                                     if ($imagenes->count() > 0) {
-                                        $portada = '/images/productos/' . $imagenes->first()->url;
+                                        $portada = '/storage/productos/' . $imagenes->first()->url;
                                     }
                                 }
                             @endphp
