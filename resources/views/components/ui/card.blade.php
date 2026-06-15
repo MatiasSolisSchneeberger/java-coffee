@@ -42,7 +42,7 @@
                     <form action="/carrito/agregar" method="POST">
                         @csrf
                         <input type="hidden" name="producto_id" value="{{ $producto['id'] }}">
-                        <x-ui.button type="submit" variant="outline" class="icon" title="Agregar al carrito">
+                        <x-ui.button type="submit" variant="outline" class="icon" title="{{ auth()->guest() ? 'Inicia sesión para agregar al carrito' : 'Agregar al carrito' }}" :disabled="auth()->guest()">
                             <x-icons.shopping-bag />
                         </x-ui.button>
                     </form>
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="card-actions">
-                    <x-ui.button variant="outline" class="icon" title="Agregar al carrito">
+                    <x-ui.button variant="outline" class="icon" title="{{ auth()->guest() ? 'Inicia sesión para agregar al carrito' : 'Agregar al carrito' }}" :disabled="auth()->guest()">
                         <x-icons.shopping-bag />
                     </x-ui.button>
                     <x-ui.button class="btn-ver-producto">

@@ -222,13 +222,18 @@
                                 <form action="/carrito/agregar" method="POST" class="product-buy-form">
                                     @csrf
                                     <input type="hidden" name="producto_id" value="{{ $producto['id'] }}">
-                                    <x-ui.button type="submit" class="btn-block">
+                                    <x-ui.button type="submit" class="btn-block" :disabled="auth()->guest()" title="{{ auth()->guest() ? 'Inicia sesión para comprar' : 'Comprar ahora' }}">
                                         Comprar ahora
                                     </x-ui.button>
-                                    <x-ui.button type="submit" variant="outline">
+                                    <x-ui.button type="submit" variant="outline" :disabled="auth()->guest()" title="{{ auth()->guest() ? 'Inicia sesión para agregar al carrito' : 'Agregar al carrito' }}">
                                         Agregar al carrito
                                     </x-ui.button>
                                 </form>
+                                @guest
+                                    <p class="text-sm icon-muted mt-sm text-center" style="margin-top: var(--spacing-sm); text-align: center; color: var(--color-text-muted); font-size: var(--font-sm);">
+                                        Debes <a href="/login" style="color: var(--color-primary); text-decoration: underline; font-weight: var(--font-semibold);">iniciar sesión</a> para comprar o agregar productos al carrito.
+                                    </p>
+                                @endguest
                             </div>
                         </div>
                     </div>
