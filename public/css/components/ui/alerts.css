@@ -92,3 +92,44 @@
     content: '> Error: ';
     font-weight: var(--font-bold);
 }
+
+/* Terminal Info Alert */
+.terminal-info-alert {
+    background-color: oklch(15% 0.03 305);
+    color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+    border-left: 4px solid var(--color-secondary);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.terminal-info-alert p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-secondary);
+    font-weight: var(--font-bold);
+}
+
+.terminal-info-alert ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.terminal-info-alert li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.terminal-info-alert li::before {
+    content: '> ';
+    position: absolute;
+    left: 0;
+    color: var(--color-secondary);
+}
+

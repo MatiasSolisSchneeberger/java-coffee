@@ -111,3 +111,14 @@ button.btn:hover {
 	border-color: var(--color-error);
 	box-shadow: var(--shadow-glow);
 }
+
+/* --- Estado Deshabilitado --- */
+button.btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed !important;
+	background-color: var(--bg-surface) !important;
+	color: var(--color-text-muted) !important;
+	border-color: oklch(35% 0.02 260) !important;
+	box-shadow: none !important;
+}
+
