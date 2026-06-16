@@ -4,11 +4,11 @@
             <h2 class="admin-panel-card-title">Listado de Pedidos Recibidos</h2>
             <div class="admin-search-wrapper" style="max-width: 300px;">
                 <select class="admin-form-field admin-form-select" onchange="filterOrders(this.value)">
-                    <option value="todos">Todos los estados</option>
-                    <option value="pendiente">Pendientes</option>
-                    <option value="preparando">Preparando</option>
-                    <option value="enviado">Enviados</option>
-                    <option value="entregado">Entregados</option>
+                    <option value="todos" {{ ($estado ?? 'todos') === 'todos' ? 'selected' : '' }}>Todos los estados</option>
+                    <option value="pendiente" {{ ($estado ?? '') === 'pendiente' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="preparando" {{ ($estado ?? '') === 'preparando' ? 'selected' : '' }}>Preparando</option>
+                    <option value="enviado" {{ ($estado ?? '') === 'enviado' ? 'selected' : '' }}>Enviados</option>
+                    <option value="entregado" {{ ($estado ?? '') === 'entregado' ? 'selected' : '' }}>Entregados</option>
                 </select>
             </div>
         </div>
@@ -59,19 +59,25 @@
                                 </select>
                             </td>
                             <td>
-                                @php
-                                    $fichaText = "Detalle de Pedido #" . $pedido->id . ":\\n" .
-                                                 "Cliente: " . addslashes($pedido->usuario ? ($pedido->usuario->nombre . ' ' . $pedido->usuario->apellido) : 'Anónimo') . "\\n" .
-                                                 "Dirección: " . addslashes($pedido->direccion_envio) . ", " . addslashes($pedido->provincia ? $pedido->provincia->nombre : 'Desconocida') . "\\n" .
-                                                 "Teléfono: " . addslashes($pedido->usuario ? $pedido->usuario->telefono : '-') . "\\n" .
-                                                 "Total: $" . number_format($pedido->total, 2) . "\\n" .
-                                                 "Pago: " . addslashes($pedido->metodo_pago) . "\\n\\n" .
-                                                 "Items:\\n";
-                                    foreach ($pedido->detalles as $det) {
-                                        $fichaText .= "- " . $det->cantidad . "x " . addslashes($det->producto ? $det->producto->nombre : 'Producto Eliminado') . "\\n";
-                                    }
-                                @endphp
-                                <button class="admin-btn admin-btn-secondary admin-btn-sm" onclick="alert('{{ $fichaText }}')">Ver Ficha</button>
+                                <button class="admin-btn admin-btn-secondary admin-btn-sm" 
+                                        onclick="showOrderDetails({{ json_encode([
+                                            'id' => $pedido->id,
+                                            'cliente' => $pedido->usuario ? ($pedido->usuario->nombre . ' ' . $pedido->usuario->apellido) : 'Anónimo',
+                                            'email' => $pedido->usuario ? $pedido->usuario->email : '-',
+                                            'telefono' => $pedido->usuario ? $pedido->usuario->telefono : '-',
+                                            'direccion' => $pedido->direccion_envio . ', ' . ($pedido->provincia ? $pedido->provincia->nombre : 'Desconocida'),
+                                            'total' => '$' . number_format($pedido->total, 2),
+                                            'metodo_pago' => $pedido->metodo_pago,
+                                            'estado' => strtoupper($pedido->estado),
+                                            'items' => $pedido->detalles->map(function($det) {
+                                                return [
+                                                    'nombre' => $det->producto ? $det->producto->nombre : 'Producto Eliminado',
+                                                    'cantidad' => $det->whitespace_normalized_quantity ?? $det->cantidad,
+                                                    'precio' => '$' . number_format($det->precio_unitario, 2),
+                                                    'subtotal' => '$' . number_format($det->subtotal, 2)
+                                                ];
+                                            })
+                                        ]) }})">Ver Ficha</button>
                             </td>
                         </tr>
                     @empty
@@ -112,7 +118,113 @@
         }
 
         function filterOrders(filter) {
-            alert("Simulación: Filtrando pedidos por estado '" + filter.toUpperCase() + "'.");
+            window.location.href = '/admin/pedidos?estado=' + filter;
+        }
+
+        function showOrderDetails(pedido) {
+            document.getElementById('modal-titulo').textContent = 'Ficha de Pedido #' + pedido.id;
+            document.getElementById('modal-cliente').textContent = pedido.cliente;
+            document.getElementById('modal-email').textContent = pedido.email;
+            document.getElementById('modal-telefono').textContent = pedido.telefono;
+            document.getElementById('modal-direccion').textContent = pedido.direccion;
+            document.getElementById('modal-total').textContent = pedido.total;
+            document.getElementById('modal-metodo-pago').textContent = pedido.metodo_pago;
+            document.getElementById('modal-estado').textContent = pedido.estado;
+            
+            const tbody = document.getElementById('modal-items-body');
+            tbody.innerHTML = '';
+            
+            pedido.items.forEach(function(item) {
+                const tr = document.createElement('tr');
+                
+                const tdNombre = document.createElement('td');
+                tdNombre.textContent = item.nombre;
+                tr.appendChild(tdNombre);
+                
+                const tdCantidad = document.createElement('td');
+                tdCantidad.textContent = item.cantidad;
+                tr.appendChild(tdCantidad);
+                
+                const tdPrecio = document.createElement('td');
+                tdPrecio.textContent = item.precio;
+                tr.appendChild(tdPrecio);
+                
+                const tdSubtotal = document.createElement('td');
+                tdSubtotal.textContent = item.subtotal;
+                tr.appendChild(tdSubtotal);
+                
+                tbody.appendChild(tr);
+            });
+            
+            document.getElementById('pedido-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('pedido-modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('pedido-modal');
+            if (event.target == modal) {
+                closeModal();
+            }
         }
     </script>
+
+    <!-- Modal de Ficha de Pedido -->
+    <div id="pedido-modal" class="admin-modal" style="display: none;">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title" id="modal-titulo">Ficha de Pedido</h3>
+                <button class="admin-modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="modal-info-grid">
+                    <div>
+                        <strong>Cliente:</strong>
+                        <span id="modal-cliente"></span>
+                    </div>
+                    <div>
+                        <strong>Email:</strong>
+                        <span id="modal-email"></span>
+                    </div>
+                    <div>
+                        <strong>Teléfono:</strong>
+                        <span id="modal-telefono"></span>
+                    </div>
+                    <div>
+                        <strong>Dirección:</strong>
+                        <span id="modal-direccion"></span>
+                    </div>
+                    <div>
+                        <strong>Total:</strong>
+                        <span id="modal-total"></span>
+                    </div>
+                    <div>
+                        <strong>Método Pago:</strong>
+                        <span id="modal-metodo-pago"></span>
+                    </div>
+                    <div>
+                        <strong>Estado Envío:</strong>
+                        <span id="modal-estado"></span>
+                    </div>
+                </div>
+                <h4 style="margin-top: var(--spacing-md); border-bottom: var(--border-thin); padding-bottom: var(--spacing-xs); color: var(--color-primary);">Detalle de Items</h4>
+                <div class="admin-table-wrapper" style="margin-top: var(--spacing-sm);">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-items-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-layouts.admin-layout>

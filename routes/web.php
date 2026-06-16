@@ -101,9 +101,16 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
         return view('pages.auth.admin.productos.editar', compact('slug', 'producto', 'categorias', 'origenes'));
     });
 
-    Route::get('/admin/pedidos', function () {
-        $pedidos = \App\Models\Pedido::with(['usuario', 'provincia', 'detalles.producto'])->latest()->get();
-        return view('pages.auth.admin.pedidos.index', compact('pedidos'));
+    Route::get('/admin/pedidos', function (\Illuminate\Http\Request $request) {
+        $estado = $request->query('estado');
+        $query = \App\Models\Pedido::with(['usuario', 'provincia', 'detalles.producto'])->latest();
+
+        if ($estado && $estado !== 'todos') {
+            $query->where('estado', $estado);
+        }
+
+        $pedidos = $query->get();
+        return view('pages.auth.admin.pedidos.index', compact('pedidos', 'estado'));
     });
 
     Route::get('/admin/consultas', function (\Illuminate\Http\Request $request) {
