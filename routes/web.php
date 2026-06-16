@@ -127,9 +127,43 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
         return view('pages.auth.admin.consultas.index', compact('consultas', 'estado'));
     });
 
-    Route::get('/admin/comentarios', function () {
-        $comentarios = \App\Models\Comentario::with(['usuario', 'producto'])->latest()->get();
-        return view('pages.auth.admin.comentarios.index', compact('comentarios'));
+    Route::get('/admin/comentarios', function (\Illuminate\Http\Request $request) {
+        $estado = $request->query('estado');
+        $query = \App\Models\Comentario::with(['usuario', 'producto'])->latest();
+
+        if ($estado && $estado !== 'todos') {
+            if ($estado === 'pendientes') {
+                $query->where('estado', 'pendiente');
+            } elseif ($estado === 'aprobados') {
+                $query->where('estado', 'aprobado');
+            } elseif ($estado === 'rechazados') {
+                $query->where('estado', 'rechazado');
+            }
+        }
+
+        $comentarios = $query->get();
+        return view('pages.auth.admin.comentarios.index', compact('comentarios', 'estado'));
+    });
+
+    Route::patch('/admin/comentarios/{id}/aprobar', function ($id) {
+        $comentario = \App\Models\Comentario::findOrFail($id);
+        $comentario->estado = 'aprobado';
+        $comentario->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comentario aprobado con éxito.'
+        ]);
+    });
+
+    Route::delete('/admin/comentarios/{id}', function ($id) {
+        $comentario = \App\Models\Comentario::findOrFail($id);
+        $comentario->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comentario eliminado con éxito.'
+        ]);
     });
 
     Route::get('/admin/usuarios', [UsuarioAdminController::class, 'index']);

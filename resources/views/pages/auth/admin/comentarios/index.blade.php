@@ -4,9 +4,10 @@
             <h2 class="admin-panel-card-title">Comentarios y Calificaciones</h2>
             <div class="admin-search-wrapper" style="max-width: 300px;">
                 <select class="admin-form-field admin-form-select" onchange="filterComments(this.value)">
-                    <option value="todos">Todos los comentarios</option>
-                    <option value="pendientes">Pendientes de Moderación</option>
-                    <option value="aprobados">Aprobados</option>
+                    <option value="todos" {{ ($estado ?? 'todos') === 'todos' ? 'selected' : '' }}>Todos los comentarios</option>
+                    <option value="pendientes" {{ ($estado ?? '') === 'pendientes' ? 'selected' : '' }}>Pendientes de Moderación</option>
+                    <option value="aprobados" {{ ($estado ?? '') === 'aprobados' ? 'selected' : '' }}>Aprobados</option>
+                    <option value="rechazados" {{ ($estado ?? '') === 'rechazados' ? 'selected' : '' }}>Rechazados</option>
                 </select>
             </div>
         </div>
@@ -76,27 +77,70 @@
 
     <script>
         function approveComment(id) {
-            alert("Simulación: Comentario #" + id + " aprobado con éxito. Ahora es visible públicamente.");
-            // Actualizar interfaz visual
-            var badge = document.getElementById('comment-badge-' + id);
-            badge.className = 'status-badge status-success';
-            badge.textContent = 'Aprobado';
-            
-            var approveBtn = document.getElementById('approve-btn-' + id);
-            approveBtn.style.display = 'none';
+            fetch(`/admin/comentarios/${id}/aprobar`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Actualizar interfaz visual
+                    var badge = document.getElementById('comment-badge-' + id);
+                    if (badge) {
+                        badge.className = 'status-badge status-success';
+                        badge.textContent = 'Aprobado';
+                    }
+                    
+                    var approveBtn = document.getElementById('approve-btn-' + id);
+                    if (approveBtn) approveBtn.style.display = 'none';
+                } else {
+                    alert('Error al aprobar el comentario.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error de conexión con el servidor.');
+            });
         }
 
         function deleteComment(id) {
-            if (confirm("¿Estás seguro de que deseas eliminar o rechazar este comentario?")) {
-                alert("Simulación: Comentario #" + id + " eliminado.");
-                var row = document.getElementById('comment-row-' + id);
-                row.style.opacity = '0.3';
-                row.querySelector('.admin-btn-group').innerHTML = '<span style="font-size:var(--text-xs); color:var(--color-error)">Eliminado</span>';
+            if (confirm("¿Estás seguro de que deseas eliminar permanentemente este comentario?")) {
+                fetch(`/admin/comentarios/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        var row = document.getElementById('comment-row-' + id);
+                        if (row) {
+                            row.style.opacity = '0.3';
+                            var actionsGroup = row.querySelector('.admin-btn-group');
+                            if (actionsGroup) {
+                                actionsGroup.innerHTML = '<span style="font-size:var(--text-xs); color:var(--color-error)">Eliminado</span>';
+                            }
+                        }
+                    } else {
+                        alert('Error al eliminar el comentario.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error de conexión con el servidor.');
+                });
             }
         }
 
         function filterComments(value) {
-            alert("Simulación: Filtrando opiniones por estado '" + value.toUpperCase() + "'.");
+            window.location.href = '/admin/comentarios?estado=' + value;
         }
     </script>
 </x-layouts.admin-layout>
