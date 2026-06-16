@@ -101,7 +101,12 @@ class ClienteController extends Controller
             ->latest()
             ->get();
 
-        return view('pages.auth.cliente', compact('pedidos', 'favoritos', 'consultas'));
+        $comentarios = \App\Models\Comentario::where('usuario_id', $usuario->id)
+            ->with('producto')
+            ->latest()
+            ->get();
+
+        return view('pages.auth.cliente', compact('pedidos', 'favoritos', 'consultas', 'comentarios'));
     }
 
     /**
@@ -201,6 +206,48 @@ class ClienteController extends Controller
             ->delete();
 
         return redirect()->back()->with('success', 'Producto quitado de favoritos.');
+    }
+
+    /**
+     * Actualiza un comentario del cliente.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function actualizarComentario(Request $request, $id)
+    {
+        $request->validate([
+            'rating' => 'required|integer|between:1,5',
+            'comentario' => 'nullable|string|max:1000',
+        ]);
+
+        $comentario = \App\Models\Comentario::where('usuario_id', Auth::id())
+            ->findOrFail($id);
+
+        $comentario->update([
+            'calificacion' => $request->input('rating'),
+            'comentario' => $request->input('comentario'),
+            'estado' => 'pendiente', // Se vuelve a moderar al editar
+        ]);
+
+        return redirect()->back()->with('success', 'Tu comentario ha sido actualizado y enviado a moderación.');
+    }
+
+    /**
+     * Elimina un comentario del cliente.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function eliminarComentario($id)
+    {
+        $comentario = \App\Models\Comentario::where('usuario_id', Auth::id())
+            ->findOrFail($id);
+
+        $comentario->delete();
+
+        return redirect()->back()->with('success', 'Tu comentario ha sido eliminado.');
     }
 }
 

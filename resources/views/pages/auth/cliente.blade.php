@@ -28,6 +28,13 @@
             </button>
         </li>
         <li>
+            <button class="dashboard-nav-btn" data-tab="comentarios">
+                <x-icons.star class="icon-sm" />
+                <span>Mis Opiniones</span>
+                <span class="nav-count">{{ $comentarios->count() }}</span>
+            </button>
+        </li>
+        <li>
             <button class="dashboard-nav-btn" data-tab="perfil">
                 <x-icons.settings class="icon-sm" />
                 <span>Editar Perfil</span>
@@ -35,7 +42,7 @@
         </li>
     </x-slot:navigation>
 
-        <!-- Alert Section -->
+        <!-- Sección de Alertas -->
         @if (session('success'))
             <x-ui.success-alert :messages="[session('success')]" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
         @endif
@@ -48,7 +55,7 @@
             <x-ui.error-alert :messages="$errors->all()" class="mb-sm" style="margin-bottom: var(--spacing-md);" />
         @endif
 
-            <!-- Tab: Resumen -->
+            <!-- Pestaña: Resumen -->
             <section class="dashboard-tab-content active" id="tab-resumen">
                 <div class="tab-header">
                     <h2>&gt; RESUMEN_</h2>
@@ -71,10 +78,15 @@
                             <x-icons.mail class="icon-lg" />
                         </x-slot:icon>
                     </x-ui.stat-card>
+                    <x-ui.stat-card label="Opiniones" :value="$comentarios->count()" iconColor="primary">
+                        <x-slot:icon>
+                            <x-icons.star class="icon-lg" />
+                        </x-slot:icon>
+                    </x-ui.stat-card>
                 </div>
 
                 <div class="resumen-details-layout">
-                    <!-- Quick Info -->
+                    <!-- Información Rápida -->
                     <div class="info-panel">
                         <h3>Detalles de la Cuenta</h3>
                         <ul class="info-list">
@@ -104,7 +116,7 @@
                         </x-ui.button>
                     </div>
 
-                    <!-- Last Order Summary -->
+                    <!-- Resumen del Último Pedido -->
                     <div class="last-order-panel">
                         <h3>Último Pedido</h3>
                         @if ($pedidos->count() > 0)
@@ -138,7 +150,7 @@
                 </div>
             </section>
 
-            <!-- Tab: Mis Pedidos -->
+            <!-- Pestaña: Mis Pedidos -->
             <section class="dashboard-tab-content" id="tab-pedidos">
                 <div class="tab-header">
                     <h2>&gt; MIS_PEDIDOS_</h2>
@@ -176,7 +188,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Collapsible Items Details -->
+                                <!-- Detalles Desplegables de los Ítems -->
                                 <details class="pedido-details">
                                     <summary class="details-summary">
                                         <span class="summary-text">Ver detalle de productos</span>
@@ -218,7 +230,7 @@
                 </div>
             </section>
 
-            <!-- Tab: Favoritos -->
+            <!-- Pestaña: Favoritos -->
             <section class="dashboard-tab-content" id="tab-favoritos">
                 <div class="tab-header">
                     <h2>&gt; MIS_FAVORITOS_</h2>
@@ -243,7 +255,7 @@
                                     <span
                                         class="fav-card-price">${{ number_format($favProduct['precio'], 2, ',', '.') }}</span>
                                     <div class="fav-card-actions">
-                                        <!-- Form prepared for adding to cart -->
+                                        <!-- Formulario preparado para agregar al carrito -->
                                         <form action="/carrito/agregar" method="POST" class="fav-action-form">
                                             @csrf
                                             <input type="hidden" name="producto_id"
@@ -253,7 +265,7 @@
                                             </button>
                                         </form>
 
-                                        <!-- Form prepared for removing from favorites -->
+                                        <!-- Formulario preparado para quitar de favoritos -->
                                         <form action="/cliente/favoritos/eliminar/{{ $favProduct['id'] }}"
                                             method="POST" class="fav-action-form">
                                             @csrf
@@ -281,7 +293,7 @@
                 </div>
             </section>
 
-            <!-- Tab: Consultas -->
+            <!-- Pestaña: Consultas -->
             <section class="dashboard-tab-content" id="tab-consultas">
                 <div class="tab-header">
                     <h2>&gt; MIS_CONSULTAS_</h2>
@@ -342,7 +354,7 @@
                 </div>
             </section>
 
-            <!-- Tab: Editar Perfil -->
+            <!-- Pestaña: Editar Perfil -->
             <section class="dashboard-tab-content" id="tab-perfil">
                 <div class="tab-header">
                     <h2>&gt; CONFIGURACION_CUENTA_</h2>
@@ -350,7 +362,7 @@
                 </div>
 
                 <div class="profile-edit-card">
-                    <!-- Form prepared for backend user profile update -->
+                    <!-- Formulario preparado para la actualización de perfil de usuario en backend -->
                     <form action="/cliente/perfil" method="POST" class="profile-form">
                         @csrf
                         @method('PUT')
@@ -425,4 +437,139 @@
                     </form>
                 </div>
             </section>
+
+            <!-- Pestaña: Mis Opiniones -->
+            <section class="dashboard-tab-content" id="tab-comentarios">
+                <div class="tab-header">
+                    <h2>&gt; MIS_OPINIONES_</h2>
+                    <p class="tab-subtitle">Historial de tus calificaciones y comentarios en productos.</p>
+                </div>
+
+                <div class="comentarios-list-wrapper" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                    @forelse ($comentarios as $com)
+                        <article class="consulta-card" id="comentario-card-{{ $com->id }}">
+                            <div class="consulta-card-header" style="cursor: default;">
+                                <div class="consulta-info">
+                                    <span class="consulta-subject" style="color: var(--color-primary);">
+                                        {{ $com->producto ? $com->producto->nombre : 'Producto Eliminado' }}
+                                    </span>
+                                    <span class="consulta-meta">
+                                        Calificación: 
+                                        <span style="color: var(--color-primary);">
+                                            {{ str_repeat('★', $com->calificacion) }}{{ str_repeat('☆', 5 - $com->calificacion) }}
+                                        </span>
+                                        | Fecha: {{ $com->created_at ? $com->created_at->format('d/m/Y') : 'Reciente' }}
+                                    </span>
+                                </div>
+                                <div class="consulta-badge-group">
+                                    @if ($com->estado === 'aprobado')
+                                        <x-ui.status-badge status="entregado">Aprobado</x-ui.status-badge>
+                                    @elseif ($com->estado === 'pendiente')
+                                        <x-ui.status-badge status="pendiente">Pendiente</x-ui.status-badge>
+                                    @else
+                                        <x-ui.status-badge status="cancelado">Rechazado</x-ui.status-badge>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="consulta-card-body">
+                                <p class="consulta-message-text" style="margin-bottom: var(--spacing-md);">
+                                    "{{ $com->comentario }}"
+                                </p>
+
+                                <div class="flex-row" style="gap: var(--spacing-sm); justify-content: flex-end;">
+                                    <x-ui.button variant="outline" size="small"
+                                                 onclick="openEditCommentModal({{ json_encode([
+                                                     'id' => $com->id,
+                                                     'producto' => $com->producto ? $com->producto->nombre : 'Producto Eliminado',
+                                                     'calificacion' => $com->calificacion,
+                                                     'comentario' => $com->comentario
+                                                 ]) }})">
+                                        Editar
+                                    </x-ui.button>
+                                    <form action="/cliente/comentarios/{{ $com->id }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta opinión?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-ui.button variant="danger" size="small" type="submit">
+                                            Eliminar
+                                        </x-ui.button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    @empty
+                        <div class="empty-state">
+                            <p>Aún no has dejado calificaciones o comentarios en nuestros productos.</p>
+                            <a href="/productos" class="shop-now-link">Ver Catálogo de Productos</a>
+                        </div>
+                    @endforelse
+                </div>
+            </section>
+
+    <!-- Modal de Edición de Comentario -->
+    <div id="editar-comentario-modal" class="admin-modal" style="display: none;">
+        <div class="admin-modal-content" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Editar Opinión</h3>
+                <button class="admin-modal-close" onclick="closeEditCommentModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <form id="editar-comentario-form" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label class="form-label" style="margin-bottom: var(--spacing-xs); display: block;">Producto</label>
+                        <input type="text" id="edit-comentario-producto" class="form-input" disabled style="opacity: 0.7;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label class="form-label" style="margin-bottom: var(--spacing-xs); display: block;">Tu calificación</label>
+                        <div class="star-rating-input" style="justify-content: flex-end; font-size: 2rem; display: flex; flex-direction: row-reverse; gap: var(--spacing-xs);">
+                            <input type="radio" id="edit-star5" name="rating" value="5" /><label for="edit-star5" title="5 estrellas" style="cursor: pointer;">★</label>
+                            <input type="radio" id="edit-star4" name="rating" value="4" /><label for="edit-star4" title="4 estrellas" style="cursor: pointer;">★</label>
+                            <input type="radio" id="edit-star3" name="rating" value="3" /><label for="edit-star3" title="3 estrellas" style="cursor: pointer;">★</label>
+                            <input type="radio" id="edit-star2" name="rating" value="2" /><label for="edit-star2" title="2 estrellas" style="cursor: pointer;">★</label>
+                            <input type="radio" id="edit-star1" name="rating" value="1" /><label for="edit-star1" title="1 estrella" style="cursor: pointer;">★</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                        <label for="edit-comentario-texto" class="form-label" style="margin-bottom: var(--spacing-xs); display: block;">Tu comentario</label>
+                        <textarea name="comentario" id="edit-comentario-texto" class="form-input"></textarea>
+                    </div>
+
+                    <div class="form-actions" style="display: flex; justify-content: flex-end; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+                        <x-ui.button variant="outline" type="button" onclick="closeEditCommentModal()">Cancelar</x-ui.button>
+                        <x-ui.button variant="primary" type="submit">Guardar Cambios</x-ui.button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openEditCommentModal(comentario) {
+            document.getElementById('editar-comentario-form').action = '/cliente/comentarios/' + comentario.id;
+            document.getElementById('edit-comentario-producto').value = comentario.producto;
+            document.getElementById('edit-comentario-texto').value = comentario.comentario;
+            
+            // Marcar el botón de radio de calificación correcto
+            const starInput = document.getElementById('edit-star' + comentario.calificacion);
+            if (starInput) starInput.checked = true;
+            
+            document.getElementById('editar-comentario-modal').style.display = 'flex';
+        }
+
+        function closeEditCommentModal() {
+            document.getElementById('editar-comentario-modal').style.display = 'none';
+        }
+
+        // Cerrar al hacer clic fuera del modal
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('editar-comentario-modal');
+            if (event.target == modal) {
+                closeEditCommentModal();
+            }
+        });
+    </script>
     </x-layouts.dashboard-layout>
