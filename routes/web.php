@@ -126,8 +126,6 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
     });
 
     Route::get('/admin/usuarios', [UsuarioAdminController::class, 'index']);
-    Route::get('/admin/usuarios/crear', [UsuarioAdminController::class, 'create']);
-    Route::post('/admin/usuarios', [UsuarioAdminController::class, 'store']);
     Route::get('/admin/usuarios/{id}/editar', [UsuarioAdminController::class, 'edit']);
     Route::put('/admin/usuarios/{id}', [UsuarioAdminController::class, 'update']);
     Route::patch('/admin/usuarios/{id}/baja', [UsuarioAdminController::class, 'delete']);

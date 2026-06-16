@@ -19,7 +19,7 @@
                     <select name="estado" class="admin-form-field admin-form-select">
                         <option value="">Todos los Estados</option>
                         <option value="activo" {{ $estado === 'activo' ? 'selected' : '' }}>Activo</option>
-                        <option value="inactivo" {{ $estado === 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                        <option value="baneado" {{ $estado === 'baneado' ? 'selected' : '' }}>Baneado</option>
                     </select>
                 </div>
 
@@ -30,10 +30,6 @@
                     <a href="/admin/usuarios" class="admin-btn admin-btn-secondary" title="Limpiar filtros">Limpiar</a>
                 @endif
             </form>
-
-            <a href="/admin/usuarios/crear" class="admin-btn admin-btn-primary">
-                <x-icons.plus class="icon-sm" style="margin-right: var(--spacing-sm);" /> Añadir Nuevo Usuario
-            </a>
         </div>
 
         @if (session('success'))
@@ -85,7 +81,7 @@
                                 @if ($u->estado === 'activo')
                                     <x-ui.status-badge status="entregado">Activo</x-ui.status-badge>
                                 @else
-                                    <x-ui.status-badge status="cancelado">Inactivo</x-ui.status-badge>
+                                    <x-ui.status-badge status="cancelado">Baneado</x-ui.status-badge>
                                 @endif
                             </td>
                             <td>
@@ -93,7 +89,7 @@
                                     <a href="/admin/usuarios/{{ $u->id }}/editar"
                                         class="admin-btn admin-btn-secondary admin-btn-sm">
                                         <x-icons.settings class="icon-xs" style="margin-right: 4px;" />
-                                        Editar
+                                        Editar Estado
                                     </a>
                                     @if ($u->estado === 'activo' && Auth::id() !== $u->id)
                                         <form id="baja-form-{{ $u->id }}"
@@ -105,7 +101,7 @@
                                         <x-ui.button variant="danger" size="default"
                                             onclick="confirmBaja({{ $u->id }}, '{{ addslashes($u->nombre . ' ' . $u->apellido) }}')">
                                             <x-icons.x-circle class="icon-xs" />
-                                            <span>Dar de Baja</span>
+                                            <span>Banear</span>
                                         </x-ui.button>
                                     @endif
                                 </div>
@@ -126,7 +122,7 @@
     <!-- Script de Interacción para Confirmar Baja -->
     <script>
         function confirmBaja(userId, userName) {
-            if (confirm("¿Estás seguro de que deseas dar de baja al usuario '" + userName + "'? Su estado pasará a Inactivo.")) {
+            if (confirm("¿Estás seguro de que deseas banear al usuario '" + userName + "'? Su estado pasará a Baneado y no podrá iniciar sesión.")) {
                 document.getElementById('baja-form-' + userId).submit();
             }
         }
