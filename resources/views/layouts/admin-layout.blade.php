@@ -30,6 +30,12 @@
                 <x-icons.star class="nav-icon" /> <span>Comentarios</span>
             </a>
         </li>
+        <li>
+            <a href="/admin/usuarios"
+                class="admin-nav-link {{ request()->is('admin/usuarios*') ? 'active' : '' }}">
+                <x-icons.user class="nav-icon" /> <span>Usuarios</span>
+            </a>
+        </li>
     </x-slot:navigation>
 
     {{ $slot }}

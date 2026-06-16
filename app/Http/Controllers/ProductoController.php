@@ -347,8 +347,8 @@ class ProductoController extends Controller
         return redirect('/admin/productos')->with('success', 'Producto actualizado exitosamente.');
     }
 
-    /**
-     * Borrado físico del producto y sus recursos.
+     /**
+     * Borrado lógico del producto.
      *
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
@@ -357,14 +357,47 @@ class ProductoController extends Controller
     {
         $producto = \App\Models\Producto::findOrFail($id);
         
-        foreach ($producto->imagenes as $imagen) {
-            if ($imagen->url !== 'error-404.png') {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete('productos/' . $imagen->url);
-            }
+        $producto->estado = 'inactivo';
+        $producto->save();
+
+        return redirect('/admin/productos')->with('success', 'Producto dado de baja exitosamente.');
+    }
+
+    /**
+     * Almacena una nueva calificación y comentario para un producto.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeComment(Request $request, $slug)
+    {
+        $request->validate([
+            'rating' => 'required|integer|between:1,5',
+            'comentario' => 'nullable|string|max:1000',
+        ], [
+            'rating.required' => 'Debes seleccionar al menos una estrella para calificar.',
+        ]);
+
+        $producto = \App\Models\Producto::where('estado', 'activo')
+            ->get()
+            ->first(function ($p) use ($slug) {
+                return \Illuminate\Support\Str::slug($p->nombre) === $slug;
+            });
+
+        if (!$producto) {
+            abort(404, 'Producto no encontrado');
         }
 
-        $producto->delete();
+        \App\Models\Comentario::create([
+            'producto_id'  => $producto->id,
+            'usuario_id'   => auth()->id(), // ID del usuario logueado
+            'calificacion' => $request->input('rating'),
+            'comentario'   => $request->input('comentario'),
+            'estado'       => 'pendiente', // Entra directo a moderación
+        ]);
 
-        return redirect('/admin/productos')->with('success', 'Producto eliminado exitosamente.');
+        return redirect()->back()->with('success', '¡Gracias por tu opinión! Tu comentario será visible una vez que sea aprobado por el administrador.');
     }
 }
+

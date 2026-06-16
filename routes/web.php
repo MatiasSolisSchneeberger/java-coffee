@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\UsuarioAdminController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -124,6 +125,13 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
         return view('pages.auth.admin.comentarios.index', compact('comentarios'));
     });
 
+    Route::get('/admin/usuarios', [UsuarioAdminController::class, 'index']);
+    Route::get('/admin/usuarios/crear', [UsuarioAdminController::class, 'create']);
+    Route::post('/admin/usuarios', [UsuarioAdminController::class, 'store']);
+    Route::get('/admin/usuarios/{id}/editar', [UsuarioAdminController::class, 'edit']);
+    Route::put('/admin/usuarios/{id}', [UsuarioAdminController::class, 'update']);
+    Route::patch('/admin/usuarios/{id}/baja', [UsuarioAdminController::class, 'delete']);
+
     Route::patch('/admin/pedidos/{id}/status', function (\Illuminate\Http\Request $request, $id) {
         $request->validate([
             'estado' => 'required|in:pendiente,preparando,enviado,entregado,cancelado'
@@ -159,6 +167,7 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente', [ClienteController::class, 'index']);
+    Route::post('/producto/{slug}/calificar', [App\Http\Controllers\ProductoController::class, 'storeComment']);
     Route::put('/cliente/perfil', [ClienteController::class, 'actualizarPerfil']);
     Route::patch('/cliente/perfil/actualizar-campo', [ClienteController::class, 'actualizarCampoRapido']);
     Route::delete('/cliente/favoritos/eliminar/{id}', [ClienteController::class, 'eliminarFavorito']);

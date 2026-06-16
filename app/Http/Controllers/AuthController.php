@@ -52,6 +52,14 @@ class AuthController extends Controller
 
 
         if (Auth::attempt($credenciales)) {
+            if (Auth::user()->estado === 'inactivo') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors([
+                    'email' => 'Su cuenta está inactiva o ha sido suspendida.',
+                ])->onlyInput('email');
+            }
 
             $request->session()->regenerate();
 
