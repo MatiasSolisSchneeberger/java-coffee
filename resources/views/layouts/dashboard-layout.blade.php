@@ -10,11 +10,11 @@
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon.svg') }}">
 
-    <!-- Fonts -->
+    <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-    <!-- Styles / Scripts -->
+    <!-- Estilos / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
@@ -26,7 +26,7 @@
 <body class="cascadia-mono-400 {{ $type === 'admin' ? 'admin-body' : '' }}">
     <div {{ $attributes->merge(['class' => 'dashboard-layout-container ' . ($type === 'admin' ? 'layout-admin' : 'layout-client')]) }}>
         
-        <!-- Mobile Top Header Bar -->
+        <!-- Barra de encabezado superior móvil -->
         <header class="dashboard-mobile-header">
             <div class="mobile-header-brand">
                 @if ($type === 'admin')
@@ -54,9 +54,9 @@
             </div>
         </header>
 
-        <!-- Sidebar -->
+        <!-- Barra lateral -->
         <aside class="dashboard-sidebar-wrapper">
-            <!-- User Avatar & Profile Section -->
+            <!-- Sección de Avatar y Perfil de Usuario -->
             @auth
                 @php
                     $initials = strtoupper(substr(auth()->user()->nombre, 0, 1)) . strtoupper(substr(auth()->user()->apellido, 0, 1));
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- Sidebar Navigation List -->
+            <!-- Lista de navegación de la barra lateral -->
             <nav class="dashboard-navigation">
                 <ul class="dashboard-nav-list">
                     @if (isset($navigation))
@@ -90,7 +90,7 @@
                 </ul>
             </nav>
 
-            <!-- Sidebar Footer Section -->
+            <!-- Sección de pie de la barra lateral -->
             <div class="sidebar-footer">
                 <a href="{{ $type === 'admin' ? '/' : '/productos' }}" class="store-back-link">
                     <x-icons.chevron-left class="icon-xs" />
@@ -106,9 +106,9 @@
             </div>
         </aside>
 
-        <!-- Content Area -->
+        <!-- Área de contenido -->
         <div class="dashboard-content-wrapper">
-            <!-- Desktop Header Bar -->
+            <!-- Barra de encabezado de escritorio -->
             <header class="dashboard-desktop-header">
                 <div class="header-title-section">
                     @if ($title)
@@ -124,14 +124,14 @@
                 </div>
             </header>
 
-            <!-- Main slot content -->
+            <!-- Contenido principal -->
             <main class="dashboard-main-content">
                 {{ $slot }}
             </main>
         </div>
     </div>
 
-    <!-- Foot scripts -->
+    <!-- Scripts de pie de página -->
     <script type="module" src="{{ asset('js/index.js') }}"></script>
 </body>
 

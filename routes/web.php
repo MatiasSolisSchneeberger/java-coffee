@@ -90,7 +90,7 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
     });
 
     Route::get('/admin/producto/{slug}', function ($slug) {
-        // Map slug to product
+        // Mapear el slug al producto
         $producto = \App\Models\Producto::with(['categoria', 'origen'])->get()->first(function ($p) use ($slug) {
             return \Illuminate\Support\Str::slug($p->nombre) === $slug;
         });
@@ -210,6 +210,8 @@ Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::put('/cliente/perfil', [ClienteController::class, 'actualizarPerfil']);
     Route::patch('/cliente/perfil/actualizar-campo', [ClienteController::class, 'actualizarCampoRapido']);
     Route::delete('/cliente/favoritos/eliminar/{id}', [ClienteController::class, 'eliminarFavorito']);
+    Route::put('/cliente/comentarios/{id}', [ClienteController::class, 'actualizarComentario']);
+    Route::delete('/cliente/comentarios/{id}', [ClienteController::class, 'eliminarComentario']);
 
     Route::get('/carrito', [CarritoController::class, 'index']);
     Route::post('/carrito/agregar', [CarritoController::class, 'agregar']);

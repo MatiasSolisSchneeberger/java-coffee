@@ -250,7 +250,7 @@
                             <x-ui.card :producto="$rel" />
                         @endforeach
                     </div>
-                    {{-- Add spacing at the bottom --}}
+                    {{-- Espacio adicional en la parte inferior --}}
                     <div class="h-2xl"></div>
                 </div>
             @endif

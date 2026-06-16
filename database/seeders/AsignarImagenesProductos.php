@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\File;
 class AsignarImagenesProductos extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Ejecuta las semillas de la base de datos.
      */
     public function run(): void
     {
-        // Rutas absolutas a las imágenes base generadas por la IA
+        // Rutas absolutas a las imágenes base del proyecto
         $baseImages = [
             'bag' => 'C:\\Users\\Matia\\.gemini\\antigravity\\brain\\5a436da5-a5d7-468e-804a-c0a6ab7079cd\\coffee_bag_mockup_1780404756645.png',
             'cup' => 'C:\\Users\\Matia\\.gemini\\antigravity\\brain\\5a436da5-a5d7-468e-804a-c0a6ab7079cd\\coffee_cup_latte_1780404771460.png',

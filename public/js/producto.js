@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCarousel(index) {
         thumbnails[currentIndex].classList.remove('active');
 
-        // Wrap around logic
+        // Lógica de carrusel infinito (circular)
         currentIndex = (index + images.length) % images.length;
 
         thumbnails[currentIndex].classList.add('active');

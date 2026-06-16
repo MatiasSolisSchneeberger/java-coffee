@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         
-                        <!-- Empty lines to fill space -->
+                        <!-- Líneas vacías para rellenar espacio -->
                         @for ($i = 0; $i < 15; $i++)
                             <div class="code-line"></div>
                         @endfor

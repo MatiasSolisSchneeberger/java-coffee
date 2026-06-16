@@ -111,7 +111,7 @@
                                     class="md-link">[Consultas]</span><span class="md-url">(<a
                                         href="{{ url('/consultas') }}">/consultas</a>)</span>, donde nuestro equipo lo
                                 atenderá a la brevedad.</span></div>
-                        <!-- Empty lines to fill space -->
+                        <!-- Líneas vacías para rellenar espacio -->
                         @for ($i = 0; $i < 10; $i++)
                             <div class="code-line"></div>
                         @endfor

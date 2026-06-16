@@ -148,7 +148,7 @@
                         </div>
                         <div class="code-line"></div>
 
-                        <!-- Empty lines to fill space -->
+                        <!-- Líneas vacías para rellenar espacio -->
                         @for ($i = 0; $i < 10; $i++)
                             <div class="code-line"></div>
                         @endfor

@@ -113,9 +113,9 @@
         document.getElementById('nombre').addEventListener('input', function() {
             var slug = this.value
                 .toLowerCase()
-                .replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-                .replace(/\s+/g, '-')        // collapse whitespace and replace by -
-                .replace(/-+/g, '-');        // collapse dashes
+                .replace(/[^a-z0-9 -]/g, '') // eliminar caracteres no válidos
+                .replace(/\s+/g, '-')        // reemplazar espacios por guiones
+                .replace(/-+/g, '-');        // evitar guiones repetidos
             document.getElementById('slug').value = slug;
         });
     </script>

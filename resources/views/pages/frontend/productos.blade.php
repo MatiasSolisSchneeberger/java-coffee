@@ -157,16 +157,16 @@
                     <div class="paginacion-container">
                         {{-- Botón Primero --}}
                         @if($paginador->onFirstPage())
-                            <span class="pag-btn disabled">&lt;&lt; FIRST</span>
+                            <span class="pag-btn disabled">&lt;&lt; PRIMERO</span>
                         @else
-                            <a href="{{ $paginador->url(1) }}" class="pag-btn">&lt;&lt; FIRST</a>
+                            <a href="{{ $paginador->url(1) }}" class="pag-btn">&lt;&lt; PRIMERO</a>
                         @endif
 
                         {{-- Botón Anterior --}}
                         @if($paginador->onFirstPage())
-                            <span class="pag-btn disabled">&lt; PREV</span>
+                            <span class="pag-btn disabled">&lt; ANT</span>
                         @else
-                            <a href="{{ $paginador->previousPageUrl() }}" class="pag-btn">&lt; PREV</a>
+                            <a href="{{ $paginador->previousPageUrl() }}" class="pag-btn">&lt; ANT</a>
                         @endif
 
                         {{-- Páginas intermedias --}}
@@ -180,16 +180,16 @@
 
                         {{-- Botón Siguiente --}}
                         @if($paginador->hasMorePages())
-                            <a href="{{ $paginador->nextPageUrl() }}" class="pag-btn">NEXT &gt;</a>
+                            <a href="{{ $paginador->nextPageUrl() }}" class="pag-btn">SIG &gt;</a>
                         @else
-                            <span class="pag-btn disabled">NEXT &gt;</span>
+                            <span class="pag-btn disabled">SIG &gt;</span>
                         @endif
 
                         {{-- Botón Último --}}
                         @if($paginador->currentPage() == $paginador->lastPage())
-                            <span class="pag-btn disabled">LAST &gt;&gt;</span>
+                            <span class="pag-btn disabled">ÚLTIMO &gt;&gt;</span>
                         @else
-                            <a href="{{ $paginador->url($paginador->lastPage()) }}" class="pag-btn">LAST &gt;&gt;</a>
+                            <a href="{{ $paginador->url($paginador->lastPage()) }}" class="pag-btn">ÚLTIMO &gt;&gt;</a>
                         @endif
                     </div>
                 @endif

@@ -1,6 +1,6 @@
 /**
- * Client Dashboard Interactive Logic
- * Controls tab switching, URL hash persistence, and collapsible queries.
+ * Lógica interactiva del panel de control del cliente.
+ * Maneja el cambio de pestañas (tabs), persistencia del hash en la URL y el colapso de las consultas.
  */
 
 export function initClienteDashboard() {
@@ -8,20 +8,20 @@ export function initClienteDashboard() {
     const tabContents = document.querySelectorAll('.dashboard-tab-content');
     const queryHeaders = document.querySelectorAll('.consulta-card-header');
 
-    console.log("[Java Coffee] initClienteDashboard: Found", navButtons.length, "nav buttons and", tabContents.length, "tabs.");
+    console.log("[Java Coffee] initClienteDashboard: Se encontraron", navButtons.length, "botones de navegación y", tabContents.length, "pestañas.");
 
-    // Return early if we are not on the dashboard page
+    // Si no estamos en la página del dashboard, salimos temprano
     if (navButtons.length === 0) return;
 
     /**
-     * Switch to a specific tab
-     * @param {string} tabId - The ID of the tab (e.g. 'resumen', 'pedidos', 'favoritos', 'perfil')
+     * Cambia a una pestaña específica
+     * @param {string} tabId - El ID de la pestaña (ej: 'resumen', 'pedidos', 'favoritos', 'perfil', 'comentarios')
      */
     function switchTab(tabId) {
-        console.log("[Java Coffee] Switching to tab:", tabId);
+        console.log("[Java Coffee] Cambiando a la pestaña:", tabId);
         let tabFound = false;
 
-        // Toggle active tab content
+        // Alterna el contenido activo de las pestañas
         tabContents.forEach(content => {
             if (content.id === `tab-${tabId}`) {
                 content.classList.add('active');
@@ -33,7 +33,7 @@ export function initClienteDashboard() {
 
         if (!tabFound) return;
 
-        // Toggle active nav button
+        // Alterna la clase activa en los botones de navegación
         navButtons.forEach(btn => {
             if (btn.getAttribute('data-tab') === tabId) {
                 btn.classList.add('active');
@@ -42,13 +42,13 @@ export function initClienteDashboard() {
             }
         });
 
-        // Sync with hash without triggering page reload
+        // Sincroniza con el hash de la URL sin recargar la página entera
         if (window.location.hash !== `#${tabId}`) {
             history.pushState(null, null, `#${tabId}`);
         }
     }
 
-    // Attach click handlers to navigation buttons
+    // Vincula los eventos de click a los botones de navegación
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
             const tabId = button.getAttribute('data-tab');
@@ -56,19 +56,19 @@ export function initClienteDashboard() {
         });
     });
 
-    // Make switchTab available globally so inline triggers (like buttons) can use it
+    // Hace disponible switchTab de forma global para que se pueda usar desde botones en línea
     window.switchTab = switchTab;
 
-    // Load active tab from URL hash if present
+    // Carga la pestaña activa desde el hash de la URL si existe
     const initialHash = window.location.hash.substring(1);
-    const validTabs = ['resumen', 'pedidos', 'favoritos', 'consultas', 'perfil'];
+    const validTabs = ['resumen', 'pedidos', 'favoritos', 'consultas', 'perfil', 'comentarios'];
     if (initialHash && validTabs.includes(initialHash)) {
         switchTab(initialHash);
     } else {
         switchTab('resumen');
     }
 
-    // Handle hash change events (e.g. back button)
+    // Maneja los eventos de cambio de hash (por ejemplo, al volver atrás en el navegador)
     window.addEventListener('hashchange', () => {
         const currentHash = window.location.hash.substring(1);
         if (currentHash && validTabs.includes(currentHash)) {
@@ -76,7 +76,7 @@ export function initClienteDashboard() {
         }
     });
 
-    // Collapsible Queries toggle logic
+    // Lógica para contraer y desplegar las consultas
     queryHeaders.forEach(header => {
         header.addEventListener('click', () => {
             const card = header.closest('.consulta-card');

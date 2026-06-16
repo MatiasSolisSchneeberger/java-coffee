@@ -275,7 +275,7 @@
                             element.setAttribute('data-original', newValue);
                             button.style.display = 'none';
                             
-                            // Visual success alert toast
+                            // Alerta visual de éxito (Toast)
                             const alertWrapper = document.createElement('div');
                             alertWrapper.style.position = 'fixed';
                             alertWrapper.style.bottom = '20px';

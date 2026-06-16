@@ -3,7 +3,7 @@
 @php
     $normalized = strtolower(str_replace(' ', '_', $status));
     
-    // Map to CSS classes
+    // Mapear a clases CSS
     $statusClass = 'status-default';
     if (in_array($normalized, ['entregado', 'success', 'activo', 'pagado', 'respondido', 'respondió'])) {
         $statusClass = 'status-success';
@@ -15,7 +15,7 @@
         $statusClass = 'status-error';
     }
     
-    // Label translation/formatting if needed
+    // Traducir y formatear la etiqueta si es necesario
     $label = ucfirst(str_replace('_', ' ', $status));
 @endphp
 

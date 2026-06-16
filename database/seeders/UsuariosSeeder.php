@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Hash;
 class UsuariosSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Ejecuta las semillas de la base de datos.
      */
     public function run(): void
     {
@@ -117,7 +117,7 @@ class UsuariosSeeder extends Seeder
             'rol' => 'cliente',
         ]);
 
-        // 3. Sembrar Consultas de Contacto (Inquiries)
+        // 3. Sembrar Consultas de Contacto
         // Consulta 1 de Lucía (Respondida)
         Consulta::create([
             'usuario_id' => $lucia->id,
